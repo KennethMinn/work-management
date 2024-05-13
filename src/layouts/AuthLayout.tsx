@@ -15,7 +15,7 @@ const AuthLayout = () => {
       padding="md"
     >
       <Navbar isOpen={isOpen} setIsOpen={setIsOpen} />
-      <AppShell.Main pt={50}>
+      <AppShell.Main pt={80}>
         <Outlet />
       </AppShell.Main>
     </AppShell>

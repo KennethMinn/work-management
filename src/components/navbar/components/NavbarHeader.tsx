@@ -1,18 +1,43 @@
-import { AppShell, Burger, Group } from "@mantine/core";
+import {
+  AppShell,
+  Avatar,
+  Burger,
+  Divider,
+  Flex,
+  Group,
+  Image,
+  Menu,
+} from "@mantine/core";
 import React from "react";
 import { NavbarProps } from "../../../types/navbar";
+import mama from "../../../assets/mama.jpg";
+import logo from "../../../assets/logo.png";
 
 const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
   return (
     <AppShell.Header>
-      <Group h="100%" px="md">
-        <Burger
-          opened={isOpen}
-          onClick={() => setIsOpen((prev) => !prev)}
-          aria-label="Toggle navigation"
-          size="sm"
-        />
-        Beyond
+      <Group h="100%" px="md" justify="space-between">
+        <Flex align="center" gap="lg">
+          <Burger
+            opened={isOpen}
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-label="Toggle navigation"
+            size="sm"
+          />
+          <Image style={{ cursor: "pointer" }} height={50} src={logo} />
+        </Flex>
+        <Flex align="center" gap="md">
+          <Menu position="bottom-end" offset={5}>
+            <Menu.Target>
+              <Avatar style={{ cursor: "pointer" }} src={mama} alt="it's me" />
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item>Settings</Menu.Item>
+              <Divider />
+              <Menu.Item>Logout</Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Flex>
       </Group>
     </AppShell.Header>
   );

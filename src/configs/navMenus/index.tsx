@@ -13,41 +13,41 @@ export const navMenus = [
   {
     label: "Task Calendar",
     icon: <IconCalendar />,
-    href: "/",
+    href: "/dashboard",
   },
   {
     label: "Report List",
     icon: <IconReport />,
-    href: "/report-list",
+    href: "/dashboard/report-list",
   },
   {
     label: "Company List",
     icon: <IconBuilding />,
-    href: "/company-list",
+    href: "/dashboard/company-list",
   },
   {
     label: "Customer List",
     icon: <IconUsersGroup />,
-    href: "/customer-list",
+    href: "/dashboard/customer-list",
   },
   {
     label: "Department List",
     icon: <IconBrandTeams />,
-    href: "/department-list",
+    href: "/dashboard/department-list",
   },
   {
     label: "Position List",
     icon: <IconUserMinus />,
-    href: "/position-list",
+    href: "/dashboard/position-list",
   },
   {
     label: "Employee List",
     icon: <IconUsers />,
-    href: "/employee-list",
+    href: "/dashboard/employee-list",
   },
   {
     label: "Project List",
     icon: <IconPresentation />,
-    href: "/project-list",
+    href: "/dashboard/project-list",
   },
 ];
