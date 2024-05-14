@@ -12,8 +12,14 @@ import React from "react";
 import { NavbarProps } from "../../../types/navbar";
 import mama from "../../../assets/mama.jpg";
 import logo from "../../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate("/login");
+  };
   return (
     <AppShell.Header>
       <Group h="100%" px="md" justify="space-between">
@@ -34,7 +40,7 @@ const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
             <Menu.Dropdown>
               <Menu.Item>Settings</Menu.Item>
               <Divider />
-              <Menu.Item>Logout</Menu.Item>
+              <Menu.Item onClick={logout}>Logout</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Flex>

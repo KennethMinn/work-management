@@ -3,6 +3,7 @@ import AuthLayout from "../../layouts/AuthLayout";
 import RootLayout from "../../layouts/RootLayout";
 import Login from "../../components/auth/Login";
 import EmployeeListing from "../../modules/employee/pages/EmployeeListing";
+import CalendarListing from "../../modules/calendar/pages/CalendarListing";
 
 export const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <EmployeeListing />,
+        element: <CalendarListing />,
       },
       {
         path: "report-list",

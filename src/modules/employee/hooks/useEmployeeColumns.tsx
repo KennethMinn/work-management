@@ -8,23 +8,29 @@ export const useEmployeeColumns = () => {
   const employeeColumns: TableColumn<EmployeeDataRow>[] = [
     {
       name: "No",
-      selector: (row) => row.no,
+      selector: (row) => row.id,
       width: "100px",
     },
     {
       name: "Name",
       selector: (row) => row.name,
-      minWidth: "200px",
+      width: "160px",
     },
     {
-      name: "Age",
-      selector: (row) => row.age,
-      minWidth: "120px",
+      name: "Gender",
+      selector: (row) => row.gender,
     },
     {
       name: "email",
       selector: (row) => row.email,
-      minWidth: "120px",
+    },
+    {
+      name: "phone",
+      selector: (row) => row.phone,
+    },
+    {
+      name: "position",
+      selector: (row) => row.position.name,
     },
     {
       name: "Actions",
