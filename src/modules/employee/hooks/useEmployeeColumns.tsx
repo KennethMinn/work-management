@@ -7,30 +7,30 @@ import EmployeeDeleteForm from "../components/EmployeeDeleteForm";
 export const useEmployeeColumns = () => {
   const employeeColumns: TableColumn<EmployeeDataRow>[] = [
     {
-      name: "No",
+      name: "Id",
       selector: (row) => row.id,
       width: "100px",
     },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row.name ?? "-",
       width: "160px",
     },
     {
       name: "Gender",
-      selector: (row) => row.gender,
+      selector: (row) => row.gender ?? "-",
     },
     {
       name: "email",
-      selector: (row) => row.email,
+      selector: (row) => row.email ?? "-",
     },
     {
       name: "phone",
-      selector: (row) => row.phone,
+      selector: (row) => row.phone ?? "-",
     },
     {
       name: "position",
-      selector: (row) => row.position.name,
+      selector: (row) => row?.position?.name ?? "-",
     },
     {
       name: "Actions",

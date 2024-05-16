@@ -13,11 +13,15 @@ import { NavbarProps } from "../../../types/navbar";
 import mama from "../../../assets/mama.jpg";
 import logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/auth/useAuth";
 
 const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   const logout = () => {
+    setAuth(null);
+    localStorage.setItem("token", "");
     navigate("/login");
   };
   return (

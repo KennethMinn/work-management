@@ -2,6 +2,7 @@ import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { CustomEventComponent } from "../components/CustomEventComponent";
+import { useNavigate } from "react-router-dom";
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -23,17 +24,12 @@ const events = [
   },
 ];
 
-const CustomEventContainerWrapper = (props) => {
-  console.log(props);
-  return <div>dsfdasf</div>;
-};
-
 const components = {
   event: CustomEventComponent,
-  eventContainerWrapper: CustomEventContainerWrapper,
 };
 
 const CalendarList = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <Calendar
@@ -52,8 +48,8 @@ const CalendarList = () => {
         }}
         onSelectEvent={(event) => alert(event.title)}
         onShowMore={(events) => {
+          navigate("/all-tasks");
           console.log(events);
-          alert("all tasks");
         }}
         components={components}
       />

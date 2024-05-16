@@ -3,12 +3,9 @@ import { onRequestError, onRequestFulfilled } from "./requestHandler";
 import { OnResponse, onResponseError } from "./responseHandler";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_DEPARTMENT_URL,
-});
-
-export const axiosPrivate = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
   headers: {
-    //"Content-Type": "application/json",
     "Content-Type": "multipart/form-data",
   },
 });

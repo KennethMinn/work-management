@@ -1,18 +1,14 @@
 import { Button, Flex, Image, Stack, TextInput } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
-import auth from "../../assets/auth.jpg";
+import auth from "../../../assets/auth.jpg";
 import { useForm } from "@mantine/form";
-import logo from "../../assets/logo.png";
-import { useNavigate } from "react-router-dom";
-
-type LoginValues = {
-  email: string;
-  password: string;
-};
+import logo from "../../../assets/logo.png";
+import { useLogin } from "../hooks/useLogin";
+import { LoginValues } from "../types";
 
 const Login = () => {
-  const navigate = useNavigate();
   const { height } = useViewportSize();
+  const { mutate: login, isPending } = useLogin();
   const form = useForm({
     initialValues: {
       email: "admin@gmail.com",
@@ -26,17 +22,24 @@ const Login = () => {
   });
 
   const onSubmit = (values: LoginValues) => {
-    console.log(values);
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+    login(formData);
     form.reset();
-    navigate("/dashboard");
   };
 
   return (
     <Flex justify="center" h={height} align="center">
-      <Image src={auth} h={800}></Image>
+      <Image src={auth} h={690} />
       <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack gap="md">
-          <Image style={{ cursor: "pointer" }} w={300} src={logo} />
+          <Image
+            style={{ userSelect: "none", pointerEvents: "none" }}
+            w={300}
+            src={logo}
+          />
           <TextInput
             w={400}
             label="Email"
@@ -49,7 +52,13 @@ const Login = () => {
             placeholder="Enter Password"
             {...form.getInputProps("password")}
           />
-          <Button type="submit" mt={12} color="#00cdfa">
+          <Button
+            loading={isPending}
+            disabled={isPending}
+            type="submit"
+            mt={12}
+            color="#00cdfa"
+          >
             Login
           </Button>
         </Stack>

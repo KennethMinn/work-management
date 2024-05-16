@@ -10,7 +10,7 @@ const EmployeeEditForm = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title="Edit Form"
+        title="Edit Employee Form"
         centered
         styles={{
           title: {

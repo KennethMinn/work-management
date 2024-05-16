@@ -2,20 +2,31 @@ import { Box } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { AlertModal } from "../../../components/AlertModal";
+import { useDeleteCompany } from "../hooks/useDeleteCompany";
+import { FC } from "react";
+import toast from "react-hot-toast";
 
-const EmployeeDeleteForm = () => {
+interface CompanyDeleteFormProps {
+  id: number;
+}
+const CompanyDeleteForm: FC<CompanyDeleteFormProps> = ({ id }) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { mutate: deleteCompany, isPending } = useDeleteCompany();
 
   const onDelete = () => {
-    alert("deleted");
-    close();
+    deleteCompany(id, {
+      onSuccess: () => {
+        close();
+        toast.success("Company deleted successfully.");
+      },
+    });
   };
 
   return (
     <Box>
       <AlertModal
-        isLoading={false}
-        title="Employee Delete"
+        isLoading={isPending}
+        title="Company Delete"
         description="This action cannot be undone."
         opened={opened}
         close={close}
@@ -29,4 +40,4 @@ const EmployeeDeleteForm = () => {
   );
 };
 
-export default EmployeeDeleteForm;
+export default CompanyDeleteForm;
