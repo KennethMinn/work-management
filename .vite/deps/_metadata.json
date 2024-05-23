@@ -1,0 +1,127 @@
+{
+  "hash": "63dc5212",
+  "configHash": "97e530b4",
+  "lockfileHash": "3d5c0c35",
+  "browserHash": "d44f3dc4",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "5453d97a",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "3461de84",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "4c99937b",
+      "needsInterop": true
+    },
+    "@mantine/core": {
+      "src": "../../node_modules/@mantine/core/esm/index.mjs",
+      "file": "@mantine_core.js",
+      "fileHash": "24af3b04",
+      "needsInterop": false
+    },
+    "@tanstack/react-query": {
+      "src": "../../node_modules/@tanstack/react-query/build/modern/index.js",
+      "file": "@tanstack_react-query.js",
+      "fileHash": "d5bc988d",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "e0b607e4",
+      "needsInterop": false
+    },
+    "react-hot-toast": {
+      "src": "../../node_modules/react-hot-toast/dist/index.mjs",
+      "file": "react-hot-toast.js",
+      "fileHash": "ac4f4edf",
+      "needsInterop": false
+    },
+    "@mantine/hooks": {
+      "src": "../../node_modules/@mantine/hooks/esm/index.mjs",
+      "file": "@mantine_hooks.js",
+      "fileHash": "fcf774b3",
+      "needsInterop": false
+    },
+    "@mantine/form": {
+      "src": "../../node_modules/@mantine/form/esm/index.mjs",
+      "file": "@mantine_form.js",
+      "fileHash": "11477360",
+      "needsInterop": false
+    },
+    "react-big-calendar": {
+      "src": "../../node_modules/react-big-calendar/dist/react-big-calendar.esm.js",
+      "file": "react-big-calendar.js",
+      "fileHash": "bc1cfcb9",
+      "needsInterop": false
+    },
+    "dayjs": {
+      "src": "../../node_modules/dayjs/dayjs.min.js",
+      "file": "dayjs.js",
+      "fileHash": "9e26e4de",
+      "needsInterop": true
+    },
+    "zustand": {
+      "src": "../../node_modules/zustand/esm/index.mjs",
+      "file": "zustand.js",
+      "fileHash": "1ce56d0d",
+      "needsInterop": false
+    },
+    "zustand/middleware": {
+      "src": "../../node_modules/zustand/esm/middleware.mjs",
+      "file": "zustand_middleware.js",
+      "fileHash": "e3e25b98",
+      "needsInterop": false
+    },
+    "react-data-table-component": {
+      "src": "../../node_modules/react-data-table-component/dist/index.es.js",
+      "file": "react-data-table-component.js",
+      "fileHash": "9f31dc61",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "74678f5a",
+      "needsInterop": false
+    },
+    "@tabler/icons-react": {
+      "src": "../../node_modules/@tabler/icons-react/dist/esm/tabler-icons-react.mjs",
+      "file": "@tabler_icons-react.js",
+      "fileHash": "5346e55d",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-CRS3CFTV": {
+      "file": "chunk-CRS3CFTV.js"
+    },
+    "chunk-6EEL643C": {
+      "file": "chunk-6EEL643C.js"
+    },
+    "chunk-ZMH4QK4U": {
+      "file": "chunk-ZMH4QK4U.js"
+    },
+    "chunk-DUQ7VHKJ": {
+      "file": "chunk-DUQ7VHKJ.js"
+    },
+    "chunk-SQSAEHDC": {
+      "file": "chunk-SQSAEHDC.js"
+    },
+    "chunk-BTNJN4YD": {
+      "file": "chunk-BTNJN4YD.js"
+    },
+    "chunk-HL2QZUHZ": {
+      "file": "chunk-HL2QZUHZ.js"
+    }
+  }
+}

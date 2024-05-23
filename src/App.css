@@ -1,0 +1,13 @@
+/* calendar css */
+.rbc-time-header {
+  display: none !important;
+}
+
+.rbc-event {
+  padding: 0 !important;
+}
+
+.rbc-day-bg,
+.rbc-date-cell {
+  cursor: pointer;
+}
