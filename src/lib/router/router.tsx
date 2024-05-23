@@ -5,6 +5,7 @@ import Login from "../../modules/auth/components/Login";
 import EmployeeListing from "../../modules/employee/pages/EmployeeListing";
 import CalendarListing from "../../modules/calendar/pages/CalendarListing";
 import CompanyListing from "../../modules/company/pages/CompanyListing";
+import Home from "../../modules/home/pages/Home";
 
 export const router = createBrowserRouter([
   {
@@ -13,18 +14,18 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <h1>haha </h1>,
+        element: <Home />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <h1>Login</h1>,
       },
       {
-        path: "/all-tasks",
+        path: "all-tasks",
         element: <div>all-tasks</div>,
       },
     ],

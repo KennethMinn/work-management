@@ -2,10 +2,11 @@ import { Box, Button, Flex, Modal, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEdit } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useUpdateCompany } from "../hooks/useUpdateCompany";
 import toast from "react-hot-toast";
 import { CompanyUpdateFormValues } from "../types";
+import { useGetCompany } from "../hooks/useGetCompany";
 
 interface CompanyEditFormProps {
   id: number;
@@ -13,6 +14,8 @@ interface CompanyEditFormProps {
 
 const CompanyEditForm: FC<CompanyEditFormProps> = ({ id }) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { data: company } = useGetCompany(id);
+
   const { mutate: updateCompany, isPending } = useUpdateCompany(id);
   const form = useForm({
     initialValues: {
@@ -38,6 +41,12 @@ const CompanyEditForm: FC<CompanyEditFormProps> = ({ id }) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (form) {
+      form.setValues(company);
+    }
+  }, [company]);
 
   return (
     <Box>
