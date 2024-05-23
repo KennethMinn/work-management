@@ -10,6 +10,8 @@ const Home = () => {
     if (!user) {
       navigate("/login");
       return;
+    } else {
+      navigate("/dashboard");
     }
   }, []);
   return <div>Home</div>;
