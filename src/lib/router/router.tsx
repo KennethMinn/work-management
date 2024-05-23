@@ -6,6 +6,8 @@ import EmployeeListing from "../../modules/employee/pages/EmployeeListing";
 import CalendarListing from "../../modules/calendar/pages/CalendarListing";
 import CompanyListing from "../../modules/company/pages/CompanyListing";
 import Home from "../../modules/home/pages/Home";
+import DepartmentListing from "../../modules/department/pages/DepartmentListing";
+import PositionListing from "../../modules/positions/pages/PositionListing";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +51,14 @@ export const router = createBrowserRouter([
       {
         path: "employee-list",
         element: <EmployeeListing />,
+      },
+      {
+        path: "department-list",
+        element: <DepartmentListing />,
+      },
+      {
+        path: "position-list",
+        element: <PositionListing />,
       },
     ],
   },

@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
 import DataTable from "../../../components/DataTable";
 import { useEmployeeColumns } from "../hooks/useCompanyColumns";
 import { useGetAllCompanies } from "../hooks/useGetAllCompanies";
@@ -8,13 +8,11 @@ const CompanyList = () => {
   const columns = useEmployeeColumns();
   const { data: employees, isLoading } = useGetAllCompanies();
 
-  //if (isLoading) return <Text>Loading...</Text>;
-
   return (
     <Box>
       <CompanyCreateForm />
       {isLoading ? (
-        <div>loading...</div>
+        <Text>loading...</Text>
       ) : (
         <DataTable columns={columns} data={employees} />
       )}

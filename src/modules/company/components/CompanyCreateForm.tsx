@@ -1,30 +1,31 @@
 import { Box, Button, Flex, Modal, Text, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import { CompanyCreateFormValues } from "../types";
 import { useCreateCompany } from "../hooks/useCreateCompany";
 import toast from "react-hot-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { companyFormSchema, TCompanyFormSchema } from "../types";
+import { useForm } from "react-hook-form";
 
 const CompanyCreateForm = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: createCompany, isPending } = useCreateCompany();
-  const form = useForm({
-    initialValues: {
-      name: "",
-    },
 
-    validate: {
-      name: (value) => (!value ? "Name is required" : null),
-    },
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<TCompanyFormSchema>({
+    resolver: zodResolver(companyFormSchema),
   });
 
-  const onSubmit = (values: CompanyCreateFormValues) => {
+  const onSubmit = (values: TCompanyFormSchema) => {
     const formData = new FormData();
     formData.append("name", values.name);
     createCompany(formData, {
       onSuccess: () => {
-        form.reset();
+        reset();
         close();
         toast.success("Company created Successfully.");
       },
@@ -49,13 +50,14 @@ const CompanyCreateForm = () => {
         }}
       >
         <Box my={10}>
-          <form onSubmit={form.onSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Flex align="center" gap="lg">
               <Text fw={500}>Name</Text>
               <TextInput
                 style={{ width: "100%" }}
                 placeholder="Enter company name"
-                {...form.getInputProps("name")}
+                {...register("name")}
+                error={errors.name?.message}
               />
             </Flex>
             <Flex justify="end" gap={15} mt={20}>
