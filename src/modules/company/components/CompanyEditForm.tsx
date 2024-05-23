@@ -1,12 +1,13 @@
 import { Box, Button, Flex, Modal, Text, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEdit } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdateCompany } from "../hooks/useUpdateCompany";
 import toast from "react-hot-toast";
-import { CompanyUpdateFormValues } from "../types";
 import { useGetCompany } from "../hooks/useGetCompany";
+import { useForm } from "react-hook-form";
+import { companyFormSchema, TCompanyFormSchema } from "../types";
 
 interface CompanyEditFormProps {
   id: number;
@@ -15,24 +16,17 @@ interface CompanyEditFormProps {
 const CompanyEditForm: FC<CompanyEditFormProps> = ({ id }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { data: company } = useGetCompany(id);
-
   const { mutate: updateCompany, isPending } = useUpdateCompany(id);
-  const form = useForm({
-    initialValues: {
-      name: "",
-    },
 
-    validate: {
-      name: (value) => (!value ? "Name is required" : null),
-    },
+  const { register, handleSubmit, setValue } = useForm<TCompanyFormSchema>({
+    resolver: zodResolver(companyFormSchema),
   });
 
-  const onSubmit = (values: CompanyUpdateFormValues) => {
+  const onSubmit = (values: TCompanyFormSchema) => {
     const formData = new FormData();
     formData.append("name", values.name);
     updateCompany(formData, {
       onSuccess: () => {
-        form.reset();
         close();
         toast.success("Company updated Successfully.");
       },
@@ -43,10 +37,8 @@ const CompanyEditForm: FC<CompanyEditFormProps> = ({ id }) => {
   };
 
   useEffect(() => {
-    if (form) {
-      form.setValues(company);
-    }
-  }, [company]);
+    setValue("name", company?.name);
+  }, [company, setValue]);
 
   return (
     <Box>
@@ -63,13 +55,13 @@ const CompanyEditForm: FC<CompanyEditFormProps> = ({ id }) => {
         }}
       >
         <Box my={10}>
-          <form onSubmit={form.onSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Flex align="center" gap="lg">
               <Text fw={500}>Name</Text>
               <TextInput
                 style={{ width: "100%" }}
                 placeholder="Enter company name"
-                {...form.getInputProps("name")}
+                {...register("name")}
               />
             </Flex>
             <Flex justify="end" gap={15} mt={20}>
@@ -84,7 +76,7 @@ const CompanyEditForm: FC<CompanyEditFormProps> = ({ id }) => {
                 disabled={isPending}
                 color="blue"
               >
-                Create
+                Update
               </Button>
             </Flex>
           </form>

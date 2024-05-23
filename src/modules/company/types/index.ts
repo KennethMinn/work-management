@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface CompanyDataRow {
   id: number;
   name: string;
@@ -6,10 +8,8 @@ export interface CompanyDataRow {
   company: string | null;
 }
 
-export interface CompanyCreateFormValues {
-  name: string;
-}
+export const companyFormSchema = z.object({
+  name: z.string().min(1, "name is required"),
+});
 
-export interface CompanyUpdateFormValues {
-  name: string;
-}
+export type TCompanyFormSchema = z.infer<typeof companyFormSchema>;
