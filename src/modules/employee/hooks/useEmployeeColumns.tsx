@@ -1,5 +1,5 @@
 import { TableColumn } from "react-data-table-component";
-import { Flex } from "@mantine/core";
+import { Avatar, Flex } from "@mantine/core";
 import { EmployeeDataRow } from "../types";
 import EmployeeEditForm from "../components/EmployeeEditForm";
 import EmployeeDeleteForm from "../components/EmployeeDeleteForm";
@@ -12,6 +12,11 @@ export const useEmployeeColumns = () => {
       width: "100px",
     },
     {
+      name: "Avatar",
+      cell: (row) => <Avatar src={row.imgURL} />,
+      width: "100px",
+    },
+    {
       name: "Name",
       selector: (row) => row.name ?? "-",
       width: "160px",
@@ -21,16 +26,20 @@ export const useEmployeeColumns = () => {
       selector: (row) => row.gender ?? "-",
     },
     {
-      name: "email",
+      name: "Email",
       selector: (row) => row.email ?? "-",
     },
     {
-      name: "phone",
+      name: "Phone",
       selector: (row) => row.phone ?? "-",
     },
     {
-      name: "position",
+      name: "Position",
       selector: (row) => row?.position?.name ?? "-",
+    },
+    {
+      name: "Role",
+      selector: (row) => row.role ?? "-",
     },
     {
       name: "Actions",

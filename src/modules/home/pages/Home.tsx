@@ -13,7 +13,7 @@ const Home = () => {
     } else {
       navigate("/dashboard");
     }
-  }, []);
+  }, [user, navigate]);
   return <div>Home</div>;
 };
 
