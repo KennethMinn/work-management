@@ -20,9 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Company,
   Department,
-  employeeFormSchema,
+  employeeCreateFormSchema,
   Position,
-  TEmployeeFormSchema,
+  TEmployeeCreateFormSchema,
 } from "../types";
 import { Controller, useForm } from "react-hook-form";
 import { useGetAllDepartments } from "../../department/hooks/useGetAllDepartments";
@@ -54,8 +54,8 @@ const PositionCreateForm = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<TEmployeeFormSchema>({
-    resolver: zodResolver(employeeFormSchema),
+  } = useForm<TEmployeeCreateFormSchema>({
+    resolver: zodResolver(employeeCreateFormSchema),
     defaultValues: {
       gender: "Male",
     },
@@ -74,7 +74,7 @@ const PositionCreateForm = () => {
     }
   }, [file]); // Re-generate preview URL whenever the file changes
 
-  const onSubmit = (values: TEmployeeFormSchema) => {
+  const onSubmit = (values: TEmployeeCreateFormSchema) => {
     if (!file) {
       toast.error("Please Add profile");
       return;
@@ -82,13 +82,16 @@ const PositionCreateForm = () => {
     const data = { ...values, photo_path: file };
     const formData = new FormData();
     for (const key in data) {
-      formData.append(key, data[key as keyof TEmployeeFormSchema] as string);
+      formData.append(
+        key,
+        data[key as keyof TEmployeeCreateFormSchema] as string
+      );
     }
     createEmployee(formData, {
       onSuccess: () => {
         reset();
         close();
-        toast.success("Department created Successfully.");
+        toast.success("Employee Created Successfully.");
       },
       onError: () => {
         toast.error("Something went wrong.");
@@ -99,7 +102,7 @@ const PositionCreateForm = () => {
   return (
     <Box>
       <Modal
-        size={600}
+        size={650}
         padding={30}
         opened={opened}
         onClose={close}
@@ -152,7 +155,7 @@ const PositionCreateForm = () => {
                 </Text>
                 <TextInput
                   style={{ width: "100%" }}
-                  placeholder="Enter position name"
+                  placeholder="Enter employee name"
                   {...register("name")}
                   error={errors.name?.message}
                 />

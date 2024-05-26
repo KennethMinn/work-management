@@ -43,10 +43,10 @@ export const useEmployeeColumns = () => {
     },
     {
       name: "Actions",
-      cell: () => (
+      cell: (row) => (
         <Flex align="center" gap={20}>
-          <EmployeeEditForm />
-          <EmployeeDeleteForm />
+          <EmployeeEditForm id={row.id} />
+          <EmployeeDeleteForm id={row.id} />
         </Flex>
       ),
     },

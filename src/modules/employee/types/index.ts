@@ -44,7 +44,7 @@ export interface EmployeeDataRow {
   imgURL: string;
 }
 
-export const employeeFormSchema = z.object({
+export const employeeCreateFormSchema = z.object({
   // photo_path: z
   //   .instanceof(File, { message: "invalid file" })
   //   .refine((file) => file !== null, "A photo is required"),
@@ -59,4 +59,25 @@ export const employeeFormSchema = z.object({
   position_id: z.string().min(1, "position is required"),
 });
 
-export type TEmployeeFormSchema = z.infer<typeof employeeFormSchema>;
+export type TEmployeeCreateFormSchema = z.infer<
+  typeof employeeCreateFormSchema
+>;
+
+export const employeeUpdateFormSchema = z.object({
+  // photo_path: z
+  //   .instanceof(File, { message: "invalid file" })
+  //   .refine((file) => file !== null, "A photo is required"),
+  name: z.string().min(1, "name is required"),
+  email: z.string().email("invalid email"),
+  password: z.string().optional(),
+  phone: z.string().min(1, "phone is required"),
+  nrc_number: z.string().min(1, "nrc is required"),
+  gender: z.string().min(1, "gender is required"),
+  company_id: z.string().min(1, "department is required"),
+  department_id: z.string().min(1, "position is required"),
+  position_id: z.string().min(1, "position is required"),
+});
+
+export type TEmployeeUpdateFormSchema = z.infer<
+  typeof employeeUpdateFormSchema
+>;
