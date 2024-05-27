@@ -5,7 +5,7 @@ import PositionEditForm from "../components/PositionEditForm";
 import PositionDeleteForm from "../components/PositionDeleteForm";
 
 export const usePositionColumns = () => {
-  const employeeColumns: TableColumn<PositionDataRow>[] = [
+  const positionColumns: TableColumn<PositionDataRow>[] = [
     {
       name: "Id",
       selector: (row) => row.id,
@@ -32,5 +32,5 @@ export const usePositionColumns = () => {
     },
   ];
 
-  return employeeColumns;
+  return positionColumns;
 };

@@ -5,7 +5,7 @@ import CompanyEditForm from "../components/CompanyEditForm";
 import CompanyDeleteForm from "../components/CompanyDeleteForm";
 
 export const useEmployeeColumns = () => {
-  const employeeColumns: TableColumn<CompanyDataRow>[] = [
+  const companyColumns: TableColumn<CompanyDataRow>[] = [
     {
       name: "Id",
       selector: (row) => row.id,
@@ -27,5 +27,5 @@ export const useEmployeeColumns = () => {
     },
   ];
 
-  return employeeColumns;
+  return companyColumns;
 };

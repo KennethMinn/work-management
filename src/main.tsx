@@ -6,6 +6,9 @@ import { MantineProvider } from "@mantine/core";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ToastProvider from "./providers/toast-provider";
+import { DatesProvider } from "@mantine/dates";
+import "dayjs/locale/ru";
+import "@mantine/dates/styles.css";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +17,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
         <ToastProvider />
-        <App />
+        <DatesProvider
+          settings={{
+            locale: "en",
+            firstDayOfWeek: 0,
+            weekendDays: [0],
+            timezone: "UTC",
+          }}
+        >
+          <App />
+        </DatesProvider>
       </MantineProvider>
     </QueryClientProvider>
   </React.StrictMode>

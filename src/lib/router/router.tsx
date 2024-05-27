@@ -8,6 +8,10 @@ import CompanyListing from "../../modules/company/pages/CompanyListing";
 import Home from "../../modules/home/pages/Home";
 import DepartmentListing from "../../modules/department/pages/DepartmentListing";
 import PositionListing from "../../modules/positions/pages/PositionListing";
+import CustomerListing from "../../modules/customer/pages/CustomerListing";
+import ProjectListing from "../../modules/project/pages/ProjectListing";
+import ShootingCategoryListing from "../../modules/shooting-category/pages/ShootingCategoryListing";
+import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/ShootingAccessoryListing";
 
 export const router = createBrowserRouter([
   {
@@ -49,8 +53,8 @@ export const router = createBrowserRouter([
         element: <CompanyListing />,
       },
       {
-        path: "employee-list",
-        element: <EmployeeListing />,
+        path: "customer-list",
+        element: <CustomerListing />,
       },
       {
         path: "department-list",
@@ -59,6 +63,22 @@ export const router = createBrowserRouter([
       {
         path: "position-list",
         element: <PositionListing />,
+      },
+      {
+        path: "employee-list",
+        element: <EmployeeListing />,
+      },
+      {
+        path: "project-list",
+        element: <ProjectListing />,
+      },
+      {
+        path: "shooting-category-list",
+        element: <ShootingCategoryListing />,
+      },
+      {
+        path: "shooting-accessory-list",
+        element: <ShootingAccessoryListing />,
       },
     ],
   },

@@ -50,4 +50,14 @@ export const navMenus = [
     icon: <IconPresentation />,
     href: "/dashboard/project-list",
   },
+  {
+    label: "Shooting Category List",
+    icon: <IconPresentation />,
+    href: "/dashboard/shooting-category-list",
+  },
+  {
+    label: "Shooting Accessory List",
+    icon: <IconPresentation />,
+    href: "/dashboard/shooting-accessory-list",
+  },
 ];

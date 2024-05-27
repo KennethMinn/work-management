@@ -5,7 +5,7 @@ import DepartmentEditForm from "../components/DepartmentEditForm";
 import DepartmentDeleteForm from "../components/DepartmentDeleteForm";
 
 export const useDepartmentColumns = () => {
-  const employeeColumns: TableColumn<DepartmentDataRow>[] = [
+  const departmentColumns: TableColumn<DepartmentDataRow>[] = [
     {
       name: "Id",
       selector: (row) => row.id,
@@ -32,5 +32,5 @@ export const useDepartmentColumns = () => {
     },
   ];
 
-  return employeeColumns;
+  return departmentColumns;
 };

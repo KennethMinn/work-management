@@ -38,7 +38,7 @@ interface EmployeeEditFormProps {
 
 const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { data: employee, isLoading: isEmployeeLoading } = useGetEmployee(id);
+  const { data: employee } = useGetEmployee(id);
   const { mutate: updateEmployee, isPending } = useUpdateEmployee(id);
   const { data: departments } = useGetAllDepartments();
   const { data: companies } = useGetAllCompanies();
@@ -121,8 +121,6 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
       setValue("position_id", employee.position_id?.toString());
     }
   }, [employee, setValue]);
-
-  if (isEmployeeLoading) return <div>loading...</div>;
 
   return (
     <Box>
@@ -322,7 +320,7 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
                 disabled={isPending}
                 color="blue"
               >
-                Create
+                Update
               </Button>
             </Flex>
           </form>

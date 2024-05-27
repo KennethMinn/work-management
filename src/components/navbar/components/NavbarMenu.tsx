@@ -11,7 +11,7 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({ isOpen }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   return (
-    <AppShell.Navbar p="md">
+    <AppShell.Navbar p="md" style={{ overflowY: "scroll" }}>
       {navMenus.map((navMenu, i) => (
         <Box key={i}>
           {isOpen ? (
