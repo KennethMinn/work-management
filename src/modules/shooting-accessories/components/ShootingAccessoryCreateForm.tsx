@@ -25,7 +25,7 @@ const ShootingAccessoryCreateForm = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: createShootingAccessory, isPending } =
     useCreateShootingAccessory();
-  const { data: shootingCategories } = useGetAllShootingCategories();
+  const { data: shootingCategories } = useGetAllShootingCategories("visible");
 
   const {
     register,

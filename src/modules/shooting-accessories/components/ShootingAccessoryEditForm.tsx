@@ -32,7 +32,7 @@ const ShootingAccessoryEditForm: FC<ShootingAccessoryEditFormProps> = ({
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { data: shootingAccessory } = useGetShootingAccessory(id);
-  const { data: shootingCategories } = useGetAllShootingCategories();
+  const { data: shootingCategories } = useGetAllShootingCategories("visible");
 
   const { mutate: updateShootingAccessory, isPending } =
     useUpdateShootingAccessory(id);

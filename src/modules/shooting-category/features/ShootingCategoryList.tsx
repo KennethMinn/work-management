@@ -3,16 +3,11 @@ import DataTable from "../../../components/DataTable";
 import { useGetAllShootingCategories } from "../hooks/useGetAllShootingCategories";
 import { useShootingCategoryColumns } from "../hooks/useShootingCategoryColumns";
 import ShootingCategoryCreateForm from "../components/ShootingCategoryCreateForm";
-import { ShootingCategoryDataRow } from "../types";
 
 const ShootingCategoryList = () => {
   const columns = useShootingCategoryColumns();
-  const { data: shootingCategories, isLoading } = useGetAllShootingCategories();
-
-  const visiblShootingCategories = shootingCategories?.filter(
-    (shootingCategory: ShootingCategoryDataRow) =>
-      shootingCategory.status === null
-  );
+  const { data: shootingCategories, isLoading } =
+    useGetAllShootingCategories("visible");
 
   return (
     <Box>
@@ -20,7 +15,7 @@ const ShootingCategoryList = () => {
       {isLoading ? (
         <Text>loading...</Text>
       ) : (
-        <DataTable columns={columns} data={visiblShootingCategories} />
+        <DataTable columns={columns} data={shootingCategories} />
       )}
     </Box>
   );

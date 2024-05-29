@@ -1,17 +1,26 @@
 import { EventProps } from "react-big-calendar";
-import { MyEvent } from "../types";
+import { Task } from "../types";
+import { Box, Text } from "@mantine/core";
 
-export const CustomEventComponent: React.FC<EventProps<MyEvent>> = (props) => {
-  console.log(props);
+export const CustomEventComponent: React.FC<EventProps<Task>> = (props) => {
+  let bgColor;
+  switch (props.event.status) {
+    case "inProgress":
+      bgColor = "blue";
+      break;
+    default:
+      bgColor = "green";
+  }
+
   return (
-    <div
+    <Box
+      px={5}
+      bg={bgColor}
       style={{
-        backgroundColor: "blue",
         borderRadius: "5px",
-        padding: "0 5px",
       }}
     >
-      {props.event.title}
-    </div>
+      <Text onClick={() => console.log(props.event)}>{props.event.title}</Text>
+    </Box>
   );
 };

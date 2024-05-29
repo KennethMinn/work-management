@@ -31,7 +31,7 @@ import { useGetAllCompanies } from "../../company/hooks/useGetAllCompanies";
 import { useGetAllPositions } from "../../positions/hooks/useGetAllPositions";
 import { useEffect, useRef, useState } from "react";
 
-const PositionCreateForm = () => {
+const EmployeeCreateForm = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: createEmployee, isPending } = useCreateEmployee();
   const { data: departments } = useGetAllDepartments();
@@ -312,4 +312,4 @@ const PositionCreateForm = () => {
   );
 };
 
-export default PositionCreateForm;
+export default EmployeeCreateForm;

@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             locale: "en",
             firstDayOfWeek: 0,
             weekendDays: [0],
-            timezone: "UTC",
+            timezone: "Asia/Yangon",
           }}
         >
           <App />
