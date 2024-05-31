@@ -78,6 +78,66 @@ export interface User {
   imgURL: string;
 }
 
+// export const taskFormSchema = z.object({
+//   title: z.string().min(1, "title is required"),
+//   description: z.string().min(1, "description is required"),
+
+//   start_date: z.date().min(new Date("2022-01-01"), "date is required"),
+//   end_date: z.date().min(new Date("2022-01-01"), "date is required"),
+//   start_time: z.string().min(1, "start time is required"),
+//   end_time: z.string().min(1, "end time is required"),
+//   customer_id: z.string().min(1, "customer is required"),
+//   project_id: z.string().min(1, "project is required"),
+//   user_id: z.string().min(1, "user is required"),
+//   meeting_link: z.string().min(1, "meeting link is required"),
+//   location: z.string().min(1, "location is required"),
+
+//   //Graphic Design
+//   //reference_photo -> from comp
+//   brand: z.string().min(1, "brand is required"),
+//   type_of_media: z.string().min(1, "media type is required"),
+//   designer_id: z.string().min(1, "designer is required"),
+//   content_writer_id: z.string().min(1, "content_writer is required"),
+//   visual_copy: z.string().min(1, "visual copy is required"),
+//   headline: z.string().min(1, "headline is required"),
+//   deadline: z.date().min(new Date("2022-01-01"), "date is required"),
+//   body: z.string().min(1, "body is required"),
+//   objective: z.string().min(1, "objective is required"),
+//   important_info: z.string().min(1, "important_info is required"),
+//   taste_style: z.string().min(1, "taste style info is required"),
+//   visual_format: z.string().min(1, "visual format is required"),
+//   aspect_ratio: z.string().min(1, "aspect_ratio is required"),
+//   width: z.string().min(1, "width is required"),
+//   height: z.string().min(1, "height is required"),
+//   resolution: z.string().min(1, "resolution is required"),
+//   reference: z.string().min(1, "reference is required"),
+
+//   //shooting
+//   //document file -> from comp
+//   duration: z.string().min(1, "duration is required"),
+//   shooting_location: z.string().min(1, "shooting_location is required"),
+//   type: z.string().min(1, "type  is required"),
+//   type_detail: z.string().min(1, "type detail  is required"),
+//   script_detail: z.string().min(1, "script detail  is required"),
+//   scene_number: z.string().min(1, "scene number  is required"),
+//   contact_name: z.string().min(1, "contact name  is required"),
+//   contact_phone: z.string().min(1, "contact phone  is required"),
+//   client: z.string().min(1, "client is required"),
+//   date: z.date().min(new Date("2022-01-01"), "date is required"),
+//   video_shooting_project: z
+//     .string()
+//     .min(1, "video shooting project is required"),
+//   photo_shooting_project: z
+//     .string()
+//     .min(1, "photo shooting project is required"),
+//   arrive_office_on_time: z.string().min(1, "time is required"),
+//   transportation_charge: z.string().min(1, "transportation charge is required"),
+//   out_time: z.string().min(1, "out time is required"),
+//   in_time: z.string().min(1, "in time is required"),
+//   crew_list: z.array(z.string()).min(1, "crew list is required"),
+//   project_details: z.string().min(1, "project detail is required"),
+// });
+
 export const taskFormSchema = z.object({
   title: z.string().min(1, "title is required"),
   description: z.string().min(1, "description is required"),
@@ -94,48 +154,43 @@ export const taskFormSchema = z.object({
 
   //Graphic Design
   //reference_photo -> from comp
-  brand: z.string().min(1, "brand is required"),
-  type_of_media: z.string().min(1, "media type is required"),
-  designer_id: z.string().min(1, "designer is required"),
-  content_writer_id: z.string().min(1, "content_writer is required"),
-  visual_copy: z.string().min(1, "visual copy is required"),
-  headline: z.string().min(1, "headline is required"),
-  deadline: z.date().min(new Date("2022-01-01"), "date is required"),
-  body: z.string().min(1, "body is required"),
-  objective: z.string().min(1, "objective is required"),
-  important_info: z.string().min(1, "important_info is required"),
-  taste_style: z.string().min(1, "taste style info is required"),
-  visual_format: z.string().min(1, "visual format is required"),
-  aspect_ratio: z.string().min(1, "aspect_ratio is required"),
-  width: z.string().min(1, "width is required"),
-  height: z.string().min(1, "height is required"),
-  resolution: z.string().min(1, "resolution is required"),
-  reference: z.string().min(1, "reference is required"),
+  brand: z.string().optional(),
+  type_of_media: z.string().optional(),
+  designer_id: z.string().optional(),
+  content_writer_id: z.string().optional(),
+  visual_copy: z.string().optional(),
+  headline: z.string().optional(),
+  deadline: z.date().optional(),
+  body: z.string().optional(),
+  objective: z.string().optional(),
+  important_info: z.string().optional(),
+  taste_style: z.string().optional(),
+  visual_format: z.string().optional(),
+  aspect_ratio: z.string().optional(),
+  width: z.string().optional(),
+  height: z.string().optional(),
+  resolution: z.string().optional(),
+  reference: z.string().optional(),
 
   //shooting
   //document file -> from comp
-  // duration: z.string().min(1, "duration is required"),
-  // shooting_location: z.string().min(1, "shooting_location is required"),
-  // type: z.string().min(1, "type  is required"),
-  // type_detail: z.string().min(1, "type detail  is required"),
-  // script_detail: z.string().min(1, "script detail  is required"),
-  // scene_number: z.string().min(1, "scene number  is required"),
-  // contact_name: z.string().min(1, "contact name  is required"),
-  // contact_phone: z.string().min(1, "contact phone  is required"),
-  // client: z.string().min(1, "client is required"),
-  // date: z.date().min(new Date("2022-01-01"), "date is required"),
-  // video_shooting_project: z
-  //   .string()
-  //   .min(1, "video shooting project is required"),
-  // photo_shooting_project: z
-  //   .string()
-  //   .min(1, "photo shooting project is required"),
-  // arrive_office_on_time: z.string().min(1, "time is required"),
-  // transportation_charge: z.string().min(1, "transportation charge is required"),
-  // out_time: z.string().min(1, "out time is required"),
-  // in_time: z.string().min(1, "in time is required"),
-  // crew_list: z.array(z.string()).min(1, "crew list is required"),
-  // project_details: z.string().min(1, "project detail is required"),
+  duration: z.string().optional(),
+  shooting_location: z.string().optional(),
+  type: z.string().optional(),
+  type_detail: z.string().optional(),
+  script_detail: z.string().optional(),
+  scene_number: z.string().optional(),
+  contact_name: z.string().optional(),
+  contact_phone: z.string().optional(),
+  client: z.string().optional(),
+  video_shooting_project: z.string().optional(),
+  photo_shooting_project: z.string().optional(),
+  arrive_office_on_time: z.string().optional(),
+  transportation_charge: z.string().optional(),
+  out_time: z.string().optional(),
+  in_time: z.string().optional(),
+  crew_list: z.array(z.string()).optional(),
+  project_details: z.string().optional(),
 });
 
 export type TTaskFormSchema = z.infer<typeof taskFormSchema>;

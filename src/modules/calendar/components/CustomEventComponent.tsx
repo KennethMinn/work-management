@@ -5,7 +5,13 @@ import { Box, Text } from "@mantine/core";
 export const CustomEventComponent: React.FC<EventProps<Task>> = (props) => {
   let bgColor;
   switch (props.event.status) {
+    case "pending":
+      bgColor = "red";
+      break;
     case "inProgress":
+      bgColor = "yellow";
+      break;
+    case "done":
       bgColor = "blue";
       break;
     default:

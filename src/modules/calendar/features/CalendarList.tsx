@@ -8,6 +8,7 @@ import { Task } from "../types";
 import { useDisclosure } from "@mantine/hooks";
 import TaskCreateForm from "../components/TaskCreateForm";
 import { useState } from "react";
+import { Text } from "@mantine/core";
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -36,7 +37,7 @@ const components = {
 const CalendarList = () => {
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
-  const { data: tasks } = useGetAllTasks();
+  const { data: tasks, isLoading } = useGetAllTasks();
   const [start, setStart] = useState<Date | undefined>();
 
   const events = tasks?.map((task: Task) => ({
@@ -45,13 +46,15 @@ const CalendarList = () => {
     end: dayjs(task.end_date).toDate(),
   }));
 
+  if (isLoading) return <Text>loading...</Text>;
+
   return (
     <div>
       <TaskCreateForm opened={opened} close={close} start={start} />
       <Calendar
         min={dayjs("2024-05-14T09:00:00").toDate()}
         max={dayjs("2024-05-14T18:00:00").toDate()}
-        views={["month"]}
+        views={["month", "day"]}
         events={events}
         localizer={localizer}
         startAccessor="start"
@@ -60,13 +63,11 @@ const CalendarList = () => {
         selectable
         onSelectSlot={({ start }) => {
           setStart(start);
-          console.log(start);
           open();
         }}
         //onSelectEvent={(event) => console.log(event)}
         onShowMore={(events) => {
-          navigate("/all-tasks");
-          console.log(events);
+          navigate("/dashboard/all-tasks", { state: events });
         }}
         components={components}
       />

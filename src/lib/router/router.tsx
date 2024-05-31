@@ -12,6 +12,7 @@ import CustomerListing from "../../modules/customer/pages/CustomerListing";
 import ProjectListing from "../../modules/project/pages/ProjectListing";
 import ShootingCategoryListing from "../../modules/shooting-category/pages/ShootingCategoryListing";
 import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/ShootingAccessoryListing";
+import TaskListing from "../../modules/calendar/pages/TaskListing";
 
 export const router = createBrowserRouter([
   {
@@ -29,10 +30,6 @@ export const router = createBrowserRouter([
       {
         path: "register",
         element: <h1>Login</h1>,
-      },
-      {
-        path: "all-tasks",
-        element: <div>all-tasks</div>,
       },
     ],
   },
@@ -79,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path: "shooting-accessory-list",
         element: <ShootingAccessoryListing />,
+      },
+      {
+        path: "all-tasks",
+        element: <TaskListing />,
       },
     ],
   },

@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  Avatar,
   Box,
   Button,
   FileButton,
@@ -149,62 +148,76 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   };
 
   const onSubmit = (values: TTaskFormSchema) => {
+    let fileKey = {};
+    let fileType;
+    switch (taskType) {
+      case "Graphic Design":
+        fileKey = { reference_photo: file };
+        fileType = "reference photo";
+        break;
+      case "Shooting":
+        fileKey = { document: file };
+        fileType = "document";
+        break;
+    }
+
     if (!file) {
-      toast.error(`Please Add file`);
+      toast.error(`Please Add ${fileType}`);
       return;
     }
 
     //shootinig
-    // if (items.length < 1) {
-    //   toast.error("Please add shooting accessories");
-    //   return;
-    // }
-
-    let fileKey = {};
-    switch (taskType) {
-      case "Graphic Design":
-        fileKey = { reference_photo: file };
-        break;
-      case "Shooting":
-        fileKey = { document: file };
-        break;
+    if (taskType === "Shooting" && items.length < 1) {
+      toast.error("Please add shooting accessories");
+      return;
     }
+
+    const dynamicValues = (() => {
+      if (taskType === "Graphic Design") {
+        return {
+          deadline: dayjs(values.deadline).format("YYYY-MM-DD"),
+        };
+      }
+      if (taskType === "Shooting") {
+        return {
+          crew_list: values.crew_list,
+          shooting_accessories: JSON.stringify(
+            items.map((item) => ({
+              accessory_name: item.accessory_name,
+              required_qty: item.required_qty,
+              taken_qty: item.taken_qty,
+              returned_qty: item.returned_qty,
+            }))
+          ),
+        };
+      }
+    })();
 
     const data = {
       ...values,
       ...fileKey,
+      ...dynamicValues, //for all task types
       start_date: dayjs(values.start_date).format("YYYY-MM-DD"),
       end_date: dayjs(values.end_date).format("YYYY-MM-DD"),
-
-      //graphic design
-      deadline: dayjs(values.deadline).format("YYYY-MM-DD"),
-
-      //shooting
-      // crew_list: values.crew_list,
-      // shooting_accessories: JSON.stringify(
-      //   items.map((item) => ({
-      //     accessory_name: item.accessory_name,
-      //     required_qty: item.required_qty,
-      //     taken_qty: item.taken_qty,
-      //     returned_qty: item.returned_qty,
-      //   }))
-      // ),
-      //date: dayjs(values.date).format("YYYY-MM-DD"),
     };
     const formData = new FormData();
     for (const key in data) {
       formData.append(key, data[key as keyof TTaskFormSchema] as string);
     }
+
     createTask(formData, {
       onSuccess: () => {
         reset();
         close();
-        clearFile();
+        setFile(null);
         setItems([]);
         toast.success("Task Created Successfully.");
       },
-      onError: () => {
-        toast.error("Something went wrong.");
+      onError: (error) => {
+        toast.error(error.message);
+        console.error(error);
+        setItems([]);
+        reset();
       },
     });
   };
@@ -216,6 +229,10 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   useEffect(() => {
     setShootingAccessory(null);
   }, [shootingCategory]);
+
+  useEffect(() => {
+    setFile(null);
+  }, [taskType]);
 
   return (
     <Box>
@@ -600,7 +617,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   </Flex>
                 </React.Fragment>
               )}
-              {/* {taskType === "Shooting" && (
+              {taskType === "Shooting" && (
                 <React.Fragment>
                   <TextInput
                     label="Duration"
@@ -728,23 +745,6 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                           }))}
                           {...field}
                           error={errors.client?.message}
-                        />
-                      )}
-                    />
-                    <Controller
-                      name="date"
-                      control={control}
-                      render={({ field }) => (
-                        <DatePickerInput
-                          style={{ width: "50%" }}
-                          {...field}
-                          label="Date"
-                          error={errors.date?.message}
-                          value={field.value ? new Date(field.value) : null}
-                          onChange={(date) => field.onChange(date)}
-                          leftSection={<IconCalendar />}
-                          leftSectionPointerEvents="none"
-                          placeholder="Pick date"
                         />
                       )}
                     />
@@ -952,7 +952,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                     </Table>
                   )}
                 </React.Fragment>
-              )} */}
+              )}
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button radius={4} size="sm" onClick={close} color="dark">
