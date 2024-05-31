@@ -45,15 +45,14 @@ export interface EmployeeDataRow {
 }
 
 export const employeeCreateFormSchema = z.object({
-  // photo_path: z
-  //   .instanceof(File, { message: "invalid file" })
-  //   .refine((file) => file !== null, "A photo is required"),
+  // photo_path -> from comp
   name: z.string().min(1, "name is required"),
   email: z.string().email("invalid email"),
   password: z.string().min(6, "password must be at least 6 characters"),
   phone: z.string().min(1, "phone is required"),
   nrc_number: z.string().min(1, "nrc is required"),
   gender: z.string().min(1, "gender is required"),
+  role: z.string().min(1, "role is required"),
   company_id: z.string().min(1, "department is required"),
   department_id: z.string().min(1, "position is required"),
   position_id: z.string().min(1, "position is required"),
@@ -64,15 +63,14 @@ export type TEmployeeCreateFormSchema = z.infer<
 >;
 
 export const employeeUpdateFormSchema = z.object({
-  // photo_path: z
-  //   .instanceof(File, { message: "invalid file" })
-  //   .refine((file) => file !== null, "A photo is required"),
+  // photo_path -> from comp
   name: z.string().min(1, "name is required"),
   email: z.string().email("invalid email"),
   password: z.string().optional(),
   phone: z.string().min(1, "phone is required"),
   nrc_number: z.string().min(1, "nrc is required"),
   gender: z.string().min(1, "gender is required"),
+  role: z.string().min(1, "role is required"),
   company_id: z.string().min(1, "department is required"),
   department_id: z.string().min(1, "position is required"),
   position_id: z.string().min(1, "position is required"),

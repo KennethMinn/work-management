@@ -116,6 +116,7 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
       setValue("phone", employee.phone);
       setValue("nrc_number", employee.nrc_number);
       setValue("gender", employee.gender);
+      setValue("role", employee.role);
       setValue("company_id", employee.company_id?.toString());
       setValue("department_id", employee.department_id?.toString());
       setValue("position_id", employee.position_id?.toString());
@@ -241,6 +242,24 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
                         <Radio value="female" label="Female" />
                       </Group>
                     </Radio.Group>
+                  )}
+                />
+              </Flex>
+              <Flex align="center" gap="lg">
+                <Text w={130} fw={500}>
+                  Role
+                </Text>
+                <Controller
+                  name="role"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      style={{ width: "100%" }}
+                      placeholder="Pick role"
+                      data={["admin", "employee"]}
+                      {...field}
+                      error={errors.role?.message}
+                    />
                   )}
                 />
               </Flex>

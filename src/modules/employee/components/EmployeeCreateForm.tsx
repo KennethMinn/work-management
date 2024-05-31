@@ -223,6 +223,24 @@ const EmployeeCreateForm = () => {
               </Flex>
               <Flex align="center" gap="lg">
                 <Text w={130} fw={500}>
+                  Role
+                </Text>
+                <Controller
+                  name="role"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      style={{ width: "100%" }}
+                      placeholder="Pick role"
+                      data={["admin", "employee"]}
+                      {...field}
+                      error={errors.role?.message}
+                    />
+                  )}
+                />
+              </Flex>
+              <Flex align="center" gap="lg">
+                <Text w={130} fw={500}>
                   Company
                 </Text>
                 <Controller

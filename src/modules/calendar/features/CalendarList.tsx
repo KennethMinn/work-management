@@ -7,8 +7,9 @@ import { useGetAllTasks } from "../hooks/useGetAllTasks";
 import { Task } from "../types";
 import { useDisclosure } from "@mantine/hooks";
 import TaskCreateForm from "../components/TaskCreateForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text } from "@mantine/core";
+import { useAuth } from "../../../hooks/auth/useAuth";
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -35,6 +36,7 @@ const components = {
 };
 
 const CalendarList = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const { data: tasks, isLoading } = useGetAllTasks();
@@ -45,6 +47,12 @@ const CalendarList = () => {
     start: dayjs(task.start_date).toDate(),
     end: dayjs(task.end_date).toDate(),
   }));
+
+  useEffect(() => {
+    if (user?.role === "employee") {
+      navigate("/");
+    }
+  }, [navigate, user?.role]);
 
   if (isLoading) return <Text>loading...</Text>;
 
