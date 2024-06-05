@@ -26,9 +26,9 @@ export interface Task {
   customer: Customer;
   project: Project;
   user: User;
-  design: string[];
-  start?: Date;
-  end?: Date;
+  designData: DesignData | null;
+  artworkSizes: [];
+  shootingData: ShootingData | null;
 }
 
 export interface Customer {
@@ -70,12 +70,92 @@ export interface User {
   phone: string;
   gender: string;
   nrc_number: string;
-  department_id: string;
+  department_id: number;
   photo_path: string;
-  email_verified_at: string;
+  email_verified_at: null;
   created_at: string;
   updated_at: string;
   imgURL: string;
+}
+
+export interface DesignData {
+  id: number;
+  brand: string;
+  type_of_media: string;
+  deadline: string;
+  designer_id: number;
+  content_writer_id: number;
+  visual_copy: string;
+  headline: string;
+  body: string;
+  objective: string;
+  important_info: string;
+  taste_style: string;
+  reference: string;
+  reference_photo: string;
+  created_at: string;
+  updated_at: string;
+  artworkSizes: ArtworkSizes;
+  imageURL: string;
+  pivot: Pivot2;
+}
+
+export interface ArtworkSizes {
+  id: number;
+  visual_format: string;
+  aspect_ratio: string;
+  width: string;
+  height: string;
+  resolution: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+export interface ShootingData {
+  id: number;
+  shooting_location: string;
+  type_detail: string;
+  script_detail: string;
+  scene_number: string;
+  document: string;
+  contact_name: string;
+  contact_phone: string;
+  duration: string;
+  type: string;
+  client: string;
+  date: string;
+  video_shooting_project: string;
+  photo_shooting_project: string;
+  arrive_office_on_time: string;
+  transportation_charge: string;
+  out_time: string;
+  in_time: string;
+  crew_list: string[];
+  project_details: string;
+  created_at: string;
+  updated_at: string;
+  fileURL: string;
+  pivot: Pivot;
+  shooting_accessory_categories: Item[];
+}
+
+export interface Pivot {
+  assigned_task_id: number;
+  shooting_id: number;
+}
+
+export interface Pivot2 {
+  shooting_id: number;
+  shooting_accessory_category_id: number;
+}
+
+export interface Item {
+  id: number;
+  accessory_name: string | null;
+  required_qty: string;
+  taken_qty: string;
+  returned_qty: string;
 }
 
 // export const taskFormSchema = z.object({

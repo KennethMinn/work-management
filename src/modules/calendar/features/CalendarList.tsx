@@ -7,9 +7,10 @@ import { useGetAllTasks } from "../hooks/useGetAllTasks";
 import { Task } from "../types";
 import { useDisclosure } from "@mantine/hooks";
 import TaskCreateForm from "../components/TaskCreateForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Text } from "@mantine/core";
-import { useAuth } from "../../../hooks/auth/useAuth";
+import { useToggleModal } from "../../../hooks/useToggleModal";
+import TaskEditForm from "../components/TaskEditForm";
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -18,17 +19,7 @@ const localizer = dayjsLocalizer(dayjs);
 //     title: "Test",
 //     start: dayjs("2024-05-14T10:00:00").toDate(),
 //     end: dayjs("2024-05-14T11:00:00").toDate(),
-//   },
-//   {
-//     title: "Test2",
-//     start: dayjs("2024-05-14T10:00:00").toDate(),
-//     end: dayjs("2024-05-14T11:00:00").toDate(),
-//   },
-//   {
-//     title: "Test3",
-//     start: dayjs("2024-05-14T10:00:00").toDate(),
-//     end: dayjs("2024-05-14T11:00:00").toDate(),
-//   },
+//   }
 // ];
 
 const components = {
@@ -36,10 +27,12 @@ const components = {
 };
 
 const CalendarList = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
+  const { open: editOpen, setOpen } = useToggleModal();
+
   const { data: tasks, isLoading } = useGetAllTasks();
+  const [task, setTask] = useState<Task | null>(null);
   const [start, setStart] = useState<Date | undefined>();
 
   const events = tasks?.map((task: Task) => ({
@@ -48,32 +41,36 @@ const CalendarList = () => {
     end: dayjs(task.end_date).toDate(),
   }));
 
-  useEffect(() => {
-    if (user?.role === "employee") {
-      navigate("/");
-    }
-  }, [navigate, user?.role]);
-
   if (isLoading) return <Text>loading...</Text>;
 
   return (
     <div>
-      <TaskCreateForm opened={opened} close={close} start={start} />
+      {opened && <TaskCreateForm opened={opened} close={close} start={start} />}
+      {editOpen && task && (
+        <TaskEditForm
+          opened={editOpen}
+          assignedTask={task}
+          close={() => setOpen(false)}
+        />
+      )}
       <Calendar
         min={dayjs("2024-05-14T09:00:00").toDate()}
         max={dayjs("2024-05-14T18:00:00").toDate()}
-        views={["month", "day"]}
+        views={["month"]}
         events={events}
         localizer={localizer}
-        startAccessor="start"
-        endAccessor="end"
+        startAccessor={(task) => new Date(task.start_date)}
+        endAccessor={(task) => new Date(task.end_date)}
         style={{ height: 550 }}
         selectable
         onSelectSlot={({ start }) => {
           setStart(start);
           open();
         }}
-        //onSelectEvent={(event) => console.log(event)}
+        onSelectEvent={(event) => {
+          setTask(event);
+          setOpen(true);
+        }}
         onShowMore={(events) => {
           navigate("/dashboard/all-tasks", { state: events });
         }}

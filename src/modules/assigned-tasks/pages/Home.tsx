@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/auth/useAuth";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -6,53 +5,54 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
-import { columns } from "../utils";
-import { Box, Card, Center, Grid, Modal, Stack, Text } from "@mantine/core";
+import { columns, getTaskColor } from "../utils";
+import { Box, Card, Center, Grid, Stack, Text } from "@mantine/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import TaskCard from "../components/TaskCard";
 import { useGetTasksByEmployeeId } from "../hooks/useGetTasksByEmployeeId";
 import { Task } from "../../calendar/types";
 import { Droppable } from "../components/Droppable";
+import ReportCreateForm from "../../report/components/ReportCreateForm";
+import ReportEditForm from "../../report/components/ReportEditForm";
 
 const Home = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const { data: assignedTasks, isLoading } = useGetTasksByEmployeeId(user?.id);
   const [tasks, setTasks] = useState<Task[]>(assignedTasks || []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [cursorStyle, setCursorStyle] = useState("grab");
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    } else if (user.role === "admin") {
-      navigate("/dashboard");
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
-    if (assignedTasks) {
-      setTasks(assignedTasks);
-    }
-  }, [assignedTasks]);
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10, //we have to move 10px to start the drag event
+      },
+    })
+  );
 
   const taskIds = useMemo(() => tasks?.map((task: Task) => task.id), [tasks]);
-
-  if (isLoading) return <Text>loading...</Text>;
 
   const onDragStart = (event: DragStartEvent) => {
     setCursorStyle("grabbing");
     if (event.active.data.current?.type === "Task") {
       setActiveTask(event.active.data.current.task);
-      console.log(event.active.data.current.task);
     }
   };
 
-  const onDragEnd = (event: DragEndEvent) => {
+  const onDragEnd = () => {
     setCursorStyle("grab");
     if (activeTask?.status === "pending") return;
+
+    if (activeTask?.status === "done") {
+      setEditOpen(true);
+      return;
+    }
     setOpen(true);
   };
 
@@ -89,14 +89,25 @@ const Home = () => {
     });
   };
 
+  useEffect(() => {
+    if (assignedTasks) {
+      setTasks(assignedTasks);
+    }
+  }, [assignedTasks]);
+
+  if (isLoading) return <Text>loading...</Text>;
+
   return (
     <Box mx={100} mt={30}>
-      <Modal opened={open} onClose={() => setOpen(false)}>
-        {activeTask?.title}
-        {activeTask?.status}
-      </Modal>
+      <ReportCreateForm open={open} setOpen={setOpen} activeTask={activeTask} />
+      <ReportEditForm
+        open={editOpen}
+        setOpen={setEditOpen}
+        activeTask={activeTask}
+      />
       <Grid>
         <DndContext
+          sensors={sensors}
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
           onDragOver={onDragOver}
@@ -104,9 +115,13 @@ const Home = () => {
           {columns.map((column) => (
             <Grid.Col span={4} key={column.id}>
               <Droppable id={column.id} columnId={column.id}>
-                <Card withBorder>
-                  <Center>
-                    <Text fw={600} fz={18}>
+                <Card withBorder radius={7}>
+                  <Center
+                    bg={getTaskColor(column.id)}
+                    h={80}
+                    style={{ borderRadius: "7px" }}
+                  >
+                    <Text fw={600} fz={18} c="white">
                       {column.title}
                     </Text>
                   </Center>
@@ -119,6 +134,9 @@ const Home = () => {
                             key={task.id}
                             task={task}
                             cursorStyle={cursorStyle}
+                            setActiveTask={setActiveTask}
+                            setOpen={setOpen}
+                            setEditOpen={setEditOpen}
                           />
                         ))}
                     </SortableContext>

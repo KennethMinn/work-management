@@ -180,7 +180,6 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       }
       if (taskType === "Shooting") {
         return {
-          crew_list: values.crew_list,
           shooting_accessories: JSON.stringify(
             items.map((item) => ({
               accessory_name: item.accessory_name,
@@ -656,21 +655,18 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                       error={errors.transportation_charge?.message}
                     />
                   </Flex>
-
-                  <Flex align="center" gap="lg">
-                    <Textarea
-                      style={{ width: "50%" }}
-                      placeholder="Type detail..."
-                      {...register("type_detail")}
-                      error={errors.type_detail?.message}
-                    />
-                    <Textarea
-                      style={{ width: "50%" }}
-                      placeholder="Script detail..."
-                      {...register("script_detail")}
-                      error={errors.script_detail?.message}
-                    />
-                  </Flex>
+                  <Textarea
+                    style={{ width: "100%" }}
+                    placeholder="Type detail..."
+                    {...register("type_detail")}
+                    error={errors.type_detail?.message}
+                  />
+                  <Textarea
+                    style={{ width: "100%" }}
+                    placeholder="Script detail..."
+                    {...register("script_detail")}
+                    error={errors.script_detail?.message}
+                  />
                   <Flex align="center" gap="lg">
                     <TextInput
                       style={{ width: "50%" }}
@@ -695,7 +691,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                         <FileButton
                           resetRef={resetRef}
                           onChange={setFile}
-                          accept="pdf"
+                          accept="application/pdf"
                         >
                           {(props) => (
                             <Button
@@ -730,25 +726,24 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                       error={errors.contact_phone?.message}
                     />
                   </Flex>
-                  <Flex align="center" gap="lg">
-                    <Controller
-                      name="client"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          label="Client"
-                          style={{ width: "50%" }}
-                          placeholder="Pick client"
-                          data={customers?.map((customer: Customer) => ({
-                            label: customer.name,
-                            value: customer.name,
-                          }))}
-                          {...field}
-                          error={errors.client?.message}
-                        />
-                      )}
-                    />
-                  </Flex>
+                  <Controller
+                    name="crew_list"
+                    control={control}
+                    render={({ field }) => (
+                      <MultiSelect
+                        hidePickedOptions
+                        label="Crew list"
+                        style={{ width: "100%" }}
+                        placeholder="Pick crews"
+                        data={employees?.map((employee: Employee) => ({
+                          label: employee.name,
+                          value: employee.name,
+                        }))}
+                        {...field}
+                        error={errors.crew_list?.message}
+                      />
+                    )}
+                  />
                   <Flex align="center" gap="lg">
                     <Controller
                       name="photo_shooting_project"
@@ -803,20 +798,19 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                       )}
                     />
                     <Controller
-                      name="crew_list"
+                      name="client"
                       control={control}
                       render={({ field }) => (
-                        <MultiSelect
-                          hidePickedOptions
-                          label="Crew list"
+                        <Select
+                          label="Client"
                           style={{ width: "50%" }}
-                          placeholder="Pick crews"
-                          data={employees?.map((employee: Employee) => ({
-                            label: employee.name,
-                            value: employee.name,
+                          placeholder="Pick client"
+                          data={customers?.map((customer: Customer) => ({
+                            label: customer.name,
+                            value: customer.name,
                           }))}
                           {...field}
-                          error={errors.crew_list?.message}
+                          error={errors.client?.message}
                         />
                       )}
                     />

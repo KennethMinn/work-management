@@ -9,7 +9,12 @@ import {
   IconUsersGroup,
 } from "@tabler/icons-react";
 
-export const navMenus = [
+export const adminNavMenus = [
+  {
+    label: "Assigned Tasks",
+    icon: <IconCalendar />,
+    href: "/dashboard/assigned-tasks",
+  },
   {
     label: "Task Calendar",
     icon: <IconCalendar />,
@@ -59,5 +64,23 @@ export const navMenus = [
     label: "Shooting Accessory List",
     icon: <IconPresentation />,
     href: "/dashboard/shooting-accessory-list",
+  },
+];
+
+export const userNavMenus = [
+  {
+    label: "Assigned Tasks",
+    icon: <IconCalendar />,
+    href: "/dashboard/assigned-tasks",
+  },
+  {
+    label: "Task Calendar",
+    icon: <IconCalendar />,
+    href: "/dashboard",
+  },
+  {
+    label: "Report List",
+    icon: <IconReport />,
+    href: "/dashboard/report-list",
   },
 ];

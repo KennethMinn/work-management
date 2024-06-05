@@ -3,8 +3,18 @@ import { Badge, Flex } from "@mantine/core";
 
 import { Task } from "../types";
 import TaskDeleteForm from "../components/TaskDeleteForm";
+import { IconEdit } from "@tabler/icons-react";
+import { useState } from "react";
 
 export const useTasksColumns = () => {
+  const [open, setOpen] = useState(false);
+  const [task, setTask] = useState<Task | null>(null);
+
+  const handleEditClick = (task: Task) => {
+    setTask(task);
+    setOpen(true);
+  };
+
   const taskColumns: TableColumn<Task>[] = [
     {
       name: "Id",
@@ -68,12 +78,20 @@ export const useTasksColumns = () => {
       name: "Actions",
       cell: (row) => (
         <Flex align="center" gap={20}>
-          {/* <CompanyEditForm id={row.id} /> */}
+          <IconEdit
+            onClick={() => handleEditClick(row)}
+            style={{ color: "#4361ee", cursor: "pointer" }}
+          />
           <TaskDeleteForm id={row.id} />
         </Flex>
       ),
     },
   ];
 
-  return taskColumns;
+  return {
+    taskColumns,
+    task,
+    open,
+    setOpen,
+  };
 };

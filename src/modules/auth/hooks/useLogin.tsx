@@ -12,11 +12,7 @@ export const useLogin = () => {
       const { user, token } = await res.data;
       localStorage.setItem("token", token);
       setAuth(user);
-      if (user.role === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/");
-      }
+      navigate("/dashboard");
     },
   });
 };

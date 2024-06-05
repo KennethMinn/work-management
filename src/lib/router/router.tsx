@@ -5,7 +5,6 @@ import Login from "../../modules/auth/components/Login";
 import EmployeeListing from "../../modules/employee/pages/EmployeeListing";
 import CalendarListing from "../../modules/calendar/pages/CalendarListing";
 import CompanyListing from "../../modules/company/pages/CompanyListing";
-import Home from "../../modules/home/pages/Home";
 import DepartmentListing from "../../modules/department/pages/DepartmentListing";
 import PositionListing from "../../modules/positions/pages/PositionListing";
 import CustomerListing from "../../modules/customer/pages/CustomerListing";
@@ -13,16 +12,13 @@ import ProjectListing from "../../modules/project/pages/ProjectListing";
 import ShootingCategoryListing from "../../modules/shooting-category/pages/ShootingCategoryListing";
 import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/ShootingAccessoryListing";
 import TaskListing from "../../modules/calendar/pages/TaskListing";
+import Home from "../../modules/assigned-tasks/pages/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
     children: [
-      {
-        index: true,
-        element: <Home />,
-      },
       {
         path: "login",
         element: <Login />,
@@ -40,6 +36,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <CalendarListing />,
+      },
+      {
+        path: "assigned-tasks",
+        element: <Home />,
       },
       {
         path: "report-list",

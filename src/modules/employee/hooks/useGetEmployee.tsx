@@ -1,7 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "../../../lib/axios/axiosInstance";
+import { EmployeeDataRow } from "../types";
 
-export const useGetEmployee = (id: number) => {
+export const useGetEmployee = (
+  id: number
+): UseQueryResult<EmployeeDataRow | Error> => {
   return useQuery({
     queryKey: ["employee", id],
     queryFn: async () => {

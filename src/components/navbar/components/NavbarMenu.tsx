@@ -1,18 +1,33 @@
 import { AppShell, Box, NavLink, Space, Tooltip } from "@mantine/core";
-import { navMenus } from "../../../configs/navMenus";
 import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
+import { useAuth } from "../../../hooks/auth/useAuth";
+import { adminNavMenus, userNavMenus } from "../../../configs/navMenus";
 
 type NavbarMenuProps = {
   isOpen: boolean;
 };
 
 const NavbarMenu: React.FC<NavbarMenuProps> = ({ isOpen }) => {
+  const { user } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  let dynamicMenus;
+
+  switch (user?.role) {
+    case "admin":
+      dynamicMenus = adminNavMenus;
+      break;
+    case "employee":
+      dynamicMenus = userNavMenus;
+      break;
+    default:
+      break;
+  }
+
   return (
     <AppShell.Navbar p="md" style={{ overflowY: "scroll" }}>
-      {navMenus.map((navMenu, i) => (
+      {dynamicMenus?.map((navMenu, i) => (
         <Box key={i}>
           {isOpen ? (
             <NavLink
