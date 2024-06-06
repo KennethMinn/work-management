@@ -58,7 +58,7 @@ const PositionEditForm: FC<PositionCompanyEditFormProps> = ({ id }) => {
   useEffect(() => {
     if (position) {
       setValue("name", position.name);
-      setValue("department_id", position.department_id.toString());
+      setValue("department_id", position.department_id?.toString());
     }
   }, [position, setValue]);
 

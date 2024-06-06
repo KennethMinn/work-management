@@ -2,7 +2,6 @@ import { useAuth } from "../../../hooks/auth/useAuth";
 import { useEffect, useMemo, useState } from "react";
 import {
   DndContext,
-  DragEndEvent,
   DragOverEvent,
   DragStartEvent,
   PointerSensor,
@@ -19,7 +18,7 @@ import { Droppable } from "../components/Droppable";
 import ReportCreateForm from "../../report/components/ReportCreateForm";
 import ReportEditForm from "../../report/components/ReportEditForm";
 
-const Home = () => {
+const AssignedTaskList = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -151,4 +150,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AssignedTaskList;

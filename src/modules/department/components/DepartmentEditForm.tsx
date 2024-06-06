@@ -61,7 +61,7 @@ const DepartmentEditForm: FC<DepartmentCompanyEditFormProps> = ({ id }) => {
   useEffect(() => {
     if (department) {
       setValue("name", department.name);
-      setValue("company_id", department.company_id.toString());
+      setValue("company_id", department.company_id?.toString());
     }
   }, [department, setValue]);
 

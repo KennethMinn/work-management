@@ -12,7 +12,7 @@ import ProjectListing from "../../modules/project/pages/ProjectListing";
 import ShootingCategoryListing from "../../modules/shooting-category/pages/ShootingCategoryListing";
 import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/ShootingAccessoryListing";
 import TaskListing from "../../modules/calendar/pages/TaskListing";
-import Home from "../../modules/assigned-tasks/pages/Home";
+import AssignedTaskListing from "../../modules/assigned-tasks/pages/AssignedTaskListing";
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "assigned-tasks",
-        element: <Home />,
+        element: <AssignedTaskListing />,
       },
       {
         path: "report-list",
