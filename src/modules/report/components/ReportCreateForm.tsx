@@ -33,7 +33,7 @@ import { useCreateReport } from "../hooks/useCreateReport";
 interface ReportCreateFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  activeTask: Task | null;
+  activeTask?: Task | null;
 }
 
 const ReportCreateForm: FC<ReportCreateFormProps> = ({
@@ -111,7 +111,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
 
   const onSubmit = (values: TReportFormSchema) => {
     if (!doc || !photo || !video) {
-      toast.error("add all additional fields");
+      toast.error("please add all additional fields");
       return;
     }
     const data = {
@@ -168,6 +168,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
               <Controller
                 name="assigned_task_id"
                 control={control}
+                disabled
                 render={({ field }) => (
                   <Select
                     label="Task"
@@ -185,6 +186,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
               <Controller
                 name="customer_id"
                 control={control}
+                disabled
                 render={({ field }) => (
                   <Select
                     label="Customer"
@@ -202,6 +204,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
               <Controller
                 name="project_id"
                 control={control}
+                disabled
                 render={({ field }) => (
                   <Select
                     label="Project"

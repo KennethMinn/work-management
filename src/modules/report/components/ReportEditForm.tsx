@@ -13,45 +13,49 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { IconCalendar, IconCloudUpload, IconTrash } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  IconCalendar,
+  IconCloudUpload,
+  IconEdit,
+  IconTrash,
+} from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { FC, useEffect, useRef, useState } from "react";
-import { reportFormSchema, TReportFormSchema } from "../types";
-import { Project, Task } from "../../calendar/types";
-import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
-import { Customer } from "../../project/types";
-import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
-import { DatePickerInput, TimeInput } from "@mantine/dates";
-import { useReportTime } from "../hooks/useReportTime";
-import { useGetAllTasks } from "../../calendar/hooks/useGetAllTasks";
-import dayjs from "dayjs";
-import { useAuth } from "../../../hooks/auth/useAuth";
-import { useGetReportByTaskId } from "../hooks/useGetReportByTaskId";
 import { useUpdateReport } from "../hooks/useUpdateReport";
+import { useGetReport } from "../hooks/useGetReport";
+import {
+  Customer,
+  Project,
+  reportFormSchema,
+  TReportFormSchema,
+} from "../types";
+import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
+import { useAuth } from "../../../hooks/auth/useAuth";
+import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
+import { useGetAllTasks } from "../../calendar/hooks/useGetAllTasks";
+import { DatePickerInput, TimeInput } from "@mantine/dates";
+import { Task } from "../../calendar/types";
+import { useReportTime } from "../hooks/useReportTime";
+import dayjs from "dayjs";
 
 interface ReportEditFormProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  activeTask: Task | null;
+  id: number;
 }
 
-const ReportEditForm: FC<ReportEditFormProps> = ({
-  open,
-  setOpen,
-  activeTask,
-}) => {
+const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
+  const [opened, { open, close }] = useDisclosure(false);
   const { user } = useAuth();
   const { data: customers } = useGetAllCustomers();
   const { data: projects } = useGetAllProjects();
   const { data: assignedTasks } = useGetAllTasks();
-  const { data: report } = useGetReportByTaskId(activeTask?.id);
-  const { mutate: updateReport, isPending } = useUpdateReport(report?.id);
+  const { mutate: updateReport, isPending } = useUpdateReport(id);
+  const { data: report } = useGetReport(id);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
-
   const [doc, setDoc] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
   const [photo, setPhoto] = useState<File | null>(null);
@@ -125,8 +129,8 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
     }
     updateReport(formData, {
       onSuccess: () => {
-        setOpen(false);
-        toast.success("Report created Successfully.");
+        close();
+        toast.success("Report updated Successfully.");
       },
       onError: () => {
         toast.error("Something went wrong.");
@@ -135,11 +139,11 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
   };
 
   useEffect(() => {
-    if (activeTask && report) {
-      setValue("customer_id", activeTask.customer_id.toString());
-      setValue("project_id", activeTask.project_id.toString());
-      setValue("assigned_task_id", activeTask.id.toString());
-      setValue("status", activeTask.status);
+    if (report) {
+      setValue("customer_id", report.task.customer_id.toString());
+      setValue("project_id", report.task.project_id.toString());
+      setValue("assigned_task_id", report.task.id.toString());
+      setValue("status", report.task.status);
       setValue("progress", report.progress);
       setValue("progress_description", report.progress_description);
       setPreviewUrl(report.imageUrl);
@@ -147,14 +151,14 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
       setValue("report_date", new Date(report.report_date));
       setValue("report_time", report.report_time);
     }
-  }, [activeTask, activeTask?.status, setValue, report]);
+  }, [setValue, report]);
 
   return (
     <Box>
       <Modal
         size={600}
-        opened={open}
-        onClose={() => setOpen(false)}
+        opened={opened}
+        onClose={close}
         title="Edit Report Task Form"
         centered
         styles={{
@@ -170,6 +174,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
               <Controller
                 name="assigned_task_id"
                 control={control}
+                disabled
                 render={({ field }) => (
                   <Select
                     label="Task"
@@ -187,6 +192,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
               <Controller
                 name="customer_id"
                 control={control}
+                disabled
                 render={({ field }) => (
                   <Select
                     label="Customer"
@@ -204,6 +210,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
               <Controller
                 name="project_id"
                 control={control}
+                disabled
                 render={({ field }) => (
                   <Select
                     label="Project"
@@ -224,7 +231,6 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
                 render={({ field }) => (
                   <Select
                     label="Status"
-                    defaultValue={activeTask?.status}
                     style={{ width: "100%" }}
                     placeholder="Pick company"
                     data={["pending", "inProgress", "done"]}
@@ -370,12 +376,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
               </Flex>
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
-              <Button
-                radius={4}
-                size="sm"
-                onClick={() => setOpen(false)}
-                color="dark"
-              >
+              <Button radius={4} size="sm" onClick={close} color="dark">
                 Cancel
               </Button>
               <Button
@@ -392,6 +393,10 @@ const ReportEditForm: FC<ReportEditFormProps> = ({
           </form>
         </Box>
       </Modal>
+      <IconEdit
+        onClick={open}
+        style={{ color: "#4361ee", cursor: "pointer" }}
+      />
     </Box>
   );
 };

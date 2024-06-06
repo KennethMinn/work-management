@@ -16,12 +16,10 @@ import { useGetTasksByEmployeeId } from "../hooks/useGetTasksByEmployeeId";
 import { Task } from "../../calendar/types";
 import { Droppable } from "../components/Droppable";
 import ReportCreateForm from "../../report/components/ReportCreateForm";
-import ReportEditForm from "../../report/components/ReportEditForm";
 
 const AssignedTaskList = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
   const { data: assignedTasks, isLoading } = useGetTasksByEmployeeId(user?.id);
   const [tasks, setTasks] = useState<Task[]>(assignedTasks || []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -47,11 +45,6 @@ const AssignedTaskList = () => {
   const onDragEnd = () => {
     setCursorStyle("grab");
     if (activeTask?.status === "pending") return;
-
-    if (activeTask?.status === "done") {
-      setEditOpen(true);
-      return;
-    }
     setOpen(true);
   };
 
@@ -97,13 +90,8 @@ const AssignedTaskList = () => {
   if (isLoading) return <Text>loading...</Text>;
 
   return (
-    <Box mx={100} mt={30}>
+    <Box mx={10}>
       <ReportCreateForm open={open} setOpen={setOpen} activeTask={activeTask} />
-      <ReportEditForm
-        open={editOpen}
-        setOpen={setEditOpen}
-        activeTask={activeTask}
-      />
       <Grid>
         <DndContext
           sensors={sensors}
@@ -135,7 +123,6 @@ const AssignedTaskList = () => {
                             cursorStyle={cursorStyle}
                             setActiveTask={setActiveTask}
                             setOpen={setOpen}
-                            setEditOpen={setEditOpen}
                           />
                         ))}
                     </SortableContext>

@@ -10,7 +10,13 @@ import { DatesProvider } from "@mantine/dates";
 import "dayjs/locale/ru";
 import "@mantine/dates/styles.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  // defaultOptions: {
+  //   queries: {
+  //     staleTime: 0,
+  //   },
+  // },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Task } from "../../calendar/types";
+import { Employee } from "../../project/types";
 
 export interface Report {
   id: number;
@@ -22,6 +23,7 @@ export interface Report {
   documentUrl: string;
   project: Project;
   customer: Customer;
+  user: Employee;
   task: Task;
 }
 

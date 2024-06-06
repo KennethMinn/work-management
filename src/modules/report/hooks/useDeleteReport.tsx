@@ -5,15 +5,15 @@ import {
 } from "@tanstack/react-query";
 import axios from "../../../lib/axios/axiosInstance";
 
-export const useUpdateReport = (id: number | undefined) => {
+export const useDeleteReport = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: FormData) => {
-      await axios.post(`/reports-update/${id}`, data);
+    mutationFn: async (id: number) => {
+      return await axios.delete(`/reports-delete/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["reports"] as InvalidateQueryFilters);
+      queryClient.invalidateQueries(["reports "] as InvalidateQueryFilters);
     },
   });
 };

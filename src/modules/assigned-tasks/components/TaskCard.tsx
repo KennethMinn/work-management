@@ -3,14 +3,14 @@ import { Card, Flex, Group, Text } from "@mantine/core";
 import { FC } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { Task } from "../../calendar/types";
-import { IconDetails, IconEdit, IconPlus } from "@tabler/icons-react";
+import { IconDetails, IconList, IconPlus } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 interface TaskCardProps {
   task: Task;
   cursorStyle: string;
   setActiveTask: React.Dispatch<React.SetStateAction<Task | null>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCard: FC<TaskCardProps> = ({
@@ -18,8 +18,8 @@ const TaskCard: FC<TaskCardProps> = ({
   cursorStyle,
   setActiveTask,
   setOpen,
-  setEditOpen,
 }) => {
+  const navigate = useNavigate();
   const {
     setNodeRef,
     attributes,
@@ -44,9 +44,8 @@ const TaskCard: FC<TaskCardProps> = ({
     setOpen(true);
   };
 
-  const onHandleReportEdit = () => {
-    setActiveTask(task);
-    setEditOpen(true);
+  const onHandleReportList = () => {
+    navigate("/dashboard/report-list", { state: task.id });
   };
 
   return (
@@ -66,20 +65,16 @@ const TaskCard: FC<TaskCardProps> = ({
             onClick={onHandleDetail}
             style={{ color: "#4361ee", cursor: "pointer" }}
           />
-          {task.status === "pending" && (
-            <IconPlus
-              size={22}
-              onClick={onHandleReportCreate}
-              style={{ color: "#4361ee", cursor: "pointer" }}
-            />
-          )}
-          {task.status === "inProgress" && (
-            <IconEdit
-              size={22}
-              onClick={onHandleReportEdit}
-              style={{ color: "#4361ee", cursor: "pointer" }}
-            />
-          )}
+          <IconPlus
+            size={22}
+            onClick={onHandleReportCreate}
+            style={{ color: "#4361ee", cursor: "pointer" }}
+          />
+          <IconList
+            size={22}
+            onClick={onHandleReportList}
+            style={{ color: "#4361ee", cursor: "pointer" }}
+          />
         </Group>
       </Flex>
     </Card>

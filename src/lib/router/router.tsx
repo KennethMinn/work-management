@@ -13,6 +13,7 @@ import ShootingCategoryListing from "../../modules/shooting-category/pages/Shoot
 import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/ShootingAccessoryListing";
 import TaskListing from "../../modules/calendar/pages/TaskListing";
 import AssignedTaskListing from "../../modules/assigned-tasks/pages/AssignedTaskListing";
+import ReportListing from "../../modules/report/pages/ReportListing";
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "report-list",
-        element: <EmployeeListing />,
+        element: <ReportListing />,
       },
       {
         path: "company-list",
