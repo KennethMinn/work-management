@@ -16,12 +16,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import {
-  IconCalendar,
-  IconCloudUpload,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconCalendar, IconCloudUpload, IconTrash } from "@tabler/icons-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Controller, useForm } from "react-hook-form";
@@ -38,13 +33,6 @@ import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
 import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
 import { useGetAllEmployees } from "../../employee/hooks/useGetAllEmployees";
 import { Employee } from "../../project/types";
-
-import { useGetAllShootingCategories } from "../../shooting-category/hooks/useGetAllShootingCategories";
-import {
-  ShootingAccessoriesDataRow,
-  ShootingCategory,
-} from "../../shooting-accessories/types";
-import useGetShootingAccessoriesByCategoryId from "../../shooting-accessories/hooks/useGetShootingAccessoriesByCategoryId";
 import { useStartTime } from "../../calendar/hooks/time/useStartTime";
 import { useEndTime } from "../../calendar/hooks/time/useEndTime";
 import { useOfficeTime } from "../../calendar/hooks/time/useOfficeTime";
@@ -72,15 +60,6 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
   const { data: employees } = useGetAllEmployees();
 
   const [items, setItems] = useState<Item[]>([]);
-  const [qty, setQty] = useState("");
-  const [shootingCategory, setShootingCategory] = useState<string | null>(null);
-  const [shootingAccessory, setShootingAccessory] = useState<string | null>(
-    null
-  );
-  const { data: shootingCategories } = useGetAllShootingCategories("visible");
-  const { data: shootingAccessories } = useGetShootingAccessoriesByCategoryId(
-    shootingCategory!
-  );
 
   //for avatar
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -120,26 +99,6 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
       setPreviewUrl(null);
     }
   }, [file]); // Re-generate preview URL whenever the file changes
-
-  const onAddAccessories = () => {
-    if (!shootingCategory || !shootingAccessory || !qty) {
-      return;
-    }
-    const newItem = {
-      id: Date.now(),
-      accessory_name: shootingAccessory,
-      required_qty: qty,
-      taken_qty: "0",
-      returned_qty: "0",
-    };
-
-    const newItems = [...items, newItem];
-    setItems(newItems);
-  };
-
-  useEffect(() => {
-    setShootingAccessory(null);
-  }, [shootingCategory]);
 
   useEffect(() => {
     setFile(null);
@@ -245,7 +204,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
         padding={30}
         opened={opened}
         onClose={close}
-        title="Edit Task Form"
+        title="Task Detail"
         centered
         styles={{
           title: {
@@ -261,6 +220,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
             <Stack gap={20}>
               {/* default forms */}
               <TextInput
+                disabled
                 label="Task title"
                 style={{ width: "100%" }}
                 placeholder="Enter task title"
@@ -268,6 +228,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                 error={errors.title?.message}
               />
               <Textarea
+                disabled
                 {...register("description")}
                 style={{ width: "100%" }}
                 label="Task description"
@@ -275,6 +236,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                 error={errors.description?.message}
               />
               <TextInput
+                disabled
                 label="Meeting link"
                 style={{ width: "100%" }}
                 placeholder="Enter meeting link"
@@ -282,6 +244,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                 error={errors.meeting_link?.message}
               />
               <TextInput
+                disabled
                 label="Location"
                 style={{ width: "100%" }}
                 placeholder="Enter location"
@@ -294,6 +257,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      disabled
                       label="Cusotmer"
                       style={{ width: "50%" }}
                       placeholder="Pick customer"
@@ -311,6 +275,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      disabled
                       label="Project"
                       style={{ width: "50%" }}
                       placeholder="Pick project"
@@ -330,6 +295,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   control={control}
                   render={({ field }) => (
                     <DatePickerInput
+                      disabled
                       error={errors.start_date?.message}
                       label="Start date"
                       style={{ width: "50%" }}
@@ -347,6 +313,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   control={control}
                   render={({ field }) => (
                     <DatePickerInput
+                      disabled
                       style={{ width: "50%" }}
                       {...field}
                       label="End date"
@@ -366,6 +333,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   control={control}
                   render={({ field }) => (
                     <TimeInput
+                      disabled
                       {...field}
                       label="Start time"
                       error={errors.start_time?.message}
@@ -382,6 +350,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   control={control}
                   render={({ field }) => (
                     <TimeInput
+                      disabled
                       {...field}
                       label="End time"
                       error={errors.end_time?.message}
@@ -399,6 +368,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Employee"
                     style={{ width: "100%" }}
                     placeholder="Pick employee"
@@ -417,6 +387,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                 <React.Fragment>
                   <Flex align="center" gap="lg">
                     <TextInput
+                      disabled
                       label="Brand"
                       style={{ width: "50%" }}
                       placeholder="Enter brand"
@@ -424,6 +395,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       error={errors.brand?.message}
                     />
                     <TextInput
+                      disabled
                       label="Media type"
                       style={{ width: "50%" }}
                       placeholder="Enter media type"
@@ -437,6 +409,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <Select
+                          disabled
                           label="Designer"
                           style={{ width: "50%" }}
                           placeholder="Pick designer"
@@ -454,6 +427,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <Select
+                          disabled
                           label="Content Write"
                           style={{ width: "50%" }}
                           placeholder="Pick content writer"
@@ -470,6 +444,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   <Grid>
                     <Grid.Col span={4}>
                       <TextInput
+                        disabled
                         label="Visual Copy"
                         style={{ width: "100%" }}
                         placeholder="Enter visual copy"
@@ -479,6 +454,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     </Grid.Col>
                     <Grid.Col span={4}>
                       <TextInput
+                        disabled
                         label="Headline"
                         style={{ width: "100%" }}
                         placeholder="Enter headline"
@@ -492,6 +468,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                         control={control}
                         render={({ field }) => (
                           <DatePickerInput
+                            disabled
                             style={{ width: "100%" }}
                             {...field}
                             label="Deadline"
@@ -508,6 +485,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   </Grid>
                   <Flex align="center" gap="lg">
                     <TextInput
+                      disabled
                       label="Body"
                       style={{ width: "50%" }}
                       placeholder="Enter body"
@@ -515,6 +493,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       error={errors.body?.message}
                     />
                     <TextInput
+                      disabled
                       label="Objective"
                       style={{ width: "50%" }}
                       placeholder="Enter objectice"
@@ -524,6 +503,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   </Flex>
                   <Flex align="center" gap="lg">
                     <TextInput
+                      disabled
                       label="Important information"
                       style={{ width: "50%" }}
                       placeholder="Enter important information"
@@ -531,6 +511,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       error={errors.important_info?.message}
                     />
                     <TextInput
+                      disabled
                       label="Tease & Style"
                       style={{ width: "50%" }}
                       placeholder="Enter taste & style"
@@ -545,6 +526,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     <Grid>
                       <Grid.Col span={2.4}>
                         <TextInput
+                          disabled
                           style={{ width: "100%" }}
                           placeholder="Visual format"
                           {...register("visual_format")}
@@ -553,6 +535,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       </Grid.Col>
                       <Grid.Col span={2.4}>
                         <TextInput
+                          disabled
                           style={{ width: "100%" }}
                           placeholder="Aspect ratio"
                           {...register("aspect_ratio")}
@@ -561,6 +544,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       </Grid.Col>
                       <Grid.Col span={2.4}>
                         <TextInput
+                          disabled
                           style={{ width: "100%" }}
                           placeholder="Width"
                           {...register("width")}
@@ -569,6 +553,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       </Grid.Col>
                       <Grid.Col span={2.4}>
                         <TextInput
+                          disabled
                           style={{ width: "100%" }}
                           placeholder="Height"
                           {...register("height")}
@@ -577,6 +562,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       </Grid.Col>
                       <Grid.Col span={2.4}>
                         <TextInput
+                          disabled
                           style={{ width: "100%" }}
                           placeholder="Resolution"
                           {...register("resolution")}
@@ -589,6 +575,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   <Flex align="center" gap="lg">
                     <Group style={{ width: "100%" }}>
                       <FileButton
+                        disabled
                         resetRef={resetRef}
                         onChange={setFile}
                         accept="image/png,image/jpeg"
@@ -604,6 +591,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       </Button>
                     </Group>
                     <TextInput
+                      disabled
                       style={{ width: "100%" }}
                       placeholder="Enter reference name"
                       {...register("reference")}
@@ -615,6 +603,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
               {taskType === "Shooting" && (
                 <React.Fragment>
                   <TextInput
+                    disabled
                     label="Duration"
                     style={{ width: "100%" }}
                     placeholder="Enter duration"
@@ -622,6 +611,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     error={errors.duration?.message}
                   />
                   <TextInput
+                    disabled
                     label="Shooting location"
                     style={{ width: "100%" }}
                     placeholder="Enter shooting location"
@@ -634,6 +624,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <Select
+                          disabled
                           label="Type"
                           style={{ width: "50%" }}
                           placeholder="Pick type"
@@ -645,6 +636,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     />
                     <TextInput
                       label="Transportation charge"
+                      disabled
                       style={{ width: "50%" }}
                       placeholder="Enter transportation"
                       {...register("transportation_charge")}
@@ -652,12 +644,14 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     />
                   </Flex>
                   <Textarea
+                    disabled
                     style={{ width: "100%" }}
                     placeholder="Type detail..."
                     {...register("type_detail")}
                     error={errors.type_detail?.message}
                   />
                   <Textarea
+                    disabled
                     style={{ width: "100%" }}
                     placeholder="Script detail..."
                     {...register("script_detail")}
@@ -665,6 +659,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   />
                   <Flex align="center" gap="lg">
                     <TextInput
+                      disabled
                       style={{ width: "50%" }}
                       placeholder="Number of scene"
                       {...register("scene_number")}
@@ -685,6 +680,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     ) : (
                       <Group style={{ width: "50%" }}>
                         <FileButton
+                          disabled
                           resetRef={resetRef}
                           onChange={setFile}
                           accept="pdf"
@@ -710,12 +706,14 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                   </Flex>
                   <Flex align="center" gap="lg">
                     <TextInput
+                      disabled
                       style={{ width: "50%" }}
                       placeholder="Contat person name"
                       {...register("contact_name")}
                       error={errors.contact_name?.message}
                     />
                     <TextInput
+                      disabled
                       style={{ width: "50%" }}
                       placeholder="Contat person phone"
                       {...register("contact_phone")}
@@ -727,6 +725,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     control={control}
                     render={({ field }) => (
                       <MultiSelect
+                        disabled
                         hidePickedOptions
                         label="Crew list"
                         style={{ width: "100%" }}
@@ -746,6 +745,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <Select
+                          disabled
                           label="Photo shooting project"
                           style={{ width: "50%" }}
                           placeholder="Pick project"
@@ -763,6 +763,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <Select
+                          disabled
                           label="Video shooting project"
                           style={{ width: "50%" }}
                           placeholder="Pick project"
@@ -782,6 +783,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <TimeInput
+                          disabled
                           {...field}
                           label="Arrive office time"
                           error={errors.arrive_office_on_time?.message}
@@ -798,6 +800,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <Select
+                          disabled
                           label="Client"
                           style={{ width: "50%" }}
                           placeholder="Pick client"
@@ -817,6 +820,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <TimeInput
+                          disabled
                           {...field}
                           label="In time"
                           error={errors.in_time?.message}
@@ -833,6 +837,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                       control={control}
                       render={({ field }) => (
                         <TimeInput
+                          disabled
                           {...field}
                           label="Out time"
                           error={errors.out_time?.message}
@@ -846,65 +851,14 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                     />
                   </Flex>
                   <Textarea
+                    disabled
                     {...register("project_details")}
                     style={{ width: "100%" }}
                     label="Project details"
                     placeholder="Enter project details"
                     error={errors.project_details?.message}
                   />
-                  <Grid>
-                    <Grid.Col span={3.3}>
-                      <Select
-                        value={shootingCategory}
-                        onChange={setShootingCategory}
-                        label="Shooting category"
-                        style={{ width: "100%" }}
-                        placeholder="Pick category"
-                        data={shootingCategories?.map(
-                          (shootingCategory: ShootingCategory) => ({
-                            label: shootingCategory.name,
-                            value: shootingCategory.id.toString(),
-                          })
-                        )}
-                        error={errors.photo_shooting_project?.message}
-                      />
-                    </Grid.Col>
-                    <Grid.Col span={3.3}>
-                      <Select
-                        label="Shooting category"
-                        style={{ width: "100%" }}
-                        disabled={shootingCategory === null}
-                        value={shootingAccessory}
-                        onChange={setShootingAccessory}
-                        placeholder="Pick category"
-                        data={shootingAccessories?.map(
-                          (shootingAccessory: ShootingAccessoriesDataRow) => ({
-                            label: shootingAccessory.name,
-                            value: shootingAccessory.name,
-                          })
-                        )}
-                        error={errors.photo_shooting_project?.message}
-                      />
-                    </Grid.Col>
-                    <Grid.Col span={3.3}>
-                      <TextInput
-                        value={qty}
-                        onChange={(e) => setQty(e.target.value)}
-                        label="quantity"
-                        style={{ width: "100%" }}
-                        placeholder="Enter task title"
-                        error={errors.title?.message}
-                      />
-                    </Grid.Col>
-                    <Grid.Col span={1} mt={25}>
-                      <Button
-                        onClick={onAddAccessories}
-                        leftSection={<IconPlus size={20} />}
-                      >
-                        Add
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
+
                   {items?.length > 0 && (
                     <Table>
                       <Table.Thead>
@@ -924,18 +878,6 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
                             <Table.Td>{item.required_qty}</Table.Td>
                             <Table.Td>{item.taken_qty}</Table.Td>
                             <Table.Td>{item.returned_qty}</Table.Td>
-                            <Table.Td>
-                              <IconTrash
-                                onClick={() =>
-                                  setItems((prevItems) =>
-                                    prevItems.filter(
-                                      (prevItem) => prevItem.id !== item.id
-                                    )
-                                  )
-                                }
-                                style={{ color: "red", cursor: "pointer" }}
-                              />
-                            </Table.Td>
                           </Table.Tr>
                         ))}
                       </Table.Tbody>
