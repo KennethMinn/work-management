@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Flex, Text } from "@mantine/core";
+import { Box, Flex, Text } from "@mantine/core";
 import DataTable from "../../../components/DataTable";
 import { useReportColumns } from "../hooks/useReportColumns";
 import { useGetReports } from "../hooks/useGetReports";

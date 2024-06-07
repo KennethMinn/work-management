@@ -11,6 +11,7 @@ interface TaskCardProps {
   cursorStyle: string;
   setActiveTask: React.Dispatch<React.SetStateAction<Task | null>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCard: FC<TaskCardProps> = ({
@@ -18,6 +19,7 @@ const TaskCard: FC<TaskCardProps> = ({
   cursorStyle,
   setActiveTask,
   setOpen,
+  setDetailOpen,
 }) => {
   const navigate = useNavigate();
   const {
@@ -36,7 +38,8 @@ const TaskCard: FC<TaskCardProps> = ({
   };
 
   const onHandleDetail = () => {
-    //task detail loginc
+    setActiveTask(task);
+    setDetailOpen(true);
   };
 
   const onHandleReportCreate = () => {
@@ -65,11 +68,13 @@ const TaskCard: FC<TaskCardProps> = ({
             onClick={onHandleDetail}
             style={{ color: "#4361ee", cursor: "pointer" }}
           />
-          <IconPlus
-            size={22}
-            onClick={onHandleReportCreate}
-            style={{ color: "#4361ee", cursor: "pointer" }}
-          />
+          {task.status !== "done" && (
+            <IconPlus
+              size={22}
+              onClick={onHandleReportCreate}
+              style={{ color: "#4361ee", cursor: "pointer" }}
+            />
+          )}
           <IconList
             size={22}
             onClick={onHandleReportList}

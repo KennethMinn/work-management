@@ -174,7 +174,6 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
               <Controller
                 name="assigned_task_id"
                 control={control}
-                disabled
                 render={({ field }) => (
                   <Select
                     label="Task"
@@ -192,7 +191,6 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
               <Controller
                 name="customer_id"
                 control={control}
-                disabled
                 render={({ field }) => (
                   <Select
                     label="Customer"
@@ -210,7 +208,6 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
               <Controller
                 name="project_id"
                 control={control}
-                disabled
                 render={({ field }) => (
                   <Select
                     label="Project"

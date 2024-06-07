@@ -2,6 +2,7 @@ import { useAuth } from "../../../hooks/auth/useAuth";
 import { useEffect, useMemo, useState } from "react";
 import {
   DndContext,
+  DragEndEvent,
   DragOverEvent,
   DragStartEvent,
   PointerSensor,
@@ -16,10 +17,12 @@ import { useGetTasksByEmployeeId } from "../hooks/useGetTasksByEmployeeId";
 import { Task } from "../../calendar/types";
 import { Droppable } from "../components/Droppable";
 import ReportCreateForm from "../../report/components/ReportCreateForm";
+import TaskDetail from "../components/TaskDetail";
 
 const AssignedTaskList = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
   const { data: assignedTasks, isLoading } = useGetTasksByEmployeeId(user?.id);
   const [tasks, setTasks] = useState<Task[]>(assignedTasks || []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -42,22 +45,28 @@ const AssignedTaskList = () => {
     }
   };
 
-  const onDragEnd = () => {
+  const onDragEnd = (event: DragEndEvent) => {
+    const { over } = event;
+    const overTaskId = over?.id;
+    // const overTaskStatus = over?.data.current?.task.status;
+
     setCursorStyle("grab");
     if (activeTask?.status === "pending") return;
+    if (overTaskId === "pending") return;
+    // if (activeTask?.status === overTaskStatus) return;
     setOpen(true);
   };
 
   const onDragOver = (event: DragOverEvent) => {
-    console.log("drag over");
-
     const { active, over } = event;
     if (!over) return;
 
+    const overColumnId = over.data.current?.columnId;
     const activeTaskId = active.id;
     const overTaskId = over.id;
 
     if (activeTaskId === overTaskId) return;
+    if (overTaskId === "pending") return;
 
     setTasks((prevTasks) => {
       const activeTaskIndex = prevTasks.findIndex(
@@ -67,8 +76,6 @@ const AssignedTaskList = () => {
         (task) => task.id === overTaskId
       );
 
-      // If `over.data.current` contains a columnId, we are hovering over a column
-      const overColumnId = over.data.current?.columnId;
       if (overColumnId && prevTasks[activeTaskIndex].status !== overColumnId) {
         prevTasks[activeTaskIndex].status = overColumnId;
       }
@@ -92,6 +99,13 @@ const AssignedTaskList = () => {
   return (
     <Box mx={10}>
       <ReportCreateForm open={open} setOpen={setOpen} activeTask={activeTask} />
+      {detailOpen && (
+        <TaskDetail
+          assignedTask={activeTask!}
+          opened={detailOpen}
+          close={() => setDetailOpen(false)}
+        />
+      )}
       <Grid>
         <DndContext
           sensors={sensors}
@@ -123,6 +137,7 @@ const AssignedTaskList = () => {
                             cursorStyle={cursorStyle}
                             setActiveTask={setActiveTask}
                             setOpen={setOpen}
+                            setDetailOpen={setDetailOpen}
                           />
                         ))}
                     </SortableContext>

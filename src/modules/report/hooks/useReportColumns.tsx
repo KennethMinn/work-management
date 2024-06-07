@@ -3,6 +3,7 @@ import { Badge, Flex } from "@mantine/core";
 import ReportEditForm from "../components/ReportEditForm";
 import { Report } from "../types";
 import ReportDeleteForm from "../components/ReportDeleteForm";
+import { getTaskColor } from "../../assigned-tasks/utils";
 
 export const useReportColumns = () => {
   const reportColumns: TableColumn<Report>[] = [
@@ -50,16 +51,7 @@ export const useReportColumns = () => {
       name: "Status",
       width: "130px",
       cell: (row) => (
-        <Badge
-          color={
-            row.status === "pending"
-              ? "red"
-              : row.status === "inProgress"
-              ? "yellow"
-              : "blue"
-          }
-          h={25}
-        >
+        <Badge color={getTaskColor(row.task.status)} h={25}>
           {row.status}
         </Badge>
       ),
