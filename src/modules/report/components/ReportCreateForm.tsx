@@ -7,19 +7,26 @@ import {
   Group,
   Image,
   Modal,
+  NumberInput,
   Select,
   Slider,
   Stack,
+  Table,
   Text,
   TextInput,
 } from "@mantine/core";
-import { IconCalendar, IconCloudUpload, IconTrash } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconCloudUpload,
+  IconTrash,
+  IconTrendingUp3,
+} from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { FC, useEffect, useRef, useState } from "react";
 import { reportFormSchema, TReportFormSchema } from "../types";
-import { Project, Task } from "../../calendar/types";
+import { Item, Project, Task } from "../../calendar/types";
 import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
 import { Customer } from "../../project/types";
 import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
@@ -47,6 +54,10 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
   const { data: assignedTasks } = useGetAllTasks();
   const { mutate: createReport, isPending } = useCreateReport();
 
+  const [items, setItems] = useState<Item[]>([]);
+  const [takenQty, setTakenQty] = useState<{ [key: number]: number }>({});
+  const [returnedQty, setReturnedQty] = useState<{ [key: number]: number }>({});
+
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
 
@@ -70,6 +81,19 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
   const clearPhoto = () => {
     setPhoto(null);
     resetPhotoRef.current?.();
+  };
+
+  const onUpdateItem = (id: number) => {
+    const newItems = items.map((item) => {
+      if (item.id === id)
+        return {
+          ...item,
+          taken_qty: takenQty[id] ?? item.taken_qty,
+          returned_qty: returnedQty[id] ?? item.returned_qty,
+        };
+      return item;
+    });
+    setItems(newItems);
   };
 
   useEffect(() => {
@@ -114,6 +138,8 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       toast.error("please add all additional fields");
       return;
     }
+
+    //will need to add accessories taken qty
     const data = {
       ...values,
       report_date: dayjs(values.report_date).format("YYYY-MM-DD"),
@@ -121,6 +147,14 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       photo_path: photo,
       video_path: video,
       user_id: user?.id,
+      shooting_accessories: JSON.stringify(
+        items.map((item) => ({
+          accessory_name: item.accessory_name,
+          required_qty: item.required_qty,
+          taken_qty: item.taken_qty,
+          returned_qty: item.returned_qty,
+        }))
+      ),
     };
     const formData = new FormData();
     for (const key in data) {
@@ -143,9 +177,25 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       setValue("customer_id", activeTask.customer_id.toString());
       setValue("project_id", activeTask.project_id.toString());
       setValue("assigned_task_id", activeTask.id.toString());
+      setValue("progress", activeTask.progress);
       setValue("status", activeTask.status);
+      setValue("report_date", new Date());
+      if (activeTask.shootingData) {
+        setItems(activeTask.shootingData.shooting_accessory_categories);
+        const initialTakenQty: { [key: number]: number } = {};
+        const initialReturnedQty: { [key: number]: number } = {};
+        activeTask.shootingData.shooting_accessory_categories.forEach(
+          (item) => {
+            initialTakenQty[item.id] = item.taken_qty || 0;
+            initialReturnedQty[item.id] = item.returned_qty || 0;
+          }
+        );
+        setTakenQty(initialTakenQty);
+        setReturnedQty(initialReturnedQty);
+      }
     }
-  }, [activeTask, activeTask?.status, setValue]);
+    console.log(activeTask);
+  }, [activeTask, setValue, activeTask?.status]);
 
   return (
     <Box>
@@ -221,6 +271,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Status"
                     defaultValue={activeTask?.status}
                     style={{ width: "100%" }}
@@ -239,7 +290,16 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                   name="progress"
                   control={control}
                   render={({ field }) => (
-                    <Slider {...field} label={(value) => value} />
+                    <Slider
+                      {...field}
+                      label={(value) => value}
+                      value={field.value}
+                      onChange={(value) => {
+                        if (activeTask?.progress && activeTask.progress > value)
+                          return;
+                        field.onChange(value);
+                      }}
+                    />
                   )}
                 />
               </Flex>
@@ -330,7 +390,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                   render={({ field }) => (
                     <DatePickerInput
                       error={errors.report_date?.message}
-                      label="Start date"
+                      label="Report date"
                       style={{ width: "50%" }}
                       {...field}
                       value={field.value ? new Date(field.value) : null}
@@ -347,7 +407,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                   render={({ field }) => (
                     <TimeInput
                       {...field}
-                      label="Start time"
+                      label="Report time"
                       error={errors.report_time?.message}
                       style={{ width: "50%" }}
                       value={field.value || ""} // Ensure value is defined
@@ -358,6 +418,66 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                   )}
                 />
               </Flex>
+              {items?.length > 0 && (
+                <Table>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>No</Table.Th>
+                      <Table.Th>Accessory Name</Table.Th>
+                      <Table.Th>Required Quantity</Table.Th>
+                      <Table.Th>Taken Quantity</Table.Th>
+                      <Table.Th>Returned Quantity</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {items.map((item, i) => (
+                      <Table.Tr key={item.id}>
+                        <Table.Td>{i + 1}</Table.Td>
+                        <Table.Td>{item.accessory_name}</Table.Td>
+                        <Table.Td>{item.required_qty}</Table.Td>
+                        <Table.Td>
+                          {activeTask?.status === "inProgress" ? (
+                            <NumberInput
+                              w={100}
+                              value={takenQty[item.id]}
+                              onChange={(qty) =>
+                                setTakenQty((prev) => ({
+                                  ...prev,
+                                  [item.id]: Number(qty),
+                                }))
+                              }
+                            />
+                          ) : (
+                            <Text>{item.taken_qty}</Text>
+                          )}
+                        </Table.Td>
+                        <td>
+                          {activeTask?.status === "done" ? (
+                            <NumberInput
+                              w={100}
+                              value={returnedQty[item.id]}
+                              onChange={(qty) =>
+                                setReturnedQty((prev) => ({
+                                  ...prev,
+                                  [item.id]: Number(qty),
+                                }))
+                              }
+                            />
+                          ) : (
+                            <Text>{item.returned_qty}</Text>
+                          )}
+                        </td>
+                        <td>
+                          <IconTrendingUp3
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onUpdateItem(item.id)}
+                          />
+                        </td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              )}
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button

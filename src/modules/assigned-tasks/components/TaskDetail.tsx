@@ -22,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import {
   Customer,
+  Item,
   Project,
   Task,
   taskFormSchema,
@@ -43,14 +44,6 @@ interface TaskDetailProp {
   assignedTask: Task;
   opened: boolean;
   close: () => void;
-}
-
-interface Item {
-  id: number;
-  accessory_name: string | null;
-  required_qty: string;
-  taken_qty: string;
-  returned_qty: string;
 }
 
 const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
@@ -192,7 +185,7 @@ const TaskDetail: FC<TaskDetailProp> = ({ opened, close, assignedTask }) => {
         setValue("out_time", assignedTask.shootingData.out_time);
         setValue("project_details", assignedTask.shootingData.project_details);
         setValue("project_details", assignedTask.shootingData.project_details);
-        setItems(assignedTask.shootingData.shooting_accessory_categories);
+        setItems(assignedTask.shootingData.shooting_accessories);
       }
     }
   }, [assignedTask, setValue]);

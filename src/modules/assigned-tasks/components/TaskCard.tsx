@@ -68,7 +68,7 @@ const TaskCard: FC<TaskCardProps> = ({
             onClick={onHandleDetail}
             style={{ color: "#4361ee", cursor: "pointer" }}
           />
-          {task.status !== "done" && (
+          {task.status !== "done" && task.status !== "pending" && (
             <IconPlus
               size={22}
               onClick={onHandleReportCreate}

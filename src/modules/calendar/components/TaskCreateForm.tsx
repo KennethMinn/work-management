@@ -9,6 +9,7 @@ import {
   Image,
   Modal,
   MultiSelect,
+  NumberInput,
   Select,
   Stack,
   Table,
@@ -26,7 +27,13 @@ import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Controller, useForm } from "react-hook-form";
-import { Customer, Project, taskFormSchema, TTaskFormSchema } from "../types";
+import {
+  Customer,
+  Item,
+  Project,
+  taskFormSchema,
+  TTaskFormSchema,
+} from "../types";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
@@ -53,14 +60,6 @@ interface TaskCreateFormProps {
   close: () => void;
 }
 
-interface Item {
-  id: number;
-  accessory_name: string | null;
-  required_qty: string;
-  taken_qty: string;
-  returned_qty: string;
-}
-
 const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   const [taskType, setTaskType] = useState<string | null>("");
   const { mutate: createTask, isPending } = useCreateTask();
@@ -80,7 +79,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   ]
   */
   const [items, setItems] = useState<Item[]>([]);
-  const [qty, setQty] = useState("");
+  const [qty, setQty] = useState(0);
   const [shootingCategory, setShootingCategory] = useState<string | null>(null);
   const [shootingAccessory, setShootingAccessory] = useState<string | null>(
     null
@@ -139,8 +138,8 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       id: Date.now(),
       accessory_name: shootingAccessory,
       required_qty: qty,
-      taken_qty: "0",
-      returned_qty: "0",
+      taken_qty: 0,
+      returned_qty: 0,
     };
 
     const newItems = [...items, newItem];
@@ -891,10 +890,10 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                       />
                     </Grid.Col>
                     <Grid.Col span={3.3}>
-                      <TextInput
+                      <NumberInput
                         value={qty}
-                        onChange={(e) => setQty(e.target.value)}
-                        label="quantity"
+                        onChange={(qty) => setQty(Number(qty))}
+                        label="Required quantity"
                         style={{ width: "100%" }}
                         placeholder="Enter task title"
                         error={errors.title?.message}

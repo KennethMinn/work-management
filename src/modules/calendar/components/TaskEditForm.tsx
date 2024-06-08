@@ -9,6 +9,7 @@ import {
   Image,
   Modal,
   MultiSelect,
+  NumberInput,
   Select,
   Stack,
   Table,
@@ -28,6 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import {
   Customer,
+  Item,
   Project,
   Task,
   taskFormSchema,
@@ -59,14 +61,6 @@ interface TaskEditFormProps {
   close: () => void;
 }
 
-interface Item {
-  id: number;
-  accessory_name: string | null;
-  required_qty: string;
-  taken_qty: string;
-  returned_qty: string;
-}
-
 const TaskEditForm: FC<TaskEditFormProps> = ({
   opened,
   close,
@@ -80,7 +74,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   const { mutate: updateTask, isPending } = useUpdateTask(assignedTask.id);
 
   const [items, setItems] = useState<Item[]>([]);
-  const [qty, setQty] = useState("");
+  const [qty, setQty] = useState(0);
   const [shootingCategory, setShootingCategory] = useState<string | null>(null);
   const [shootingAccessory, setShootingAccessory] = useState<string | null>(
     null
@@ -138,12 +132,20 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       id: Date.now(),
       accessory_name: shootingAccessory,
       required_qty: qty,
-      taken_qty: "0",
-      returned_qty: "0",
+      taken_qty: 0,
+      returned_qty: 0,
     };
 
     const newItems = [...items, newItem];
     setItems(newItems);
+  };
+
+  const handleRequiredQtyChange = (id: number, value: number) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, required_qty: value } : item
+      )
+    );
   };
 
   const onSubmit = (values: TTaskFormSchema) => {
@@ -196,8 +198,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
     for (const key in data) {
       formData.append(key, data[key as keyof TTaskFormSchema] as string);
     }
-
-    console.log(data);
 
     updateTask(formData, {
       onSuccess: () => {
@@ -310,7 +310,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         setValue("out_time", assignedTask.shootingData.out_time);
         setValue("project_details", assignedTask.shootingData.project_details);
         setValue("project_details", assignedTask.shootingData.project_details);
-        setItems(assignedTask.shootingData.shooting_accessory_categories);
+        setItems(assignedTask.shootingData.shooting_accessories);
       }
     }
   }, [assignedTask, setValue]);
@@ -951,7 +951,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                               value: shootingCategory.id.toString(),
                             })
                           )}
-                          error={errors.photo_shooting_project?.message}
                         />
                       </Grid.Col>
                       <Grid.Col span={3.3}>
@@ -970,17 +969,15 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                               value: shootingAccessory.name,
                             })
                           )}
-                          error={errors.photo_shooting_project?.message}
                         />
                       </Grid.Col>
                       <Grid.Col span={3.3}>
-                        <TextInput
+                        <NumberInput
                           value={qty}
-                          onChange={(e) => setQty(e.target.value)}
-                          label="quantity"
+                          onChange={(qty) => setQty(Number(qty))}
+                          label="Required quantity"
                           style={{ width: "100%" }}
                           placeholder="Enter task title"
-                          error={errors.title?.message}
                         />
                       </Grid.Col>
                       <Grid.Col span={1} mt={25}>
@@ -1001,14 +998,26 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                             <Table.Th>Required Quantity</Table.Th>
                             <Table.Th>Taken Quantity</Table.Th>
                             <Table.Th>Returned Quantity</Table.Th>
+                            <Table.Th>Actions</Table.Th>
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
                           {items.map((item, i) => (
-                            <Table.Tr key={i}>
-                              <Table.Td>{++i}</Table.Td>
+                            <Table.Tr key={item.id}>
+                              <Table.Td>{i + 1}</Table.Td>
                               <Table.Td>{item.accessory_name}</Table.Td>
-                              <Table.Td>{item.required_qty}</Table.Td>
+                              <Table.Td>
+                                <NumberInput
+                                  value={item.required_qty}
+                                  onChange={(value) =>
+                                    handleRequiredQtyChange(
+                                      item.id,
+                                      Number(value)
+                                    )
+                                  }
+                                  min={0}
+                                />
+                              </Table.Td>
                               <Table.Td>{item.taken_qty}</Table.Td>
                               <Table.Td>{item.returned_qty}</Table.Td>
                               <Table.Td>

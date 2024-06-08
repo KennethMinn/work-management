@@ -138,6 +138,7 @@ export interface ShootingData {
   fileURL: string;
   pivot: Pivot;
   shooting_accessory_categories: Item[];
+  shooting_accessories: Item[];
 }
 
 export interface Pivot {
@@ -153,9 +154,9 @@ export interface Pivot2 {
 export interface Item {
   id: number;
   accessory_name: string | null;
-  required_qty: string;
-  taken_qty: string;
-  returned_qty: string;
+  required_qty: number;
+  taken_qty: number;
+  returned_qty: number;
 }
 
 // export const taskFormSchema = z.object({

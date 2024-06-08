@@ -7,9 +7,11 @@ import {
   Group,
   Image,
   Modal,
+  NumberInput,
   Select,
   Slider,
   Stack,
+  Table,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -19,6 +21,7 @@ import {
   IconCloudUpload,
   IconEdit,
   IconTrash,
+  IconTrendingUp3,
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +40,7 @@ import { useAuth } from "../../../hooks/auth/useAuth";
 import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
 import { useGetAllTasks } from "../../calendar/hooks/useGetAllTasks";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
-import { Task } from "../../calendar/types";
+import { Item, Task } from "../../calendar/types";
 import { useReportTime } from "../hooks/useReportTime";
 import dayjs from "dayjs";
 
@@ -53,6 +56,10 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
   const { data: assignedTasks } = useGetAllTasks();
   const { mutate: updateReport, isPending } = useUpdateReport(id);
   const { data: report } = useGetReport(id);
+
+  const [items, setItems] = useState<Item[]>([]);
+  const [takenQty, setTakenQty] = useState<{ [key: number]: number }>({});
+  const [returnedQty, setReturnedQty] = useState<{ [key: number]: number }>({});
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
@@ -78,31 +85,40 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
     resetPhotoRef.current?.();
   };
 
+  const onUpdateItem = (id: number) => {
+    const newItems = items.map((item) => {
+      if (item.id === id)
+        return {
+          ...item,
+          taken_qty: takenQty[id] ?? item.taken_qty,
+          returned_qty: returnedQty[id] ?? item.returned_qty,
+        };
+      return item;
+    });
+    setItems(newItems);
+  };
+
   useEffect(() => {
     if (photo) {
       const objectUrl = URL.createObjectURL(photo);
       setPreviewUrl(objectUrl);
 
-      // Clean up to revoke the object URL when the component unmounts or when the file changes
       return () => URL.revokeObjectURL(objectUrl);
     } else {
-      // Reset the previewUrl to null if no file is provided
       setPreviewUrl(null);
     }
-  }, [photo]); // Re-generate preview URL whenever the file changes
+  }, [photo]);
 
   useEffect(() => {
     if (video) {
       const objectUrl = URL.createObjectURL(video);
       setVideoPreviewUrl(objectUrl);
 
-      // Clean up to revoke the object URL when the component unmounts or when the file changes
       return () => URL.revokeObjectURL(objectUrl);
     } else {
-      // Reset the videoPreviewUrl to null if no file is provided
       setVideoPreviewUrl(null);
     }
-  }, [video]); // Re-generate preview URL whenever the file changes
+  }, [video]);
 
   const {
     control,
@@ -122,6 +138,14 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
       photo_path: photo,
       video_path: video,
       user_id: user?.id,
+      shooting_accessories: JSON.stringify(
+        items.map((item) => ({
+          accessory_name: item.accessory_name,
+          required_qty: item.required_qty,
+          taken_qty: item.taken_qty,
+          returned_qty: item.returned_qty,
+        }))
+      ),
     };
     const formData = new FormData();
     for (const key in data) {
@@ -130,7 +154,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
     updateReport(formData, {
       onSuccess: () => {
         close();
-        toast.success("Report updated Successfully.");
+        toast.success("Report updated successfully.");
       },
       onError: () => {
         toast.error("Something went wrong.");
@@ -150,6 +174,17 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
       setVideoPreviewUrl(report.videoUrl);
       setValue("report_date", new Date(report.report_date));
       setValue("report_time", report.report_time);
+      if (report.task.shootingData?.shooting_accessories) {
+        setItems(report.task.shootingData?.shooting_accessories);
+        const initialTakenQty: { [key: number]: number } = {};
+        const initialReturnedQty: { [key: number]: number } = {};
+        report.task.shootingData?.shooting_accessories.forEach((item) => {
+          initialTakenQty[item.id] = item.taken_qty;
+          initialReturnedQty[item.id] = item.returned_qty;
+        });
+        setTakenQty(initialTakenQty);
+        setReturnedQty(initialReturnedQty);
+      }
     }
   }, [setValue, report]);
 
@@ -227,9 +262,10 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Status"
                     style={{ width: "100%" }}
-                    placeholder="Pick company"
+                    placeholder="Pick status"
                     data={["pending", "inProgress", "done"]}
                     {...field}
                     error={errors.status?.message}
@@ -371,6 +407,69 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                   )}
                 />
               </Flex>
+              {items?.length > 0 && (
+                <Table>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>No</Table.Th>
+                      <Table.Th>Accessory Name</Table.Th>
+                      <Table.Th>Required Quantity</Table.Th>
+                      <Table.Th>Taken Quantity</Table.Th>
+                      <Table.Th>Returned Quantity</Table.Th>
+                      <Table.Th>Action</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {items.map((item, i) => (
+                      <Table.Tr key={i}>
+                        <Table.Td>{i + 1}</Table.Td>
+                        <Table.Td>{item.accessory_name}</Table.Td>
+                        <Table.Td>{item.required_qty}</Table.Td>
+                        <Table.Td>
+                          {report?.status === "inProgress" ? (
+                            <NumberInput
+                              w={100}
+                              defaultValue={item.taken_qty || 0}
+                              value={takenQty[item.id] ?? item.taken_qty}
+                              onChange={(qty) =>
+                                setTakenQty((prev) => ({
+                                  ...prev,
+                                  [item.id]: Number(qty),
+                                }))
+                              }
+                            />
+                          ) : (
+                            <Text>{item.taken_qty}</Text>
+                          )}
+                        </Table.Td>
+                        <td>
+                          {report?.status === "done" ? (
+                            <NumberInput
+                              w={100}
+                              defaultValue={item.returned_qty || 0}
+                              value={returnedQty[item.id] ?? item.returned_qty}
+                              onChange={(qty) =>
+                                setReturnedQty((prev) => ({
+                                  ...prev,
+                                  [item.id]: Number(qty),
+                                }))
+                              }
+                            />
+                          ) : (
+                            <Text>{item.returned_qty}</Text>
+                          )}
+                        </td>
+                        <td>
+                          <IconTrendingUp3
+                            style={{ cursor: "pointer" }}
+                            onClick={() => onUpdateItem(item.id)}
+                          />
+                        </td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              )}
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button radius={4} size="sm" onClick={close} color="dark">
