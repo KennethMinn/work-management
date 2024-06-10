@@ -51,7 +51,7 @@ export const useReportColumns = () => {
       name: "Status",
       width: "130px",
       cell: (row) => (
-        <Badge color={getTaskColor(row.task.status)} h={25}>
+        <Badge color={getTaskColor(row.status)} h={25}>
           {row.status}
         </Badge>
       ),

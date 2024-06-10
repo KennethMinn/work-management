@@ -21,7 +21,6 @@ import {
   IconCloudUpload,
   IconEdit,
   IconTrash,
-  IconTrendingUp3,
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -85,17 +84,14 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
     resetPhotoRef.current?.();
   };
 
-  const onUpdateItem = (id: number) => {
-    const newItems = items.map((item) => {
-      if (item.id === id)
-        return {
-          ...item,
-          taken_qty: takenQty[id] ?? item.taken_qty,
-          returned_qty: returnedQty[id] ?? item.returned_qty,
-        };
-      return item;
-    });
-    setItems(newItems);
+  const updateItemQty = (id: number, taken: number, returned: number) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id
+          ? { ...item, taken_qty: taken, returned_qty: returned }
+          : item
+      )
+    );
   };
 
   useEffect(() => {
@@ -211,6 +207,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Task"
                     style={{ width: "100%" }}
                     placeholder="Pick task"
@@ -228,6 +225,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Customer"
                     style={{ width: "100%" }}
                     placeholder="Pick customer"
@@ -245,6 +243,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Project"
                     style={{ width: "100%" }}
                     placeholder="Pick project"
@@ -416,12 +415,11 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                       <Table.Th>Required Quantity</Table.Th>
                       <Table.Th>Taken Quantity</Table.Th>
                       <Table.Th>Returned Quantity</Table.Th>
-                      <Table.Th>Action</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
                     {items.map((item, i) => (
-                      <Table.Tr key={i}>
+                      <Table.Tr key={item.id}>
                         <Table.Td>{i + 1}</Table.Td>
                         <Table.Td>{item.accessory_name}</Table.Td>
                         <Table.Td>{item.required_qty}</Table.Td>
@@ -429,42 +427,44 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                           {report?.status === "inProgress" ? (
                             <NumberInput
                               w={100}
-                              defaultValue={item.taken_qty || 0}
-                              value={takenQty[item.id] ?? item.taken_qty}
-                              onChange={(qty) =>
+                              value={takenQty[item.id]}
+                              onChange={(qty) => {
                                 setTakenQty((prev) => ({
                                   ...prev,
                                   [item.id]: Number(qty),
-                                }))
-                              }
+                                }));
+                                updateItemQty(
+                                  item.id,
+                                  Number(qty),
+                                  returnedQty[item.id] || 0
+                                );
+                              }}
                             />
                           ) : (
                             <Text>{item.taken_qty}</Text>
                           )}
                         </Table.Td>
-                        <td>
+                        <Table.Td>
                           {report?.status === "done" ? (
                             <NumberInput
                               w={100}
-                              defaultValue={item.returned_qty || 0}
-                              value={returnedQty[item.id] ?? item.returned_qty}
-                              onChange={(qty) =>
+                              value={returnedQty[item.id]}
+                              onChange={(qty) => {
                                 setReturnedQty((prev) => ({
                                   ...prev,
                                   [item.id]: Number(qty),
-                                }))
-                              }
+                                }));
+                                updateItemQty(
+                                  item.id,
+                                  takenQty[item.id] || 0,
+                                  Number(qty)
+                                );
+                              }}
                             />
                           ) : (
                             <Text>{item.returned_qty}</Text>
                           )}
-                        </td>
-                        <td>
-                          <IconTrendingUp3
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onUpdateItem(item.id)}
-                          />
-                        </td>
+                        </Table.Td>
                       </Table.Tr>
                     ))}
                   </Table.Tbody>

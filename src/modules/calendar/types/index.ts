@@ -8,6 +8,7 @@ import { z } from "zod";
 
 export interface Task {
   id: number;
+  is_reported: boolean;
   customer_id: number;
   project_id: number;
   title: string;
@@ -272,6 +273,23 @@ export const taskFormSchema = z.object({
   in_time: z.string().optional(),
   crew_list: z.array(z.string()).optional(),
   project_details: z.string().optional(),
+
+  //Frontend
+  feature_type: z.string().optional(),
+  reference_figma: z.string().optional(),
+  detail_task: z.string().optional(),
+  desgin_validation_detail: z.string().optional(),
+  styling_detail: z.string().optional(),
+  api_integration: z.string().optional(),
+
+  //Backend
+  use_case: z.string().optional(),
+  crud_type: z.string().optional(),
+  detail: z.string().optional(),
+  database_migration: z.string().optional(),
+  controller_name: z.string().optional(),
+  routes: z.string().optional(),
+  related_view: z.string().optional(),
 });
 
 export type TTaskFormSchema = z.infer<typeof taskFormSchema>;

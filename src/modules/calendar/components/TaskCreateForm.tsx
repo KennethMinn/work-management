@@ -410,7 +410,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   onChange={setTaskType}
                   style={{ width: "50%" }}
                   placeholder="Pick task"
-                  data={["Graphic Design", "Shooting"]}
+                  data={["Graphic Design", "Shooting", "Frontend"]}
                 />
               </Flex>
 
@@ -944,6 +944,59 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                       </Table.Tbody>
                     </Table>
                   )}
+                </React.Fragment>
+              )}
+              {taskType === "Frontend" && (
+                <React.Fragment>
+                  <Controller
+                    name="feature_type"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        label="Type"
+                        style={{ width: "100%" }}
+                        placeholder="Pick type"
+                        data={["Form", "List", "Dialog", "Flow"]}
+                        {...field}
+                        error={errors.feature_type?.message}
+                      />
+                    )}
+                  />
+                  <Textarea
+                    {...register("reference_figma")}
+                    style={{ width: "100%" }}
+                    label="Reference figma"
+                    placeholder="Enter reference figma link"
+                    error={errors.reference_figma?.message}
+                  />
+                  <Textarea
+                    {...register("detail_task")}
+                    style={{ width: "100%" }}
+                    label="Task detail"
+                    placeholder="Enter project details"
+                    error={errors.detail_task?.message}
+                  />
+                  <Textarea
+                    {...register("desgin_validation_detail")}
+                    style={{ width: "100%" }}
+                    label="Design validation detail"
+                    placeholder="Enter design validation detail"
+                    error={errors.desgin_validation_detail?.message}
+                  />
+                  <Textarea
+                    {...register("styling_detail")}
+                    style={{ width: "100%" }}
+                    label="Styling detail"
+                    placeholder="Enter styling detail"
+                    error={errors.styling_detail?.message}
+                  />
+                  <Textarea
+                    {...register("api_integration")}
+                    style={{ width: "100%" }}
+                    label="API integration"
+                    placeholder="Enter api integration"
+                    error={errors.api_integration?.message}
+                  />
                 </React.Fragment>
               )}
             </Stack>

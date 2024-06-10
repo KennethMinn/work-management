@@ -15,12 +15,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import {
-  IconCalendar,
-  IconCloudUpload,
-  IconTrash,
-  IconTrendingUp3,
-} from "@tabler/icons-react";
+import { IconCalendar, IconCloudUpload, IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -83,17 +78,14 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
     resetPhotoRef.current?.();
   };
 
-  const onUpdateItem = (id: number) => {
-    const newItems = items.map((item) => {
-      if (item.id === id)
-        return {
-          ...item,
-          taken_qty: takenQty[id] ?? item.taken_qty,
-          returned_qty: returnedQty[id] ?? item.returned_qty,
-        };
-      return item;
-    });
-    setItems(newItems);
+  const updateItemQty = (id: number, taken: number, returned: number) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id
+          ? { ...item, taken_qty: taken, returned_qty: returned }
+          : item
+      )
+    );
   };
 
   useEffect(() => {
@@ -221,6 +213,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                 render={({ field }) => (
                   <Select
                     label="Task"
+                    disabled
                     style={{ width: "100%" }}
                     placeholder="Pick task"
                     data={assignedTasks?.map((task: Task) => ({
@@ -237,6 +230,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Customer"
                     style={{ width: "100%" }}
                     placeholder="Pick customer"
@@ -254,6 +248,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                 control={control}
                 render={({ field }) => (
                   <Select
+                    disabled
                     label="Project"
                     style={{ width: "100%" }}
                     placeholder="Pick project"
@@ -440,39 +435,43 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                             <NumberInput
                               w={100}
                               value={takenQty[item.id]}
-                              onChange={(qty) =>
+                              onChange={(qty) => {
                                 setTakenQty((prev) => ({
                                   ...prev,
                                   [item.id]: Number(qty),
-                                }))
-                              }
+                                }));
+                                updateItemQty(
+                                  item.id,
+                                  Number(qty),
+                                  returnedQty[item.id] || 0
+                                );
+                              }}
                             />
                           ) : (
                             <Text>{item.taken_qty}</Text>
                           )}
                         </Table.Td>
-                        <td>
+                        <Table.Td>
                           {activeTask?.status === "done" ? (
                             <NumberInput
                               w={100}
                               value={returnedQty[item.id]}
-                              onChange={(qty) =>
+                              onChange={(qty) => {
                                 setReturnedQty((prev) => ({
                                   ...prev,
                                   [item.id]: Number(qty),
-                                }))
-                              }
+                                }));
+                                updateItemQty(
+                                  item.id,
+                                  takenQty[item.id] || 0,
+                                  Number(qty)
+                                );
+                              }}
                             />
                           ) : (
                             <Text>{item.returned_qty}</Text>
                           )}
-                        </td>
-                        <td>
-                          <IconTrendingUp3
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onUpdateItem(item.id)}
-                          />
-                        </td>
+                        </Table.Td>
                       </Table.Tr>
                     ))}
                   </Table.Tbody>

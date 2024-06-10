@@ -1008,6 +1008,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                               <Table.Td>{item.accessory_name}</Table.Td>
                               <Table.Td>
                                 <NumberInput
+                                  disabled={assignedTask.is_reported}
                                   value={item.required_qty}
                                   onChange={(value) =>
                                     handleRequiredQtyChange(
