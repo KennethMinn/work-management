@@ -53,6 +53,7 @@ import {
 } from "../../shooting-accessories/types";
 import useGetShootingAccessoriesByCategoryId from "../../shooting-accessories/hooks/useGetShootingAccessoriesByCategoryId";
 import dayjs from "dayjs";
+import BackendForm from "./sub-forms/BackendForm";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -410,7 +411,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   onChange={setTaskType}
                   style={{ width: "50%" }}
                   placeholder="Pick task"
-                  data={["Graphic Design", "Shooting", "Frontend"]}
+                  data={["Graphic Design", "Shooting", "Frontend", "Backend"]}
                 />
               </Flex>
 
@@ -998,6 +999,9 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                     error={errors.api_integration?.message}
                   />
                 </React.Fragment>
+              )}
+              {taskType === "Backend" && (
+                <BackendForm errors={errors} register={register} />
               )}
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
