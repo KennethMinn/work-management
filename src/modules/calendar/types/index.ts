@@ -30,6 +30,8 @@ export interface Task {
   designData: DesignData | null;
   artworkSizes: [];
   shootingData: ShootingData | null;
+  frontEndData: FrontEndData | null;
+  backEndData: BackEndData | null;
 }
 
 export interface Customer {
@@ -140,6 +142,33 @@ export interface ShootingData {
   pivot: Pivot;
   shooting_accessory_categories: Item[];
   shooting_accessories: Item[];
+}
+
+export interface FrontEndData {
+  id: number;
+  feature_type: string;
+  reference_figma: string;
+  detail_task: string;
+  design_validation_detail: string;
+  styling_detail: string;
+  api_integration: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+export interface BackEndData {
+  id: number;
+  use_case: string;
+  crud_type: string;
+  detail: string;
+  database_migration: string;
+  controller_name: string;
+  routes: string;
+  related_view: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
 }
 
 export interface Pivot {
@@ -278,7 +307,7 @@ export const taskFormSchema = z.object({
   feature_type: z.string().optional(),
   reference_figma: z.string().optional(),
   detail_task: z.string().optional(),
-  desgin_validation_detail: z.string().optional(),
+  design_validation_detail: z.string().optional(),
   styling_detail: z.string().optional(),
   api_integration: z.string().optional(),
 

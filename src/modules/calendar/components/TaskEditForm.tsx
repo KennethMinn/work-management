@@ -1,28 +1,15 @@
 import {
-  ActionIcon,
   Box,
   Button,
-  FileButton,
   Flex,
-  Grid,
-  Group,
-  Image,
   Modal,
-  MultiSelect,
-  NumberInput,
   Select,
   Stack,
-  Table,
   Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
-import {
-  IconCalendar,
-  IconCloudUpload,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconCalendar } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -35,7 +22,7 @@ import {
   taskFormSchema,
   TTaskFormSchema,
 } from "../types";
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
 import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
@@ -43,17 +30,12 @@ import { useGetAllEmployees } from "../../employee/hooks/useGetAllEmployees";
 import { Employee } from "../../project/types";
 import { useStartTime } from "../hooks/time/useStartTime";
 import { useEndTime } from "../hooks/time/useEndTime";
-import { useOfficeTime } from "../hooks/time/useOfficeTime";
-import { useInTime } from "../hooks/time/useInTime";
-import { useOutTime } from "../hooks/time/useOutTime";
-import { useGetAllShootingCategories } from "../../shooting-category/hooks/useGetAllShootingCategories";
-import {
-  ShootingAccessoriesDataRow,
-  ShootingCategory,
-} from "../../shooting-accessories/types";
-import useGetShootingAccessoriesByCategoryId from "../../shooting-accessories/hooks/useGetShootingAccessoriesByCategoryId";
 import dayjs from "dayjs";
 import { useUpdateTask } from "../hooks/useUpdateTask";
+import ShootingForm from "./sub-forms/ShootingForm";
+import DesignForm from "./sub-forms/DesignForm";
+import FrontendForm from "./sub-forms/FrontendForm";
+import BackendForm from "./sub-forms/BackendForm";
 
 interface TaskEditFormProps {
   assignedTask: Task;
@@ -66,23 +48,13 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   close,
   assignedTask,
 }) => {
+  const [items, setItems] = useState<Item[]>([]);
   const [taskType, setTaskType] = useState<string | null>("");
   const { data: customers } = useGetAllCustomers();
   const { data: projects } = useGetAllProjects();
   const { data: employees } = useGetAllEmployees();
 
   const { mutate: updateTask, isPending } = useUpdateTask(assignedTask.id);
-
-  const [items, setItems] = useState<Item[]>([]);
-  const [qty, setQty] = useState(0);
-  const [shootingCategory, setShootingCategory] = useState<string | null>(null);
-  const [shootingAccessory, setShootingAccessory] = useState<string | null>(
-    null
-  );
-  const { data: shootingCategories } = useGetAllShootingCategories("visible");
-  const { data: shootingAccessories } = useGetShootingAccessoriesByCategoryId(
-    shootingCategory!
-  );
 
   //for avatar
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -91,10 +63,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   //for times
   const { refStart, pickerControlStart } = useStartTime();
   const { refEnd, pickerControlEnd } = useEndTime();
-  const { refOfficeTime, pickerControlOfficeTime } = useOfficeTime();
-  const { refInTime, pickerControlInTime } = useInTime();
-  const { refOutTime, pickerControlOutTime } = useOutTime();
-
   //to clear profile
   const clearFile = () => {
     setFile(null);
@@ -123,22 +91,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       setPreviewUrl(null);
     }
   }, [file]); // Re-generate preview URL whenever the file changes
-
-  const onAddAccessories = () => {
-    if (!shootingCategory || !shootingAccessory || !qty) {
-      return;
-    }
-    const newItem = {
-      id: Date.now(),
-      accessory_name: shootingAccessory,
-      required_qty: qty,
-      taken_qty: 0,
-      returned_qty: 0,
-    };
-
-    const newItems = [...items, newItem];
-    setItems(newItems);
-  };
 
   const handleRequiredQtyChange = (id: number, value: number) => {
     setItems((prevItems) =>
@@ -204,7 +156,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         close();
         setFile(null);
         setItems([]);
-        toast.success("Task Created Successfully.");
+        toast.success("Task Updated Successfully.");
       },
       onError: (error) => {
         toast.error(error.message);
@@ -213,10 +165,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       },
     });
   };
-
-  useEffect(() => {
-    setShootingAccessory(null);
-  }, [shootingCategory]);
 
   useEffect(() => {
     setFile(null);
@@ -229,6 +177,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       }
       if (assignedTask.designData) {
         setTaskType("Graphic Design");
+      }
+      if (assignedTask.frontEndData) {
+        setTaskType("Frontend");
+      }
+      if (assignedTask.backEndData) {
+        setTaskType("Backend");
       }
 
       //root
@@ -312,8 +266,37 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         setValue("project_details", assignedTask.shootingData.project_details);
         setItems(assignedTask.shootingData.shooting_accessories);
       }
+
+      //frontend
+      if (assignedTask?.frontEndData) {
+        setValue("feature_type", assignedTask.frontEndData.feature_type);
+        setValue("reference_figma", assignedTask.frontEndData.reference_figma);
+        setValue("detail_task", assignedTask.frontEndData.detail_task);
+        setValue(
+          "design_validation_detail",
+          assignedTask.frontEndData.design_validation_detail
+        );
+        setValue("styling_detail", assignedTask.frontEndData.styling_detail);
+        setValue("api_integration", assignedTask.frontEndData.api_integration);
+      }
+
+      //backend
+      if (assignedTask?.backEndData) {
+        setValue("use_case", assignedTask.backEndData.use_case);
+        setValue("crud_type", assignedTask.backEndData.crud_type);
+        setValue("detail", assignedTask.backEndData.detail);
+        setValue(
+          "database_migration",
+          assignedTask.backEndData.database_migration
+        );
+        setValue("controller_name", assignedTask.backEndData.controller_name);
+        setValue("routes", assignedTask.backEndData.routes);
+        setValue("related_view", assignedTask.backEndData.related_view);
+      }
     }
   }, [assignedTask, setValue]);
+
+  console.log(assignedTask);
 
   return (
     <Box>
@@ -492,553 +475,45 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                 {/* dynamically rendered forms */}
                 {/* graphic design */}
                 {taskType === "Graphic Design" && (
-                  <React.Fragment>
-                    <Flex align="center" gap="lg">
-                      <TextInput
-                        label="Brand"
-                        style={{ width: "50%" }}
-                        placeholder="Enter brand"
-                        {...register("brand")}
-                        error={errors.brand?.message}
-                      />
-                      <TextInput
-                        label="Media type"
-                        style={{ width: "50%" }}
-                        placeholder="Enter media type"
-                        {...register("type_of_media")}
-                        error={errors.type_of_media?.message}
-                      />
-                    </Flex>
-                    <Flex align="center" gap="lg">
-                      <Controller
-                        name="designer_id"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            label="Designer"
-                            style={{ width: "50%" }}
-                            placeholder="Pick designer"
-                            data={employees?.map((employee: Employee) => ({
-                              label: employee.name,
-                              value: employee.id.toString(),
-                            }))}
-                            {...field}
-                            error={errors.designer_id?.message}
-                          />
-                        )}
-                      />
-                      <Controller
-                        name="content_writer_id"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            label="Content Write"
-                            style={{ width: "50%" }}
-                            placeholder="Pick content writer"
-                            data={employees?.map((employee: Employee) => ({
-                              label: employee.name,
-                              value: employee.id.toString(),
-                            }))}
-                            {...field}
-                            error={errors.content_writer_id?.message}
-                          />
-                        )}
-                      />
-                    </Flex>
-                    <Grid>
-                      <Grid.Col span={4}>
-                        <TextInput
-                          label="Visual Copy"
-                          style={{ width: "100%" }}
-                          placeholder="Enter visual copy"
-                          {...register("visual_copy")}
-                          error={errors.visual_copy?.message}
-                        />
-                      </Grid.Col>
-                      <Grid.Col span={4}>
-                        <TextInput
-                          label="Headline"
-                          style={{ width: "100%" }}
-                          placeholder="Enter headline"
-                          {...register("headline")}
-                          error={errors.headline?.message}
-                        />
-                      </Grid.Col>
-                      <Grid.Col span={4}>
-                        <Controller
-                          name="deadline"
-                          control={control}
-                          render={({ field }) => (
-                            <DatePickerInput
-                              style={{ width: "100%" }}
-                              {...field}
-                              label="Deadline"
-                              error={errors.deadline?.message}
-                              value={field.value ? new Date(field.value) : null}
-                              onChange={(date) => field.onChange(date)}
-                              leftSection={<IconCalendar />}
-                              leftSectionPointerEvents="none"
-                              placeholder="Pick deadline"
-                            />
-                          )}
-                        />
-                      </Grid.Col>
-                    </Grid>
-                    <Flex align="center" gap="lg">
-                      <TextInput
-                        label="Body"
-                        style={{ width: "50%" }}
-                        placeholder="Enter body"
-                        {...register("body")}
-                        error={errors.body?.message}
-                      />
-                      <TextInput
-                        label="Objective"
-                        style={{ width: "50%" }}
-                        placeholder="Enter objectice"
-                        {...register("objective")}
-                        error={errors.objective?.message}
-                      />
-                    </Flex>
-                    <Flex align="center" gap="lg">
-                      <TextInput
-                        label="Important information"
-                        style={{ width: "50%" }}
-                        placeholder="Enter important information"
-                        {...register("important_info")}
-                        error={errors.important_info?.message}
-                      />
-                      <TextInput
-                        label="Tease & Style"
-                        style={{ width: "50%" }}
-                        placeholder="Enter taste & style"
-                        {...register("taste_style")}
-                        error={errors.taste_style?.message}
-                      />
-                    </Flex>
-                    <Flex direction="column" gap={4}>
-                      <Text fz="sm" fw={500}>
-                        Artwork size
-                      </Text>
-                      <Grid>
-                        <Grid.Col span={2.4}>
-                          <TextInput
-                            style={{ width: "100%" }}
-                            placeholder="Visual format"
-                            {...register("visual_format")}
-                            error={errors.visual_format?.message}
-                          />
-                        </Grid.Col>
-                        <Grid.Col span={2.4}>
-                          <TextInput
-                            style={{ width: "100%" }}
-                            placeholder="Aspect ratio"
-                            {...register("aspect_ratio")}
-                            error={errors.aspect_ratio?.message}
-                          />
-                        </Grid.Col>
-                        <Grid.Col span={2.4}>
-                          <TextInput
-                            style={{ width: "100%" }}
-                            placeholder="Width"
-                            {...register("width")}
-                            error={errors.width?.message}
-                          />
-                        </Grid.Col>
-                        <Grid.Col span={2.4}>
-                          <TextInput
-                            style={{ width: "100%" }}
-                            placeholder="Height"
-                            {...register("height")}
-                            error={errors.height?.message}
-                          />
-                        </Grid.Col>
-                        <Grid.Col span={2.4}>
-                          <TextInput
-                            style={{ width: "100%" }}
-                            placeholder="Resolution"
-                            {...register("resolution")}
-                            error={errors.resolution?.message}
-                          />
-                        </Grid.Col>
-                      </Grid>
-                    </Flex>
-                    {previewUrl && <Image radius="md" src={previewUrl} />}
-                    <Flex align="center" gap="lg">
-                      <Group style={{ width: "100%" }}>
-                        <FileButton
-                          resetRef={resetRef}
-                          onChange={setFile}
-                          accept="image/png,image/jpeg"
-                        >
-                          {(props) => (
-                            <Button
-                              leftSection={<IconCloudUpload />}
-                              {...props}
-                            >
-                              reference photo
-                            </Button>
-                          )}
-                        </FileButton>
-                        <Button
-                          disabled={!file}
-                          color="red"
-                          onClick={clearFile}
-                        >
-                          Reset
-                        </Button>
-                      </Group>
-                      <TextInput
-                        style={{ width: "100%" }}
-                        placeholder="Enter reference name"
-                        {...register("reference")}
-                        error={errors.reference?.message}
-                      />
-                    </Flex>
-                  </React.Fragment>
+                  <DesignForm
+                    previewUrl={previewUrl}
+                    errors={errors}
+                    register={register}
+                    control={control}
+                    file={file}
+                    setFile={setFile}
+                    resetRef={resetRef}
+                    clearFile={clearFile}
+                    employees={employees}
+                  />
                 )}
                 {taskType === "Shooting" && (
-                  <React.Fragment>
-                    <TextInput
-                      label="Duration"
-                      style={{ width: "100%" }}
-                      placeholder="Enter duration"
-                      {...register("duration")}
-                      error={errors.duration?.message}
-                    />
-                    <TextInput
-                      label="Shooting location"
-                      style={{ width: "100%" }}
-                      placeholder="Enter shooting location"
-                      {...register("shooting_location")}
-                      error={errors.shooting_location?.message}
-                    />
-                    <Flex align="center" gap="lg">
-                      <Controller
-                        name="type"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            label="Type"
-                            style={{ width: "50%" }}
-                            placeholder="Pick type"
-                            data={["type"]}
-                            {...field}
-                            error={errors.type?.message}
-                          />
-                        )}
-                      />
-                      <TextInput
-                        label="Transportation charge"
-                        style={{ width: "50%" }}
-                        placeholder="Enter transportation"
-                        {...register("transportation_charge")}
-                        error={errors.transportation_charge?.message}
-                      />
-                    </Flex>
-                    <Textarea
-                      style={{ width: "100%" }}
-                      placeholder="Type detail..."
-                      {...register("type_detail")}
-                      error={errors.type_detail?.message}
-                    />
-                    <Textarea
-                      style={{ width: "100%" }}
-                      placeholder="Script detail..."
-                      {...register("script_detail")}
-                      error={errors.script_detail?.message}
-                    />
-                    <Flex align="center" gap="lg">
-                      <TextInput
-                        style={{ width: "50%" }}
-                        placeholder="Number of scene"
-                        {...register("scene_number")}
-                        error={errors.scene_number?.message}
-                      />
-                      {file ? (
-                        <Flex align="center" gap="lg" style={{ width: "50%" }}>
-                          <Text>{file.name}</Text>
-                          <ActionIcon
-                            size="lg"
-                            variant="filled"
-                            color="red"
-                            onClick={clearFile}
-                          >
-                            <IconTrash size={20} />
-                          </ActionIcon>
-                        </Flex>
-                      ) : (
-                        <Group style={{ width: "50%" }}>
-                          <FileButton
-                            resetRef={resetRef}
-                            onChange={setFile}
-                            accept="pdf"
-                          >
-                            {(props) => (
-                              <Button
-                                leftSection={<IconCloudUpload />}
-                                {...props}
-                              >
-                                Upload Document
-                              </Button>
-                            )}
-                          </FileButton>
-                          <Button
-                            disabled={!file}
-                            color="red"
-                            onClick={clearFile}
-                          >
-                            Reset
-                          </Button>
-                        </Group>
-                      )}
-                    </Flex>
-                    <Flex align="center" gap="lg">
-                      <TextInput
-                        style={{ width: "50%" }}
-                        placeholder="Contat person name"
-                        {...register("contact_name")}
-                        error={errors.contact_name?.message}
-                      />
-                      <TextInput
-                        style={{ width: "50%" }}
-                        placeholder="Contat person phone"
-                        {...register("contact_phone")}
-                        error={errors.contact_phone?.message}
-                      />
-                    </Flex>
-                    <Controller
-                      name="crew_list"
-                      control={control}
-                      render={({ field }) => (
-                        <MultiSelect
-                          hidePickedOptions
-                          label="Crew list"
-                          style={{ width: "100%" }}
-                          placeholder="Pick crews"
-                          data={employees?.map((employee: Employee) => ({
-                            label: employee.name,
-                            value: employee.name,
-                          }))}
-                          {...field}
-                          error={errors.crew_list?.message}
-                        />
-                      )}
-                    />
-                    <Flex align="center" gap="lg">
-                      <Controller
-                        name="photo_shooting_project"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            label="Photo shooting project"
-                            style={{ width: "50%" }}
-                            placeholder="Pick project"
-                            data={projects?.map((project: Project) => ({
-                              label: project.name,
-                              value: project.name,
-                            }))}
-                            {...field}
-                            error={errors.photo_shooting_project?.message}
-                          />
-                        )}
-                      />
-                      <Controller
-                        name="video_shooting_project"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            label="Video shooting project"
-                            style={{ width: "50%" }}
-                            placeholder="Pick project"
-                            data={projects?.map((project: Project) => ({
-                              label: project.name,
-                              value: project.name,
-                            }))}
-                            {...field}
-                            error={errors.video_shooting_project?.message}
-                          />
-                        )}
-                      />
-                    </Flex>
-                    <Flex align="center" gap="lg">
-                      <Controller
-                        name="arrive_office_on_time"
-                        control={control}
-                        render={({ field }) => (
-                          <TimeInput
-                            {...field}
-                            label="Arrive office time"
-                            error={errors.arrive_office_on_time?.message}
-                            style={{ width: "50%" }}
-                            value={field.value || ""} // Ensure value is defined
-                            onChange={(time) => field.onChange(time)}
-                            ref={refOfficeTime}
-                            rightSection={pickerControlOfficeTime}
-                          />
-                        )}
-                      />
-                      <Controller
-                        name="client"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            label="Client"
-                            style={{ width: "50%" }}
-                            placeholder="Pick client"
-                            data={customers?.map((customer: Customer) => ({
-                              label: customer.name,
-                              value: customer.name,
-                            }))}
-                            {...field}
-                            error={errors.client?.message}
-                          />
-                        )}
-                      />
-                    </Flex>
-                    <Flex align="center" gap="lg">
-                      <Controller
-                        name="in_time"
-                        control={control}
-                        render={({ field }) => (
-                          <TimeInput
-                            {...field}
-                            label="In time"
-                            error={errors.in_time?.message}
-                            style={{ width: "50%" }}
-                            value={field.value || ""} // Ensure value is defined
-                            onChange={(time) => field.onChange(time)}
-                            ref={refInTime}
-                            rightSection={pickerControlInTime}
-                          />
-                        )}
-                      />
-                      <Controller
-                        name="out_time"
-                        control={control}
-                        render={({ field }) => (
-                          <TimeInput
-                            {...field}
-                            label="Out time"
-                            error={errors.out_time?.message}
-                            style={{ width: "50%" }}
-                            value={field.value || ""} // Ensure value is defined
-                            onChange={(time) => field.onChange(time)}
-                            ref={refOutTime}
-                            rightSection={pickerControlOutTime}
-                          />
-                        )}
-                      />
-                    </Flex>
-                    <Textarea
-                      {...register("project_details")}
-                      style={{ width: "100%" }}
-                      label="Project details"
-                      placeholder="Enter project details"
-                      error={errors.project_details?.message}
-                    />
-                    <Grid>
-                      <Grid.Col span={3.3}>
-                        <Select
-                          value={shootingCategory}
-                          onChange={setShootingCategory}
-                          label="Shooting category"
-                          style={{ width: "100%" }}
-                          placeholder="Pick category"
-                          data={shootingCategories?.map(
-                            (shootingCategory: ShootingCategory) => ({
-                              label: shootingCategory.name,
-                              value: shootingCategory.id.toString(),
-                            })
-                          )}
-                        />
-                      </Grid.Col>
-                      <Grid.Col span={3.3}>
-                        <Select
-                          label="Shooting category"
-                          style={{ width: "100%" }}
-                          disabled={shootingCategory === null}
-                          value={shootingAccessory}
-                          onChange={setShootingAccessory}
-                          placeholder="Pick category"
-                          data={shootingAccessories?.map(
-                            (
-                              shootingAccessory: ShootingAccessoriesDataRow
-                            ) => ({
-                              label: shootingAccessory.name,
-                              value: shootingAccessory.name,
-                            })
-                          )}
-                        />
-                      </Grid.Col>
-                      <Grid.Col span={3.3}>
-                        <NumberInput
-                          value={qty}
-                          onChange={(qty) => setQty(Number(qty))}
-                          label="Required quantity"
-                          style={{ width: "100%" }}
-                          placeholder="Enter task title"
-                        />
-                      </Grid.Col>
-                      <Grid.Col span={1} mt={25}>
-                        <Button
-                          onClick={onAddAccessories}
-                          leftSection={<IconPlus size={20} />}
-                        >
-                          Add
-                        </Button>
-                      </Grid.Col>
-                    </Grid>
-                    {items?.length > 0 && (
-                      <Table>
-                        <Table.Thead>
-                          <Table.Tr>
-                            <Table.Th>No</Table.Th>
-                            <Table.Th>Accessory Name</Table.Th>
-                            <Table.Th>Required Quantity</Table.Th>
-                            <Table.Th>Taken Quantity</Table.Th>
-                            <Table.Th>Returned Quantity</Table.Th>
-                            <Table.Th>Actions</Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                          {items.map((item, i) => (
-                            <Table.Tr key={item.id}>
-                              <Table.Td>{i + 1}</Table.Td>
-                              <Table.Td>{item.accessory_name}</Table.Td>
-                              <Table.Td>
-                                <NumberInput
-                                  disabled={assignedTask.is_reported}
-                                  value={item.required_qty}
-                                  onChange={(value) =>
-                                    handleRequiredQtyChange(
-                                      item.id,
-                                      Number(value)
-                                    )
-                                  }
-                                  min={0}
-                                />
-                              </Table.Td>
-                              <Table.Td>{item.taken_qty}</Table.Td>
-                              <Table.Td>{item.returned_qty}</Table.Td>
-                              <Table.Td>
-                                <IconTrash
-                                  onClick={() =>
-                                    setItems((prevItems) =>
-                                      prevItems.filter(
-                                        (prevItem) => prevItem.id !== item.id
-                                      )
-                                    )
-                                  }
-                                  style={{ color: "red", cursor: "pointer" }}
-                                />
-                              </Table.Td>
-                            </Table.Tr>
-                          ))}
-                        </Table.Tbody>
-                      </Table>
-                    )}
-                  </React.Fragment>
+                  <ShootingForm
+                    assignedTask={assignedTask}
+                    errors={errors}
+                    register={register}
+                    control={control}
+                    file={file}
+                    setFile={setFile}
+                    resetRef={resetRef}
+                    clearFile={clearFile}
+                    items={items}
+                    setItems={setItems}
+                    customers={customers}
+                    projects={projects}
+                    employees={employees}
+                    handleRequiredQtyChange={handleRequiredQtyChange}
+                  />
+                )}
+                {taskType === "Frontend" && (
+                  <FrontendForm
+                    errors={errors}
+                    register={register}
+                    control={control}
+                  />
+                )}
+                {taskType === "Backend" && (
+                  <BackendForm errors={errors} register={register} />
                 )}
               </Stack>
               <Flex justify="end" gap={15} mt={20}>
