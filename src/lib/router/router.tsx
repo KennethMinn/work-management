@@ -14,12 +14,17 @@ import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/S
 import TaskListing from "../../modules/calendar/pages/TaskListing";
 import AssignedTaskListing from "../../modules/assigned-tasks/pages/AssignedTaskListing";
 import ReportListing from "../../modules/report/pages/ReportListing";
+import Home from "../../modules/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
     children: [
+      {
+        index: true,
+        element: <Home />,
+      },
       {
         path: "login",
         element: <Login />,
