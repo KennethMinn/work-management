@@ -13,7 +13,7 @@ import {
   Stack,
   Table,
   Text,
-  TextInput,
+  Textarea,
 } from "@mantine/core";
 import { IconCalendar, IconCloudUpload, IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
@@ -103,6 +103,10 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
 
   useEffect(() => {
     if (video) {
+      if (video.size > 1000000) {
+        clearVideo();
+        return;
+      }
       const objectUrl = URL.createObjectURL(video);
       setVideoPreviewUrl(objectUrl);
 
@@ -169,7 +173,11 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       setValue("customer_id", activeTask.customer_id.toString());
       setValue("project_id", activeTask.project_id.toString());
       setValue("assigned_task_id", activeTask.id.toString());
-      setValue("progress", activeTask.progress);
+      if (activeTask.status === "done") {
+        setValue("progress", 100);
+      } else {
+        setValue("progress", activeTask.progress);
+      }
       setValue("status", activeTask.status);
       setValue("report_date", new Date());
       if (activeTask.shootingData) {
@@ -298,7 +306,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                   )}
                 />
               </Flex>
-              <TextInput
+              <Textarea
                 error={errors.progress_description?.message}
                 label="Description"
                 placeholder="Enter description"

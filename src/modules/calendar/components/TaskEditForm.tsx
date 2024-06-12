@@ -66,7 +66,9 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   //to clear profile
   const clearFile = () => {
     setFile(null);
-    resetRef.current?.();
+    if (file?.type !== "application/pdf") {
+      resetRef.current?.();
+    }
   };
 
   const {

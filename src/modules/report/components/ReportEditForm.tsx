@@ -13,7 +13,7 @@ import {
   Stack,
   Table,
   Text,
-  TextInput,
+  Textarea,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -42,6 +42,7 @@ import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { Item, Task } from "../../calendar/types";
 import { useReportTime } from "../hooks/useReportTime";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 interface ReportEditFormProps {
   id: number;
@@ -60,6 +61,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
   const [takenQty, setTakenQty] = useState<{ [key: number]: number }>({});
   const [returnedQty, setReturnedQty] = useState<{ [key: number]: number }>({});
 
+  const [docUrl, setDocUrl] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
   const [doc, setDoc] = useState<File | null>(null);
@@ -72,6 +74,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
 
   const clearDoc = () => {
     setDoc(null);
+    setDocUrl(null);
   };
 
   const clearVideo = () => {
@@ -95,6 +98,12 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
   };
 
   useEffect(() => {
+    if (doc) {
+      setDocUrl(doc?.name);
+    }
+  }, [doc]);
+
+  useEffect(() => {
     if (photo) {
       const objectUrl = URL.createObjectURL(photo);
       setPreviewUrl(objectUrl);
@@ -107,6 +116,10 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
 
   useEffect(() => {
     if (video) {
+      if (video.size > 1000000) {
+        clearVideo();
+        return;
+      }
       const objectUrl = URL.createObjectURL(video);
       setVideoPreviewUrl(objectUrl);
 
@@ -168,6 +181,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
       setValue("progress_description", report.progress_description);
       setPreviewUrl(report.imageUrl);
       setVideoPreviewUrl(report.videoUrl);
+      setDocUrl(report.documentUrl);
       setValue("report_date", new Date(report.report_date));
       setValue("report_time", report.report_time);
       if (report.task.shootingData?.shooting_accessories) {
@@ -291,15 +305,17 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
                   )}
                 />
               </Flex>
-              <TextInput
+              <Textarea
                 error={errors.progress_description?.message}
                 label="Description"
                 placeholder="Enter description"
                 {...register("progress_description")}
               />
-              {doc ? (
+              {docUrl ? (
                 <Flex align="center" gap="lg" style={{ width: "100%" }}>
-                  <Text>{doc.name}</Text>
+                  <Link target="_blank" to={docUrl} download={docUrl}>
+                    {docUrl}
+                  </Link>
                   <ActionIcon
                     size="lg"
                     variant="filled"

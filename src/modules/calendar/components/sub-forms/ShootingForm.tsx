@@ -17,7 +17,6 @@ import {
   NumberInput,
   Select,
   Table,
-  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
@@ -33,6 +32,7 @@ import { useInTime } from "../../hooks/time/useInTime";
 import { useOutTime } from "../../hooks/time/useOutTime";
 import { useGetAllShootingCategories } from "../../../shooting-category/hooks/useGetAllShootingCategories";
 import useGetShootingAccessoriesByCategoryId from "../../../shooting-accessories/hooks/useGetShootingAccessoriesByCategoryId";
+import { Link } from "react-router-dom";
 
 interface ShootingFormProps {
   assignedTask?: Task;
@@ -154,16 +154,28 @@ const ShootingForm: FC<ShootingFormProps> = ({
         {...register("script_detail")}
         error={errors.script_detail?.message}
       />
+      <TextInput
+        style={{ width: "100%" }}
+        placeholder="Number of scene"
+        {...register("scene_number")}
+        error={errors.scene_number?.message}
+      />
       <Flex align="center" gap="lg">
-        <TextInput
-          style={{ width: "50%" }}
-          placeholder="Number of scene"
-          {...register("scene_number")}
-          error={errors.scene_number?.message}
-        />
+        {!file && assignedTask?.shootingData?.document && (
+          <Link
+            style={{ width: "50%" }}
+            target="_blank"
+            to={assignedTask?.shootingData.document}
+            download={assignedTask?.shootingData.document}
+          >
+            {assignedTask?.shootingData.document}
+          </Link>
+        )}
         {file ? (
           <Flex align="center" gap="lg" style={{ width: "50%" }}>
-            <Text>{file.name}</Text>
+            <Link target="_blank" to={file.name} download={file.name}>
+              {file.name}
+            </Link>
             <ActionIcon
               size="lg"
               variant="filled"
