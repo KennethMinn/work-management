@@ -371,10 +371,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   onChange={setTaskType}
                   style={{ width: "50%" }}
                   placeholder="Pick task"
-                  data={taskTypes?.map((taskType: TaskType) => ({
-                    label: taskType.name,
-                    value: taskType.id.toString(),
-                  }))}
+                  data={taskTypes?.map((taskType: TaskType) => taskType.name)}
                 />
               </Flex>
 
