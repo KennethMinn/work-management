@@ -5,7 +5,7 @@ export const useGetTaskTypes = (companyId: string) => {
   return useQuery({
     queryKey: ["task-types", companyId],
     queryFn: async () => {
-      const res = await axios.get(`/task-types?companyId=${companyId}`);
+      const res = await axios.get(`/task-types?company_id=${companyId}`);
       return await res.data.taskTypes;
     },
   });
