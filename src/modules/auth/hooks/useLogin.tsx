@@ -8,6 +8,8 @@ export const useLogin = () => {
   const { setAuth } = useAuth();
   return useMutation({
     mutationFn: async (data: FormData) => {
+      await axios.get("/sanctum/csrf-cookie");
+
       const res = await axios.post("/admin/login", data);
       const { user, token } = await res.data;
       localStorage.setItem("token", token);
