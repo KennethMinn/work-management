@@ -4,6 +4,7 @@ import { OnResponse, onResponseError } from "./responseHandler";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  withXSRFToken: true,
   withCredentials: true,
   headers: {
     "Content-Type": "multipart/form-data",
