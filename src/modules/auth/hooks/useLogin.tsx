@@ -17,7 +17,7 @@ export const useLogin = () => {
         );
 
         // Perform login request
-        const res = await axiosInstance.post("/admin/login", data);
+        const res = await axiosInstance.post("/login", data);
         const { user, token } = await res.data;
 
         // Store token and set authenticated user
