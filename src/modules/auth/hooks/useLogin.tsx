@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../../lib/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/auth/useAuth";
-import axios from "axios";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -12,9 +11,7 @@ export const useLogin = () => {
     mutationFn: async (data: FormData) => {
       try {
         // Fetch CSRF token
-        await axios.get(
-          "http://workmanagementbackend.kwintechnologies.com/sanctum/csrf-cookie"
-        );
+        await axiosInstance.get("/sanctum/csrf-cookie");
 
         // Perform login request
         const res = await axiosInstance.post("/login", data);
