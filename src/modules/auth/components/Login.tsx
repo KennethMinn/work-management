@@ -11,8 +11,8 @@ const Login = () => {
   const { mutate: login, isPending } = useLogin();
   const form = useForm({
     initialValues: {
-      email: "admin@gmail.com",
-      password: "admin123",
+      email: "admin123@gmail.com",
+      password: "admin123@",
     },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
