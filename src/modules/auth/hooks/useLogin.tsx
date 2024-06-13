@@ -9,7 +9,9 @@ export const useLogin = () => {
   const { setAuth } = useAuth();
   return useMutation({
     mutationFn: async (data: FormData) => {
-      await axios.get("/sanctum/csrf-cookie");
+      await axios.get(
+        "http://workmanagementbackend.kwintechnologies.com/sanctum/csrf-cookie"
+      );
 
       const res = await axiosInstance.post("/admin/login", data);
       const { user, token } = await res.data;
