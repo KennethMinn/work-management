@@ -7,20 +7,33 @@ import axios from "axios";
 export const useLogin = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuth();
+
   return useMutation({
     mutationFn: async (data: FormData) => {
-      await axios.get(
-        "http://workmanagementbackend.kwintechnologies.com/sanctum/csrf-cookie"
-      );
+      try {
+        // Fetch CSRF token
+        await axios.get(
+          "http://workmanagementbackend.kwintechnologies.com/sanctum/csrf-cookie"
+        );
 
-      const res = await axiosInstance.post("/admin/login", data);
-      const { user, token } = await res.data;
-      localStorage.setItem("token", token);
-      setAuth(user);
-      if (user?.role === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/dashboard/assigned-tasks");
+        // Perform login request
+        const res = await axiosInstance.post("/admin/login", data);
+        const { user, token } = await res.data;
+
+        // Store token and set authenticated user
+        localStorage.setItem("token", token);
+        setAuth(user);
+
+        // Redirect based on user role
+        if (user?.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/dashboard/assigned-tasks");
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error("Login failed:", error);
+        // You might want to handle errors in a better way
       }
     },
   });
