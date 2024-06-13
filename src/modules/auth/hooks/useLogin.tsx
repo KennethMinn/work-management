@@ -1,16 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import axios from "../../../lib/axios/axiosInstance";
+import axiosInstance from "../../../lib/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/auth/useAuth";
+import axios from "axios";
 
 export const useLogin = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuth();
   return useMutation({
     mutationFn: async (data: FormData) => {
-      await fetch("/sanctum/csrf-cookie");
+      await axios.get("/sanctum/csrf-cookie");
 
-      const res = await axios.post("/admin/login", data);
+      const res = await axiosInstance.post("/admin/login", data);
       const { user, token } = await res.data;
       localStorage.setItem("token", token);
       setAuth(user);
