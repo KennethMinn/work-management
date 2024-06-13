@@ -12,7 +12,7 @@ const Login = () => {
   const form = useForm({
     initialValues: {
       email: "admin123@gmail.com",
-      password: "admin123@",
+      password: "Admin123@",
     },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),

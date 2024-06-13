@@ -35,6 +35,10 @@ import BackendForm from "./sub-forms/BackendForm";
 import FrontendForm from "./sub-forms/FrontendForm";
 import ShootingForm from "./sub-forms/ShootingForm";
 import DesignForm from "./sub-forms/DesignForm";
+import { useGetAllCompanies } from "../../company/hooks/useGetAllCompanies";
+import { Company } from "../../employee/types";
+import { useGetTaskTypes } from "../../task-type/hooks/useGetTaskTypes";
+import { TaskType } from "../../task-type/types";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -43,11 +47,14 @@ interface TaskCreateFormProps {
 }
 
 const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
-  const [taskType, setTaskType] = useState<string | null>("");
+  const [companyId, setCompanyId] = useState<string | null>(null);
+  const [taskType, setTaskType] = useState<string | null>(null);
   const { mutate: createTask, isPending } = useCreateTask();
   const { data: customers } = useGetAllCustomers();
   const { data: projects } = useGetAllProjects();
   const { data: employees } = useGetAllEmployees();
+  const { data: companies } = useGetAllCompanies();
+  const { data: taskTypes } = useGetTaskTypes(companyId!);
   const [items, setItems] = useState<Item[]>([]);
 
   //for avatar
@@ -169,6 +176,10 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   useEffect(() => {
     setFile(null);
   }, [taskType]);
+
+  useEffect(() => {
+    setTaskType(null);
+  }, [companyId]);
 
   return (
     <Box>
@@ -324,31 +335,46 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   )}
                 />
               </Flex>
+              <Controller
+                name="user_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    label="Employee"
+                    style={{ width: "50%" }}
+                    placeholder="Pick employee"
+                    data={employees?.map((employee: Employee) => ({
+                      label: employee.name,
+                      value: employee.id.toString(),
+                    }))}
+                    {...field}
+                    error={errors.user_id?.message}
+                  />
+                )}
+              />
               <Flex align="center" gap="lg">
-                <Controller
-                  name="user_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      label="Employee"
-                      style={{ width: "50%" }}
-                      placeholder="Pick employee"
-                      data={employees?.map((employee: Employee) => ({
-                        label: employee.name,
-                        value: employee.id.toString(),
-                      }))}
-                      {...field}
-                      error={errors.user_id?.message}
-                    />
-                  )}
+                <Select
+                  label="Company"
+                  style={{ width: "50%" }}
+                  value={companyId}
+                  onChange={setCompanyId}
+                  placeholder="Pick Company"
+                  data={companies?.map((company: Company) => ({
+                    label: company.name,
+                    value: company.id.toString(),
+                  }))}
                 />
                 <Select
                   label="Task type"
+                  disabled={!companyId}
                   value={taskType}
                   onChange={setTaskType}
                   style={{ width: "50%" }}
                   placeholder="Pick task"
-                  data={["Graphic Design", "Shooting", "Frontend", "Backend"]}
+                  data={taskTypes?.map((taskType: TaskType) => ({
+                    label: taskType.name,
+                    value: taskType.id.toString(),
+                  }))}
                 />
               </Flex>
 
