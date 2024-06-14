@@ -11,11 +11,6 @@ import {
 
 export const adminNavMenus = [
   {
-    label: "Assigned Tasks",
-    icon: <IconCalendar />,
-    href: "/dashboard/assigned-tasks",
-  },
-  {
     label: "Task Calendar",
     icon: <IconCalendar />,
     href: "/dashboard",
@@ -72,11 +67,6 @@ export const userNavMenus = [
     label: "Assigned Tasks",
     icon: <IconCalendar />,
     href: "/dashboard/assigned-tasks",
-  },
-  {
-    label: "Task Calendar",
-    icon: <IconCalendar />,
-    href: "/dashboard",
   },
   {
     label: "Report List",

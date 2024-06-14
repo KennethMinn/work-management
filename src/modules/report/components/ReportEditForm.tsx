@@ -116,7 +116,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
 
   useEffect(() => {
     if (video) {
-      if (video.size > 1000000) {
+      if (video.size > 10000000) {
         clearVideo();
         return;
       }
@@ -140,6 +140,22 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
   });
 
   const onSubmit = (values: TReportFormSchema) => {
+    const getShootingAccessories = (() => {
+      if (report?.task.shootingData) {
+        return {
+          shooting_accessories: JSON.stringify(
+            items.map((item) => ({
+              accessory_name: item.accessory_name,
+              required_qty: item.required_qty,
+              taken_qty: item.taken_qty,
+              returned_qty: item.returned_qty,
+            }))
+          ),
+        };
+      }
+      return {};
+    })();
+
     const data = {
       ...values,
       report_date: dayjs(values.report_date).format("YYYY-MM-DD"),
@@ -147,14 +163,7 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
       photo_path: photo,
       video_path: video,
       user_id: user?.id,
-      shooting_accessories: JSON.stringify(
-        items.map((item) => ({
-          accessory_name: item.accessory_name,
-          required_qty: item.required_qty,
-          taken_qty: item.taken_qty,
-          returned_qty: item.returned_qty,
-        }))
-      ),
+      ...getShootingAccessories,
     };
     const formData = new FormData();
     for (const key in data) {

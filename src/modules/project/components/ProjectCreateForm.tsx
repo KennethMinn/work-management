@@ -54,7 +54,7 @@ const ProjectCreateForm = () => {
 
   const onSubmit = (values: TProjectFormSchema) => {
     if (!file) {
-      toast.error("Please Add profile");
+      toast.error("Please add document");
       return;
     }
     const data = {
@@ -107,7 +107,7 @@ const ProjectCreateForm = () => {
               )}
               <Flex align="center" gap="lg">
                 <Text w={170} fw={500}>
-                  Profile
+                  Document
                 </Text>
                 <Group style={{ width: "100%" }}>
                   <FileButton resetRef={resetRef} onChange={setFile}>

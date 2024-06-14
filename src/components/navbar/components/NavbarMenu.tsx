@@ -16,6 +16,7 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({ isOpen }) => {
 
   switch (user?.role) {
     case "admin":
+    case "owner":
       dynamicMenus = adminNavMenus;
       break;
     case "employee":

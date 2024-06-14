@@ -10,14 +10,13 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { NavbarProps } from "../../../types/navbar";
-import mama from "../../../assets/mama.jpg";
 import logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/auth/useAuth";
 
 const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { user, setAuth } = useAuth();
 
   const logout = () => {
     setAuth(null);
@@ -39,7 +38,11 @@ const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
         <Flex align="center" gap="md">
           <Menu position="bottom-end" offset={5}>
             <Menu.Target>
-              <Avatar style={{ cursor: "pointer" }} src={mama} alt="it's me" />
+              <Avatar
+                style={{ cursor: "pointer" }}
+                src={user?.imgURL}
+                alt="it's me"
+              />
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item>Settings</Menu.Item>

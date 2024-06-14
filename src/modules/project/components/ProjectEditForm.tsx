@@ -121,7 +121,7 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ id }) => {
               )}
               <Flex align="center" gap="lg">
                 <Text w={170} fw={500}>
-                  Profile
+                  Document
                 </Text>
                 <Group style={{ width: "100%" }}>
                   <FileButton resetRef={resetRef} onChange={setFile}>

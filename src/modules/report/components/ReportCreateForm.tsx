@@ -103,7 +103,8 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
 
   useEffect(() => {
     if (video) {
-      if (video.size > 1000000) {
+      alert(video.size);
+      if (video.size > 10000000) {
         clearVideo();
         return;
       }
@@ -135,6 +136,22 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       return;
     }
 
+    const getShootingAccessories = (() => {
+      if (activeTask?.shootingData) {
+        return {
+          shooting_accessories: JSON.stringify(
+            items.map((item) => ({
+              accessory_name: item.accessory_name,
+              required_qty: item.required_qty,
+              taken_qty: item.taken_qty,
+              returned_qty: item.returned_qty,
+            }))
+          ),
+        };
+      }
+      return {};
+    })();
+
     //will need to add accessories taken qty
     const data = {
       ...values,
@@ -143,15 +160,9 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       photo_path: photo,
       video_path: video,
       user_id: user?.id,
-      shooting_accessories: JSON.stringify(
-        items.map((item) => ({
-          accessory_name: item.accessory_name,
-          required_qty: item.required_qty,
-          taken_qty: item.taken_qty,
-          returned_qty: item.returned_qty,
-        }))
-      ),
+      ...getShootingAccessories,
     };
+    console.log(data);
     const formData = new FormData();
     for (const key in data) {
       formData.append(key, data[key as keyof TReportFormSchema] as string);
@@ -160,6 +171,9 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       onSuccess: () => {
         reset();
         setOpen(false);
+        setVideo(null);
+        setDoc(null);
+        setPhoto(null);
         toast.success("Report created Successfully.");
       },
       onError: () => {
