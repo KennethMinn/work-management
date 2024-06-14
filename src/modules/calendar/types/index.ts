@@ -259,6 +259,41 @@ export const taskFormSchema = z.object({
   controller_name: z.string().optional(),
   routes: z.string().optional(),
   related_view: z.string().optional(),
+
+  //ui/ux
+  customer_requirement: z.string().optional(),
+  ui_type: z.array(z.string()).optional(),
+  reference_platform: z.string().optional(),
+  ui_detail_task: z.string().optional(),
+  ui_styling_detail: z.string().optional(),
+  total_ui_screen: z.number().optional(),
+  confirmed_ui_screen: z.number().optional(),
+
+  //testing
+  //test_cases -> from comp
+  testing_type: z.string().optional(),
+  initial_test_brief: z.string().optional(),
+  testing_issues: z.string().optional(),
+  testing_overall: z.string().optional(),
+  customer_comment: z.string().optional(), //if customer involves
+
+  //deployment
+  deployment_type: z.string().optional(),
+  deployment_brief: z.string().optional(),
+  server_type: z.string().optional(),
+  instance_name: z.string().optional(),
+  configuration: z.string().optional(),
+  db_type: z.string().optional(),
+  db_name: z.string().optional(),
+  ip_and_port: z.string().optional(),
+  username: z.string().optional(),
+  project_type: z.string().optional(),
+  dev_type: z.string().optional(),
+  sub_domain: z.string().optional(),
+  server_restart_after_deploy: z.boolean().optional(),
+  apk_released_if_mobile: z.boolean().optional(),
+  deployment_issues: z.string().optional(),
+  deployment_overall: z.string().optional(),
 });
 
 export type TTaskFormSchema = z.infer<typeof taskFormSchema>;

@@ -39,6 +39,7 @@ import { useGetAllCompanies } from "../../company/hooks/useGetAllCompanies";
 import { Company } from "../../employee/types";
 import { useGetTaskTypes } from "../../task-type/hooks/useGetTaskTypes";
 import { TaskType } from "../../task-type/types";
+import UiUxForm from "./sub-forms/UiUxForm";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -416,6 +417,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
               {taskType === "Backend" && (
                 <BackendForm errors={errors} register={register} />
               )}
+              <UiUxForm control={control} register={register} errors={errors} />
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button radius={4} size="sm" onClick={close} color="dark">
