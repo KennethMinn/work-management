@@ -131,10 +131,10 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
   });
 
   const onSubmit = (values: TReportFormSchema) => {
-    if (!doc || !photo || !video) {
-      toast.error("please add all additional fields");
-      return;
-    }
+    // if (!doc || !photo || !video) {
+    //   toast.error("please add all additional fields");
+    //   return;
+    // }
 
     const getShootingAccessories = (() => {
       if (activeTask?.shootingData) {
@@ -162,7 +162,6 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       user_id: user?.id,
       ...getShootingAccessories,
     };
-    console.log(data);
     const formData = new FormData();
     for (const key in data) {
       formData.append(key, data[key as keyof TReportFormSchema] as string);
@@ -208,7 +207,6 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
         setReturnedQty(initialReturnedQty);
       }
     }
-    console.log(activeTask);
   }, [activeTask, setValue, activeTask?.status]);
 
   return (

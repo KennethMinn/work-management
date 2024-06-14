@@ -68,10 +68,6 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
   });
 
   const onSubmit = (values: TEmployeeUpdateFormSchema) => {
-    // if (!file) {
-    //   toast.error("Please Add profile");
-    //   return;
-    // }
     const data = { ...values, photo_path: file };
     const formData = new FormData();
     for (const key in data) {

@@ -188,9 +188,13 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
       setValue("status", report.task.status);
       setValue("progress", report.progress);
       setValue("progress_description", report.progress_description);
-      setPreviewUrl(report.imageUrl);
-      setVideoPreviewUrl(report.videoUrl);
-      setDocUrl(report.documentUrl);
+      setPreviewUrl(report.imageUrl.includes("null") ? null : report.imageUrl);
+      setVideoPreviewUrl(
+        report.videoUrl.includes("null") ? null : report.videoUrl
+      );
+      setDocUrl(
+        report.documentUrl.includes("null") ? null : report.documentUrl
+      );
       setValue("report_date", new Date(report.report_date));
       setValue("report_time", report.report_time);
       if (report.task.shootingData?.shooting_accessories) {
