@@ -52,7 +52,9 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   const [taskType, setTaskType] = useState<string | null>("");
   const { data: customers } = useGetAllCustomers();
   const { data: projects } = useGetAllProjects();
-  const { data: employees } = useGetAllEmployees();
+  const { data: employees } = useGetAllEmployees(
+    assignedTask.user.company_id.toString()
+  );
 
   const { mutate: updateTask, isPending } = useUpdateTask(assignedTask.id);
 
@@ -491,6 +493,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                 )}
                 {taskType === "Shooting" && (
                   <ShootingForm
+                    isEdit={true}
                     assignedTask={assignedTask}
                     errors={errors}
                     register={register}

@@ -14,7 +14,7 @@ export const useLogin = () => {
       const { user, token } = await res.data;
       localStorage.setItem("token", token);
       setAuth(user);
-      if (user?.role === "admin") {
+      if (user?.role === "admin" || user?.role === "owner") {
         navigate("/dashboard");
       } else {
         navigate("/dashboard/assigned-tasks");

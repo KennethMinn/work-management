@@ -11,8 +11,8 @@ const Login = () => {
   const { mutate: login, isPending } = useLogin();
   const form = useForm({
     initialValues: {
-      email: "admin123@gmail.com",
-      password: "Admin123@",
+      email: "",
+      password: "",
     },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
@@ -26,8 +26,11 @@ const Login = () => {
     for (const key in values) {
       formData.append(key, values[key]);
     }
-    login(formData);
-    form.reset();
+    login(formData, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   };
 
   return (

@@ -35,6 +35,8 @@ import useGetShootingAccessoriesByCategoryId from "../../../shooting-accessories
 import { Link } from "react-router-dom";
 
 interface ShootingFormProps {
+  isEdit?: boolean;
+  isDetail?: boolean;
   assignedTask?: Task;
   handleRequiredQtyChange?: (id: number, value: number) => void;
   errors: FieldErrors<TTaskFormSchema>;
@@ -52,6 +54,8 @@ interface ShootingFormProps {
 }
 
 const ShootingForm: FC<ShootingFormProps> = ({
+  isEdit,
+  isDetail,
   errors,
   register,
   control,
@@ -106,6 +110,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
   return (
     <React.Fragment>
       <TextInput
+        disabled={isDetail}
         label="Duration"
         style={{ width: "100%" }}
         placeholder="Enter duration"
@@ -113,6 +118,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
         error={errors.duration?.message}
       />
       <TextInput
+        disabled={isDetail}
         label="Shooting location"
         style={{ width: "100%" }}
         placeholder="Enter shooting location"
@@ -125,6 +131,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              disabled={isDetail}
               label="Type"
               style={{ width: "50%" }}
               placeholder="Pick type"
@@ -135,6 +142,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           )}
         />
         <TextInput
+          disabled={isDetail}
           label="Transportation charge"
           style={{ width: "50%" }}
           placeholder="Enter transportation"
@@ -143,18 +151,21 @@ const ShootingForm: FC<ShootingFormProps> = ({
         />
       </Flex>
       <Textarea
+        disabled={isDetail}
         style={{ width: "100%" }}
         placeholder="Type detail..."
         {...register("type_detail")}
         error={errors.type_detail?.message}
       />
       <Textarea
+        disabled={isDetail}
         style={{ width: "100%" }}
         placeholder="Script detail..."
         {...register("script_detail")}
         error={errors.script_detail?.message}
       />
       <TextInput
+        disabled={isDetail}
         style={{ width: "100%" }}
         placeholder="Number of scene"
         {...register("scene_number")}
@@ -177,6 +188,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
               {file.name}
             </Link>
             <ActionIcon
+              disabled={isDetail}
               size="lg"
               variant="filled"
               color="red"
@@ -188,6 +200,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
         ) : (
           <Group style={{ width: "50%" }}>
             <FileButton
+              disabled={isDetail}
               resetRef={resetRef}
               onChange={setFile}
               accept="application/pdf"
@@ -206,12 +219,14 @@ const ShootingForm: FC<ShootingFormProps> = ({
       </Flex>
       <Flex align="center" gap="lg">
         <TextInput
+          disabled={isDetail}
           style={{ width: "50%" }}
           placeholder="Contat person name"
           {...register("contact_name")}
           error={errors.contact_name?.message}
         />
         <TextInput
+          disabled={isDetail}
           style={{ width: "50%" }}
           placeholder="Contat person phone"
           {...register("contact_phone")}
@@ -223,6 +238,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
         control={control}
         render={({ field }) => (
           <MultiSelect
+            disabled={isDetail}
             hidePickedOptions
             label="Crew list"
             style={{ width: "100%" }}
@@ -242,6 +258,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              disabled={isDetail}
               label="Photo shooting project"
               style={{ width: "50%" }}
               placeholder="Pick project"
@@ -259,6 +276,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              disabled={isDetail}
               label="Video shooting project"
               style={{ width: "50%" }}
               placeholder="Pick project"
@@ -278,6 +296,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <TimeInput
+              disabled={isDetail}
               {...field}
               label="Arrive office time"
               error={errors.arrive_office_on_time?.message}
@@ -294,6 +313,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              disabled={isDetail}
               label="Client"
               style={{ width: "50%" }}
               placeholder="Pick client"
@@ -313,6 +333,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <TimeInput
+              disabled={isDetail}
               {...field}
               label="In time"
               error={errors.in_time?.message}
@@ -329,6 +350,7 @@ const ShootingForm: FC<ShootingFormProps> = ({
           control={control}
           render={({ field }) => (
             <TimeInput
+              disabled={isDetail}
               {...field}
               label="Out time"
               error={errors.out_time?.message}
@@ -342,65 +364,69 @@ const ShootingForm: FC<ShootingFormProps> = ({
         />
       </Flex>
       <Textarea
+        disabled={isDetail}
         {...register("project_details")}
         style={{ width: "100%" }}
         label="Project details"
         placeholder="Enter project details"
         error={errors.project_details?.message}
       />
-      <Grid>
-        <Grid.Col span={3.3}>
-          <Select
-            value={shootingCategory}
-            onChange={setShootingCategory}
-            label="Shooting category"
-            style={{ width: "100%" }}
-            placeholder="Pick category"
-            data={shootingCategories?.map(
-              (shootingCategory: ShootingCategory) => ({
-                label: shootingCategory.name,
-                value: shootingCategory.id.toString(),
-              })
-            )}
-            error={errors.photo_shooting_project?.message}
-          />
-        </Grid.Col>
-        <Grid.Col span={3.3}>
-          <Select
-            label="Shooting accessory"
-            style={{ width: "100%" }}
-            disabled={!shootingCategory}
-            value={shootingAccessory}
-            onChange={setShootingAccessory}
-            placeholder="Pick accessory"
-            data={shootingAccessories?.map(
-              (shootingAccessory: ShootingAccessoriesDataRow) => ({
-                label: shootingAccessory.name,
-                value: shootingAccessory.name,
-              })
-            )}
-            error={errors.photo_shooting_project?.message}
-          />
-        </Grid.Col>
-        <Grid.Col span={3.3}>
-          <NumberInput
-            value={qty}
-            onChange={(qty) => setQty(Number(qty))}
-            label="Required quantity"
-            style={{ width: "100%" }}
-            placeholder="Enter task title"
-            error={errors.title?.message}
-          />
-        </Grid.Col>
-        <Grid.Col span={1} mt={25}>
-          <Button
-            onClick={onAddAccessories}
-            leftSection={<IconPlus size={20} />}
-          >
-            Add
-          </Button>
-        </Grid.Col>
-      </Grid>
+      {!isDetail && !isEdit && !assignedTask?.is_reported && (
+        <Grid>
+          <Grid.Col span={3.3}>
+            <Select
+              value={shootingCategory}
+              onChange={setShootingCategory}
+              label="Shooting category"
+              style={{ width: "100%" }}
+              placeholder="Pick category"
+              data={shootingCategories?.map(
+                (shootingCategory: ShootingCategory) => ({
+                  label: shootingCategory.name,
+                  value: shootingCategory.id.toString(),
+                })
+              )}
+              error={errors.photo_shooting_project?.message}
+            />
+          </Grid.Col>
+          <Grid.Col span={3.3}>
+            <Select
+              label="Shooting accessory"
+              style={{ width: "100%" }}
+              disabled={!shootingCategory}
+              value={shootingAccessory}
+              onChange={setShootingAccessory}
+              placeholder="Pick accessory"
+              data={shootingAccessories?.map(
+                (shootingAccessory: ShootingAccessoriesDataRow) => ({
+                  label: shootingAccessory.name,
+                  value: shootingAccessory.name,
+                })
+              )}
+              error={errors.photo_shooting_project?.message}
+            />
+          </Grid.Col>
+          <Grid.Col span={3.3}>
+            <NumberInput
+              value={qty}
+              onChange={(qty) => setQty(Number(qty))}
+              label="Required quantity"
+              style={{ width: "100%" }}
+              placeholder="Enter task title"
+              error={errors.title?.message}
+            />
+          </Grid.Col>
+          <Grid.Col span={1} mt={25}>
+            <Button
+              onClick={onAddAccessories}
+              leftSection={<IconPlus size={20} />}
+            >
+              Add
+            </Button>
+          </Grid.Col>
+        </Grid>
+      )}
+
       {assignedTask
         ? items?.length > 0 && (
             <Table>
@@ -411,7 +437,9 @@ const ShootingForm: FC<ShootingFormProps> = ({
                   <Table.Th>Required Quantity</Table.Th>
                   <Table.Th>Taken Quantity</Table.Th>
                   <Table.Th>Returned Quantity</Table.Th>
-                  <Table.Th>Actions</Table.Th>
+                  {!isDetail && !isEdit && !assignedTask?.is_reported && (
+                    <Table.Th>Actions</Table.Th>
+                  )}
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
@@ -420,30 +448,35 @@ const ShootingForm: FC<ShootingFormProps> = ({
                     <Table.Td>{i + 1}</Table.Td>
                     <Table.Td>{item.accessory_name}</Table.Td>
                     <Table.Td>
-                      <NumberInput
-                        disabled={assignedTask.is_reported}
-                        value={item.required_qty}
-                        onChange={(value) =>
-                          handleRequiredQtyChange &&
-                          handleRequiredQtyChange(item.id, Number(value))
-                        }
-                        min={0}
-                      />
+                      {assignedTask.is_reported || isDetail ? (
+                        item.required_qty
+                      ) : (
+                        <NumberInput
+                          value={item.required_qty}
+                          onChange={(value) =>
+                            handleRequiredQtyChange &&
+                            handleRequiredQtyChange(item.id, Number(value))
+                          }
+                          min={0}
+                        />
+                      )}
                     </Table.Td>
                     <Table.Td>{item.taken_qty}</Table.Td>
                     <Table.Td>{item.returned_qty}</Table.Td>
-                    <Table.Td>
-                      <IconTrash
-                        onClick={() =>
-                          setItems((prevItems) =>
-                            prevItems.filter(
-                              (prevItem) => prevItem.id !== item.id
+                    {!isDetail && !isEdit && !assignedTask?.is_reported && (
+                      <Table.Td>
+                        <IconTrash
+                          onClick={() =>
+                            setItems((prevItems) =>
+                              prevItems.filter(
+                                (prevItem) => prevItem.id !== item.id
+                              )
                             )
-                          )
-                        }
-                        style={{ color: "red", cursor: "pointer" }}
-                      />
-                    </Table.Td>
+                          }
+                          style={{ color: "red", cursor: "pointer" }}
+                        />
+                      </Table.Td>
+                    )}
                   </Table.Tr>
                 ))}
               </Table.Tbody>

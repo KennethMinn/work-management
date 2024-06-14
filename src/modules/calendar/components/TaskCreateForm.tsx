@@ -52,7 +52,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   const { mutate: createTask, isPending } = useCreateTask();
   const { data: customers } = useGetAllCustomers();
   const { data: projects } = useGetAllProjects();
-  const { data: employees } = useGetAllEmployees();
+  const { data: employees } = useGetAllEmployees(companyId!);
   const { data: companies } = useGetAllCompanies();
   const { data: taskTypes } = useGetTaskTypes(companyId!);
   const [items, setItems] = useState<Item[]>([]);
@@ -335,34 +335,34 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   )}
                 />
               </Flex>
-              <Controller
-                name="user_id"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    label="Employee"
-                    style={{ width: "50%" }}
-                    placeholder="Pick employee"
-                    data={employees?.map((employee: Employee) => ({
-                      label: employee.name,
-                      value: employee.id.toString(),
-                    }))}
-                    {...field}
-                    error={errors.user_id?.message}
-                  />
-                )}
+              <Select
+                label="Company"
+                style={{ width: "100%" }}
+                value={companyId}
+                onChange={setCompanyId}
+                placeholder="Pick Company"
+                data={companies?.map((company: Company) => ({
+                  label: company.name,
+                  value: company.id.toString(),
+                }))}
               />
               <Flex align="center" gap="lg">
-                <Select
-                  label="Company"
-                  style={{ width: "50%" }}
-                  value={companyId}
-                  onChange={setCompanyId}
-                  placeholder="Pick Company"
-                  data={companies?.map((company: Company) => ({
-                    label: company.name,
-                    value: company.id.toString(),
-                  }))}
+                <Controller
+                  name="user_id"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label="Employee"
+                      style={{ width: "50%" }}
+                      placeholder="Pick employee"
+                      data={employees?.map((employee: Employee) => ({
+                        label: employee.name,
+                        value: employee.id.toString(),
+                      }))}
+                      {...field}
+                      error={errors.user_id?.message}
+                    />
+                  )}
                 />
                 <Select
                   label="Task type"

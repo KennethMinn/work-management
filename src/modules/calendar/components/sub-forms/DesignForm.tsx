@@ -22,6 +22,7 @@ import { TTaskFormSchema } from "../../types";
 import { Employee } from "../../../project/types";
 
 interface DesignFormProps {
+  isDetail?: boolean;
   errors: FieldErrors<TTaskFormSchema>;
   register: UseFormRegister<TTaskFormSchema>;
   control: Control<TTaskFormSchema>;
@@ -43,11 +44,13 @@ const DesignForm: FC<DesignFormProps> = ({
   resetRef,
   clearFile,
   employees,
+  isDetail,
 }) => {
   return (
     <React.Fragment>
       <Flex align="center" gap="lg">
         <TextInput
+          disabled={isDetail}
           label="Brand"
           style={{ width: "50%" }}
           placeholder="Enter brand"
@@ -55,6 +58,7 @@ const DesignForm: FC<DesignFormProps> = ({
           error={errors.brand?.message}
         />
         <TextInput
+          disabled={isDetail}
           label="Media type"
           style={{ width: "50%" }}
           placeholder="Enter media type"
@@ -68,6 +72,7 @@ const DesignForm: FC<DesignFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              disabled={isDetail}
               label="Designer"
               style={{ width: "50%" }}
               placeholder="Pick designer"
@@ -85,6 +90,7 @@ const DesignForm: FC<DesignFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              disabled={isDetail}
               label="Content Write"
               style={{ width: "50%" }}
               placeholder="Pick content writer"
@@ -101,6 +107,7 @@ const DesignForm: FC<DesignFormProps> = ({
       <Grid>
         <Grid.Col span={4}>
           <TextInput
+            disabled={isDetail}
             label="Visual Copy"
             style={{ width: "100%" }}
             placeholder="Enter visual copy"
@@ -111,6 +118,7 @@ const DesignForm: FC<DesignFormProps> = ({
         <Grid.Col span={4}>
           <TextInput
             label="Headline"
+            disabled={isDetail}
             style={{ width: "100%" }}
             placeholder="Enter headline"
             {...register("headline")}
@@ -123,6 +131,7 @@ const DesignForm: FC<DesignFormProps> = ({
             control={control}
             render={({ field }) => (
               <DatePickerInput
+                disabled={isDetail}
                 style={{ width: "100%" }}
                 {...field}
                 label="Deadline"
@@ -139,6 +148,7 @@ const DesignForm: FC<DesignFormProps> = ({
       </Grid>
       <Flex align="center" gap="lg">
         <TextInput
+          disabled={isDetail}
           label="Body"
           style={{ width: "50%" }}
           placeholder="Enter body"
@@ -146,6 +156,7 @@ const DesignForm: FC<DesignFormProps> = ({
           error={errors.body?.message}
         />
         <TextInput
+          disabled={isDetail}
           label="Objective"
           style={{ width: "50%" }}
           placeholder="Enter objectice"
@@ -155,6 +166,7 @@ const DesignForm: FC<DesignFormProps> = ({
       </Flex>
       <Flex align="center" gap="lg">
         <TextInput
+          disabled={isDetail}
           label="Important information"
           style={{ width: "50%" }}
           placeholder="Enter important information"
@@ -162,6 +174,7 @@ const DesignForm: FC<DesignFormProps> = ({
           error={errors.important_info?.message}
         />
         <TextInput
+          disabled={isDetail}
           label="Tease & Style"
           style={{ width: "50%" }}
           placeholder="Enter taste & style"
@@ -176,6 +189,7 @@ const DesignForm: FC<DesignFormProps> = ({
         <Grid>
           <Grid.Col span={2.4}>
             <TextInput
+              disabled={isDetail}
               style={{ width: "100%" }}
               placeholder="Visual format"
               {...register("visual_format")}
@@ -184,6 +198,7 @@ const DesignForm: FC<DesignFormProps> = ({
           </Grid.Col>
           <Grid.Col span={2.4}>
             <TextInput
+              disabled={isDetail}
               style={{ width: "100%" }}
               placeholder="Aspect ratio"
               {...register("aspect_ratio")}
@@ -192,6 +207,7 @@ const DesignForm: FC<DesignFormProps> = ({
           </Grid.Col>
           <Grid.Col span={2.4}>
             <TextInput
+              disabled={isDetail}
               style={{ width: "100%" }}
               placeholder="Width"
               {...register("width")}
@@ -200,6 +216,7 @@ const DesignForm: FC<DesignFormProps> = ({
           </Grid.Col>
           <Grid.Col span={2.4}>
             <TextInput
+              disabled={isDetail}
               style={{ width: "100%" }}
               placeholder="Height"
               {...register("height")}
@@ -208,6 +225,7 @@ const DesignForm: FC<DesignFormProps> = ({
           </Grid.Col>
           <Grid.Col span={2.4}>
             <TextInput
+              disabled={isDetail}
               style={{ width: "100%" }}
               placeholder="Resolution"
               {...register("resolution")}
@@ -220,6 +238,7 @@ const DesignForm: FC<DesignFormProps> = ({
       <Flex align="center" gap="lg">
         <Group style={{ width: "100%" }}>
           <FileButton
+            disabled={isDetail}
             resetRef={resetRef}
             onChange={setFile}
             accept="image/png,image/jpeg"
@@ -235,6 +254,7 @@ const DesignForm: FC<DesignFormProps> = ({
           </Button>
         </Group>
         <TextInput
+          disabled={isDetail}
           style={{ width: "100%" }}
           placeholder="Enter reference name"
           {...register("reference")}

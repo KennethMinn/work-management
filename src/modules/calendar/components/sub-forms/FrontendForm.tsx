@@ -9,12 +9,18 @@ import {
 import { TTaskFormSchema } from "../../types";
 
 interface FrontendFormProps {
+  isDetail?: boolean;
   errors: FieldErrors<TTaskFormSchema>;
   register: UseFormRegister<TTaskFormSchema>;
   control: Control<TTaskFormSchema>;
 }
 
-const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
+const FrontendForm: FC<FrontendFormProps> = ({
+  errors,
+  register,
+  control,
+  isDetail,
+}) => {
   return (
     <React.Fragment>
       <Controller
@@ -22,6 +28,7 @@ const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
         control={control}
         render={({ field }) => (
           <Select
+            disabled={isDetail}
             label="Type"
             style={{ width: "100%" }}
             placeholder="Pick type"
@@ -32,6 +39,7 @@ const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
         )}
       />
       <Textarea
+        disabled={isDetail}
         {...register("reference_figma")}
         style={{ width: "100%" }}
         label="Reference figma"
@@ -39,6 +47,7 @@ const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
         error={errors.reference_figma?.message}
       />
       <Textarea
+        disabled={isDetail}
         {...register("detail_task")}
         style={{ width: "100%" }}
         label="Task detail"
@@ -46,6 +55,7 @@ const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
         error={errors.detail_task?.message}
       />
       <Textarea
+        disabled={isDetail}
         {...register("design_validation_detail")}
         style={{ width: "100%" }}
         label="Design validation detail"
@@ -53,6 +63,7 @@ const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
         error={errors.design_validation_detail?.message}
       />
       <Textarea
+        disabled={isDetail}
         {...register("styling_detail")}
         style={{ width: "100%" }}
         label="Styling detail"
@@ -60,6 +71,7 @@ const FrontendForm: FC<FrontendFormProps> = ({ errors, register, control }) => {
         error={errors.styling_detail?.message}
       />
       <Textarea
+        disabled={isDetail}
         {...register("api_integration")}
         style={{ width: "100%" }}
         label="API integration"

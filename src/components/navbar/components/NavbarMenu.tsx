@@ -2,7 +2,11 @@ import { AppShell, Box, NavLink, Space, Tooltip } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 import { useAuth } from "../../../hooks/auth/useAuth";
-import { adminNavMenus, userNavMenus } from "../../../configs/navMenus";
+import {
+  adminNavMenus,
+  ownerNavMenus,
+  userNavMenus,
+} from "../../../configs/navMenus";
 
 type NavbarMenuProps = {
   isOpen: boolean;
@@ -15,8 +19,10 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({ isOpen }) => {
   let dynamicMenus;
 
   switch (user?.role) {
-    case "admin":
     case "owner":
+      dynamicMenus = ownerNavMenus;
+      break;
+    case "admin":
       dynamicMenus = adminNavMenus;
       break;
     case "employee":
