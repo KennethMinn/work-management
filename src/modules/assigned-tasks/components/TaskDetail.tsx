@@ -20,7 +20,7 @@ import {
   taskFormSchema,
   TTaskFormSchema,
 } from "../../calendar/types/index";
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
 import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
