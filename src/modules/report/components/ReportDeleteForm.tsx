@@ -9,6 +9,7 @@ import { useDeleteReport } from "../hooks/useDeleteReport";
 interface ReportDeleteFormProps {
   id: number;
 }
+
 const ReportDeleteForm: FC<ReportDeleteFormProps> = ({ id }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: deleteReport, isPending } = useDeleteReport();

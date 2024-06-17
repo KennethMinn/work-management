@@ -40,6 +40,8 @@ import { Company } from "../../employee/types";
 import { useGetTaskTypes } from "../../task-type/hooks/useGetTaskTypes";
 import { TaskType } from "../../task-type/types";
 import UiUxForm from "./sub-forms/UiUxForm";
+import TestingForm from "./sub-forms/TestingForm";
+import DeploymentForm from "./sub-forms/DeploymentForm";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -141,6 +143,12 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
           ),
         };
       }
+      if (taskType === "Deployment") {
+        return {
+          apk_released_if_mobile: values.apk_released_if_mobile ? 1 : 0,
+          sent_to_customer_if_mobile: values.sent_to_customer_if_mobile ? 1 : 0,
+        };
+      }
     })();
 
     const data = {
@@ -155,12 +163,15 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       formData.append(key, data[key as keyof TTaskFormSchema] as string);
     }
 
+    console.log(data);
+
     createTask(formData, {
       onSuccess: () => {
         reset();
         close();
         setFile(null);
         setItems([]);
+        setFile(null);
         toast.success("Task Created Successfully.");
       },
       onError: (error) => {
@@ -417,7 +428,27 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
               {taskType === "Backend" && (
                 <BackendForm errors={errors} register={register} />
               )}
-              <UiUxForm control={control} register={register} errors={errors} />
+              {taskType === "UiUx" && (
+                <UiUxForm
+                  control={control}
+                  register={register}
+                  errors={errors}
+                />
+              )}
+              {taskType === "Testing" && (
+                <TestingForm
+                  control={control}
+                  register={register}
+                  errors={errors}
+                />
+              )}
+              {taskType === "Deployment" && (
+                <DeploymentForm
+                  control={control}
+                  errors={errors}
+                  register={register}
+                />
+              )}
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button radius={4} size="sm" onClick={close} color="dark">

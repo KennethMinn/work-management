@@ -24,7 +24,7 @@ import {
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { FC, useEffect, useRef, useState } from "react";
 import { useUpdateReport } from "../hooks/useUpdateReport";
 import { useGetReport } from "../hooks/useGetReport";
@@ -210,6 +210,17 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
       }
     }
   }, [setValue, report]);
+
+  const watchedProgress = useWatch({
+    control,
+    name: "progress",
+  });
+
+  useEffect(() => {
+    if (watchedProgress === 100) {
+      setValue("status", "done");
+    }
+  }, [watchedProgress, setValue]);
 
   return (
     <Box>

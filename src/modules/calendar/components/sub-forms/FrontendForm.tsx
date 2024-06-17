@@ -1,4 +1,4 @@
-import { Select, Textarea } from "@mantine/core";
+import { MultiSelect, Textarea } from "@mantine/core";
 import React, { FC } from "react";
 import {
   Control,
@@ -27,7 +27,8 @@ const FrontendForm: FC<FrontendFormProps> = ({
         name="feature_type"
         control={control}
         render={({ field }) => (
-          <Select
+          <MultiSelect
+            hidePickedOptions
             disabled={isDetail}
             label="Type"
             style={{ width: "100%" }}

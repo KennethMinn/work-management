@@ -32,6 +32,7 @@ export interface Task {
   shootingData: ShootingData | null;
   frontEndData: FrontEndData | null;
   backEndData: BackEndData | null;
+  uiUxData: UiUxData | null;
 }
 
 export interface Customer {
@@ -146,7 +147,7 @@ export interface ShootingData {
 
 export interface FrontEndData {
   id: number;
-  feature_type: string;
+  feature_type: string[];
   reference_figma: string;
   detail_task: string;
   design_validation_detail: string;
@@ -166,6 +167,20 @@ export interface BackEndData {
   controller_name: string;
   routes: string;
   related_view: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+export interface UiUxData {
+  id: number;
+  customer_requirement: string;
+  ui_type: string;
+  reference_platform: string;
+  ui_detail_task: string;
+  ui_styling_detail: string;
+  total_ui_screen: number;
+  confirmed_ui_screen: number;
   created_at: string;
   updated_at: string;
   pivot: Pivot;
@@ -244,7 +259,7 @@ export const taskFormSchema = z.object({
   project_details: z.string().optional(),
 
   //Frontend
-  feature_type: z.string().optional(),
+  feature_type: z.array(z.string()).optional(),
   reference_figma: z.string().optional(),
   detail_task: z.string().optional(),
   design_validation_detail: z.string().optional(),
@@ -270,7 +285,6 @@ export const taskFormSchema = z.object({
   confirmed_ui_screen: z.number().optional(),
 
   //testing
-  //test_cases -> from comp
   testing_type: z.string().optional(),
   initial_test_brief: z.string().optional(),
   testing_issues: z.string().optional(),
@@ -287,11 +301,12 @@ export const taskFormSchema = z.object({
   db_name: z.string().optional(),
   ip_and_port: z.string().optional(),
   username: z.string().optional(),
-  project_type: z.string().optional(),
-  dev_type: z.string().optional(),
+  project_type: z.array(z.string()).optional(),
+  dev_type: z.array(z.string()).optional(),
   sub_domain: z.string().optional(),
   server_restart_after_deploy: z.boolean().optional(),
-  apk_released_if_mobile: z.boolean().optional(),
+  apk_released_if_mobile: z.boolean().optional().default(false), //optional
+  sent_to_customer_if_mobile: z.boolean().optional().default(false), //optional
   deployment_issues: z.string().optional(),
   deployment_overall: z.string().optional(),
 });

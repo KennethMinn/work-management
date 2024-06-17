@@ -42,8 +42,8 @@ const UiUxForm: FC<UiUxFormProps> = ({
         control={control}
         render={({ field }) => (
           <MultiSelect
-            disabled={isDetail}
             hidePickedOptions
+            disabled={isDetail}
             label="Type"
             style={{ width: "100%" }}
             placeholder="Pick type"

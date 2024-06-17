@@ -18,7 +18,7 @@ import {
 import { IconCalendar, IconCloudUpload, IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { FC, useEffect, useRef, useState } from "react";
 import { reportFormSchema, TReportFormSchema } from "../types";
 import { Item, Project, Task } from "../../calendar/types";
@@ -208,6 +208,17 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
       }
     }
   }, [activeTask, setValue, activeTask?.status]);
+
+  const watchedProgress = useWatch({
+    control,
+    name: "progress",
+  });
+
+  useEffect(() => {
+    if (watchedProgress === 100) {
+      setValue("status", "done");
+    }
+  }, [watchedProgress, setValue]);
 
   return (
     <Box>

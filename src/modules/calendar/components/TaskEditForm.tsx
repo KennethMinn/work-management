@@ -36,6 +36,9 @@ import ShootingForm from "./sub-forms/ShootingForm";
 import DesignForm from "./sub-forms/DesignForm";
 import FrontendForm from "./sub-forms/FrontendForm";
 import BackendForm from "./sub-forms/BackendForm";
+import UiUxForm from "./sub-forms/UiUxForm";
+import TestingForm from "./sub-forms/TestingForm";
+import DeploymentForm from "./sub-forms/DeploymentForm";
 
 interface TaskEditFormProps {
   assignedTask: Task;
@@ -188,6 +191,15 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       if (assignedTask.backEndData) {
         setTaskType("Backend");
       }
+      if (assignedTask.uiUxData) {
+        setTaskType("UiUx");
+      }
+      // if (assignedTask.backEndData) {
+      //   setTaskType("Backend");
+      // }
+      // if (assignedTask.backEndData) {
+      //   setTaskType("Backend");
+      // }
 
       //root
       setValue("title", assignedTask.title || "");
@@ -296,6 +308,14 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         setValue("controller_name", assignedTask.backEndData.controller_name);
         setValue("routes", assignedTask.backEndData.routes);
         setValue("related_view", assignedTask.backEndData.related_view);
+      }
+
+      //uiux
+      if (assignedTask?.uiUxData) {
+        setValue(
+          "customer_requirement",
+          assignedTask.uiUxData.customer_requirement
+        );
       }
     }
   }, [assignedTask, setValue]);
@@ -519,6 +539,27 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                 )}
                 {taskType === "Backend" && (
                   <BackendForm errors={errors} register={register} />
+                )}
+                {taskType === "UiUx" && (
+                  <UiUxForm
+                    control={control}
+                    register={register}
+                    errors={errors}
+                  />
+                )}
+                {taskType === "Testing" && (
+                  <TestingForm
+                    control={control}
+                    register={register}
+                    errors={errors}
+                  />
+                )}
+                {taskType === "Deployment" && (
+                  <DeploymentForm
+                    control={control}
+                    errors={errors}
+                    register={register}
+                  />
                 )}
               </Stack>
               <Flex justify="end" gap={15} mt={20}>

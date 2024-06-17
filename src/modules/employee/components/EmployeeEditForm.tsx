@@ -126,7 +126,7 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
         padding={30}
         opened={opened}
         onClose={close}
-        title="Create Employee Form"
+        title="Edit Employee Form"
         centered
         styles={{
           title: {

@@ -5,6 +5,7 @@ import { useForm } from "@mantine/form";
 import logo from "../../../assets/logo.png";
 import { useLogin } from "../hooks/useLogin";
 import { LoginValues } from "../types";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { height } = useViewportSize();
@@ -29,6 +30,9 @@ const Login = () => {
     login(formData, {
       onSuccess: () => {
         form.reset();
+      },
+      onError: () => {
+        toast.error("Invalid credentials");
       },
     });
   };
