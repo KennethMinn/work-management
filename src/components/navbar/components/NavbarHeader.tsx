@@ -2,7 +2,6 @@ import {
   AppShell,
   Avatar,
   Burger,
-  Divider,
   Flex,
   Group,
   Image,
@@ -45,8 +44,6 @@ const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
               />
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item>Settings</Menu.Item>
-              <Divider />
               <Menu.Item onClick={logout}>Logout</Menu.Item>
             </Menu.Dropdown>
           </Menu>

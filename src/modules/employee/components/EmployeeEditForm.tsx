@@ -77,10 +77,10 @@ const EmployeeEditForm: FC<EmployeeEditFormProps> = ({ id }) => {
       );
     }
 
-    console.log(data);
     updateEmployee(formData, {
       onSuccess: () => {
         close();
+        setFile(null);
         toast.success("Employee Updated Successfully.");
       },
       onError: () => {

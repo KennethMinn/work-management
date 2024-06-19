@@ -42,6 +42,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              withAsterisk
               {...field}
               label="Deployment type"
               style={{ width: "50%" }}
@@ -62,6 +63,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
           control={control}
           render={({ field }) => (
             <Select
+              withAsterisk
               {...field}
               label="Server type"
               style={{ width: "50%" }}
@@ -73,6 +75,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         />
       </Flex>
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("deployment_brief")}
         style={{ width: "100%" }}
@@ -81,6 +84,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         error={errors.deployment_brief?.message}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         {...register("instance_name")}
         style={{ width: "100%" }}
@@ -89,6 +93,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         error={errors.instance_name?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("configuration")}
         style={{ width: "100%" }}
@@ -98,6 +103,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
       />
       <Flex gap="lg" align="center">
         <TextInput
+          withAsterisk
           disabled={isDetail}
           {...register("db_type")}
           style={{ width: "50%" }}
@@ -106,6 +112,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
           error={errors.db_type?.message}
         />
         <TextInput
+          withAsterisk
           disabled={isDetail}
           {...register("db_name")}
           style={{ width: "50%" }}
@@ -116,6 +123,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
       </Flex>
       <Flex gap="lg" align="center">
         <TextInput
+          withAsterisk
           disabled={isDetail}
           {...register("ip_and_port")}
           style={{ width: "50%" }}
@@ -124,6 +132,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
           error={errors.ip_and_port?.message}
         />
         <TextInput
+          withAsterisk
           disabled={isDetail}
           {...register("username")}
           style={{ width: "50%" }}
@@ -137,6 +146,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         control={control}
         render={({ field }) => (
           <MultiSelect
+            withAsterisk
             disabled={isDetail}
             hidePickedOptions
             label="Type of project deployed"
@@ -165,6 +175,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         control={control}
         render={({ field }) => (
           <MultiSelect
+            withAsterisk
             disabled={isDetail}
             hidePickedOptions
             label="Type of dev deployed"
@@ -177,6 +188,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         )}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         {...register("sub_domain")}
         style={{ width: "100%" }}
@@ -186,6 +198,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
       />
 
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("deployment_issues")}
         style={{ width: "100%" }}
@@ -194,6 +207,7 @@ const DeploymentForm: FC<DeploymentFormProps> = ({
         error={errors.deployment_issues?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("deployment_overall")}
         style={{ width: "100%" }}

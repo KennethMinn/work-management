@@ -30,6 +30,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
   return (
     <React.Fragment>
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("customer_requirement")}
         style={{ width: "100%" }}
@@ -42,6 +43,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
         control={control}
         render={({ field }) => (
           <MultiSelect
+            withAsterisk
             hidePickedOptions
             disabled={isDetail}
             label="Type"
@@ -54,6 +56,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
         )}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         {...register("reference_platform")}
         style={{ width: "100%" }}
@@ -62,6 +65,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
         error={errors.reference_platform?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("ui_detail_task")}
         style={{ width: "100%" }}
@@ -70,6 +74,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
         error={errors.ui_detail_task?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("ui_styling_detail")}
         style={{ width: "100%" }}
@@ -83,6 +88,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
           control={control}
           render={({ field }) => (
             <NumberInput
+              withAsterisk
               style={{ width: "50%" }}
               {...field}
               label="Total ui screen"
@@ -96,6 +102,7 @@ const UiUxForm: FC<UiUxFormProps> = ({
           control={control}
           render={({ field }) => (
             <NumberInput
+              withAsterisk
               style={{ width: "50%" }}
               {...field}
               label="Confirm ui screen"

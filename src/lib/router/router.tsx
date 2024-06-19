@@ -1,20 +1,23 @@
 import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
 import RootLayout from "../../layouts/RootLayout";
-import Login from "../../modules/auth/components/Login";
-import EmployeeListing from "../../modules/employee/pages/EmployeeListing";
-import CalendarListing from "../../modules/calendar/pages/CalendarListing";
-import CompanyListing from "../../modules/company/pages/CompanyListing";
-import DepartmentListing from "../../modules/department/pages/DepartmentListing";
-import PositionListing from "../../modules/positions/pages/PositionListing";
-import CustomerListing from "../../modules/customer/pages/CustomerListing";
-import ProjectListing from "../../modules/project/pages/ProjectListing";
-import ShootingCategoryListing from "../../modules/shooting-category/pages/ShootingCategoryListing";
-import ShootingAccessoryListing from "../../modules/shooting-accessories/pages/ShootingAccessoryListing";
-import TaskListing from "../../modules/calendar/pages/TaskListing";
-import AssignedTaskListing from "../../modules/assigned-tasks/pages/AssignedTaskListing";
-import ReportListing from "../../modules/report/pages/ReportListing";
-import Home from "../../Home";
+import LazyLoad from "../../components/LazyLoad";
+import {
+  AssignedTaskListing,
+  CalendarListing,
+  CompanyListing,
+  CustomerListing,
+  DepartmentListing,
+  EmployeeListing,
+  Home,
+  Login,
+  PositionListing,
+  ProjectListing,
+  ReportListing,
+  ShootingAccessoryListing,
+  ShootingCategoryListing,
+  TaskListing,
+} from "../../components/lazyLoadComps";
 
 export const router = createBrowserRouter([
   {
@@ -23,15 +26,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <LazyLoad>
+            <Home />
+          </LazyLoad>
+        ),
       },
       {
         path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <h1>Login</h1>,
+        element: (
+          <LazyLoad>
+            <Login />
+          </LazyLoad>
+        ),
       },
     ],
   },
@@ -41,51 +48,99 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <CalendarListing />,
+        element: (
+          <LazyLoad>
+            <CalendarListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "assigned-tasks",
-        element: <AssignedTaskListing />,
+        element: (
+          <LazyLoad>
+            <AssignedTaskListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "report-list",
-        element: <ReportListing />,
+        element: (
+          <LazyLoad>
+            <ReportListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "company-list",
-        element: <CompanyListing />,
+        element: (
+          <LazyLoad>
+            <CompanyListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "customer-list",
-        element: <CustomerListing />,
+        element: (
+          <LazyLoad>
+            <CustomerListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "department-list",
-        element: <DepartmentListing />,
+        element: (
+          <LazyLoad>
+            <DepartmentListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "position-list",
-        element: <PositionListing />,
+        element: (
+          <LazyLoad>
+            <PositionListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "employee-list",
-        element: <EmployeeListing />,
+        element: (
+          <LazyLoad>
+            <EmployeeListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "project-list",
-        element: <ProjectListing />,
+        element: (
+          <LazyLoad>
+            <ProjectListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "shooting-category-list",
-        element: <ShootingCategoryListing />,
+        element: (
+          <LazyLoad>
+            <ShootingCategoryListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "shooting-accessory-list",
-        element: <ShootingAccessoryListing />,
+        element: (
+          <LazyLoad>
+            <ShootingAccessoryListing />
+          </LazyLoad>
+        ),
       },
       {
         path: "all-tasks",
-        element: <TaskListing />,
+        element: (
+          <LazyLoad>
+            <TaskListing />
+          </LazyLoad>
+        ),
       },
     ],
   },

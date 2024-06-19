@@ -17,12 +17,12 @@ import { useGetTasksByEmployeeId } from "../hooks/useGetTasksByEmployeeId";
 import { Task } from "../../calendar/types";
 import { Droppable } from "../components/Droppable";
 import ReportCreateForm from "../../report/components/ReportCreateForm";
-import TaskDetail from "../components/TaskDetail";
+import TaskEditForm from "../../calendar/components/TaskEditForm";
 
 const AssignedTaskList = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const { data: assignedTasks, isLoading } = useGetTasksByEmployeeId(user?.id);
   const [tasks, setTasks] = useState<Task[]>(assignedTasks || []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -46,6 +46,7 @@ const AssignedTaskList = () => {
   };
 
   const onDragEnd = (event: DragEndEvent) => {
+    if (activeTask?.is_done) return;
     const { over } = event;
     const overTaskId = over?.id;
     // const overTaskStatus = over?.data.current?.task.status;
@@ -67,6 +68,7 @@ const AssignedTaskList = () => {
 
     if (activeTaskId === overTaskId) return;
     if (overTaskId === "pending") return;
+    if (activeTask?.is_done) return;
 
     setTasks((prevTasks) => {
       const activeTaskIndex = prevTasks.findIndex(
@@ -99,11 +101,11 @@ const AssignedTaskList = () => {
   return (
     <Box mx={10}>
       <ReportCreateForm open={open} setOpen={setOpen} activeTask={activeTask} />
-      {detailOpen && (
-        <TaskDetail
+      {editOpen && (
+        <TaskEditForm
           assignedTask={activeTask!}
-          opened={detailOpen}
-          close={() => setDetailOpen(false)}
+          opened={editOpen}
+          close={() => setEditOpen(false)}
         />
       )}
       <Grid>
@@ -137,7 +139,7 @@ const AssignedTaskList = () => {
                             cursorStyle={cursorStyle}
                             setActiveTask={setActiveTask}
                             setOpen={setOpen}
-                            setDetailOpen={setDetailOpen}
+                            setEditOpen={setEditOpen}
                           />
                         ))}
                     </SortableContext>

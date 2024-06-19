@@ -3,7 +3,7 @@ import { Card, Flex, Group, Text } from "@mantine/core";
 import { FC } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { Task } from "../../calendar/types";
-import { IconDetails, IconList, IconPlus } from "@tabler/icons-react";
+import { IconEdit, IconList, IconPlus } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 interface TaskCardProps {
@@ -11,7 +11,7 @@ interface TaskCardProps {
   cursorStyle: string;
   setActiveTask: React.Dispatch<React.SetStateAction<Task | null>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCard: FC<TaskCardProps> = ({
@@ -19,7 +19,7 @@ const TaskCard: FC<TaskCardProps> = ({
   cursorStyle,
   setActiveTask,
   setOpen,
-  setDetailOpen,
+  setEditOpen,
 }) => {
   const navigate = useNavigate();
   const {
@@ -37,9 +37,9 @@ const TaskCard: FC<TaskCardProps> = ({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const onHandleDetail = () => {
+  const onHandleEdit = () => {
     setActiveTask(task);
-    setDetailOpen(true);
+    setEditOpen(true);
   };
 
   const onHandleReportCreate = () => {
@@ -63,9 +63,9 @@ const TaskCard: FC<TaskCardProps> = ({
       <Flex justify="space-between">
         <Text>{task.title}</Text>
         <Group gap={8}>
-          <IconDetails
+          <IconEdit
             size={22}
-            onClick={onHandleDetail}
+            onClick={onHandleEdit}
             style={{ color: "#4361ee", cursor: "pointer" }}
           />
           {task.status !== "done" && task.status !== "pending" && (

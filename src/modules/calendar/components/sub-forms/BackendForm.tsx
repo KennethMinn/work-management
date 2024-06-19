@@ -13,6 +13,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
   return (
     <React.Fragment>
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("use_case")}
         style={{ width: "100%" }}
@@ -21,6 +22,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
         error={errors.use_case?.message}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         label="CRUD type"
         {...register("crud_type")}
@@ -28,6 +30,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
         error={errors.crud_type?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("detail")}
         style={{ width: "100%" }}
@@ -36,6 +39,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
         error={errors.detail?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("database_migration")}
         style={{ width: "100%" }}
@@ -44,6 +48,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
         error={errors.database_migration?.message}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         label="Controller name"
         {...register("controller_name")}
@@ -51,6 +56,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
         error={errors.controller_name?.message}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         label="Web/Api routes"
         {...register("routes")}
@@ -58,6 +64,7 @@ const BackendForm: FC<BackendFormProps> = ({ errors, register, isDetail }) => {
         error={errors.routes?.message}
       />
       <TextInput
+        withAsterisk
         disabled={isDetail}
         label="Related view"
         {...register("related_view")}

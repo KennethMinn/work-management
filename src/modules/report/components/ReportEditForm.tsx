@@ -172,6 +172,9 @@ const ReportEditForm: FC<ReportEditFormProps> = ({ id }) => {
     updateReport(formData, {
       onSuccess: () => {
         close();
+        setVideo(null);
+        setDoc(null);
+        setPhoto(null);
         toast.success("Report updated successfully.");
       },
       onError: () => {

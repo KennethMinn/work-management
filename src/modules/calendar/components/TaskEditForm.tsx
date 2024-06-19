@@ -39,6 +39,7 @@ import BackendForm from "./sub-forms/BackendForm";
 import UiUxForm from "./sub-forms/UiUxForm";
 import TestingForm from "./sub-forms/TestingForm";
 import DeploymentForm from "./sub-forms/DeploymentForm";
+import { useAuth } from "../../../hooks/auth/useAuth";
 
 interface TaskEditFormProps {
   assignedTask: Task;
@@ -58,6 +59,8 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   const { data: employees } = useGetAllEmployees(
     assignedTask.user.company_id.toString()
   );
+  const { user } = useAuth();
+  const isEmployee = user?.role === "employee" ? true : false;
 
   const { mutate: updateTask, isPending } = useUpdateTask(assignedTask.id);
 
@@ -144,6 +147,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           ),
         };
       }
+      if (taskType === "Deployment") {
+        return {
+          apk_released_if_mobile: values.apk_released_if_mobile ? 1 : 0,
+          sent_to_customer_if_mobile: values.sent_to_customer_if_mobile ? 1 : 0,
+        };
+      }
     })();
 
     const data = {
@@ -194,12 +203,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       if (assignedTask.uiUxData) {
         setTaskType("UiUx");
       }
-      // if (assignedTask.backEndData) {
-      //   setTaskType("Backend");
-      // }
-      // if (assignedTask.backEndData) {
-      //   setTaskType("Backend");
-      // }
+      if (assignedTask.testingData) {
+        setTaskType("Testing");
+      }
+      if (assignedTask.deployment) {
+        setTaskType("Deployment");
+      }
 
       //root
       setValue("title", assignedTask.title || "");
@@ -316,6 +325,56 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           "customer_requirement",
           assignedTask.uiUxData.customer_requirement
         );
+        setValue("ui_type", assignedTask.uiUxData.ui_type);
+        setValue(
+          "reference_platform",
+          assignedTask.uiUxData.reference_platform
+        );
+        setValue("ui_detail_task", assignedTask.uiUxData.ui_detail_task);
+        setValue("ui_styling_detail", assignedTask.uiUxData.ui_styling_detail);
+        setValue("total_ui_screen", assignedTask.uiUxData.total_ui_screen);
+        setValue(
+          "confirmed_ui_screen",
+          assignedTask.uiUxData.confirmed_ui_screen
+        );
+      }
+
+      //testing
+      if (assignedTask.testingData) {
+        setValue("testing_type", assignedTask.testingData.testing_type);
+        setValue(
+          "initial_test_brief",
+          assignedTask.testingData.initial_test_brief
+        );
+        setValue("testing_issues", assignedTask.testingData.testing_issues);
+        setValue("testing_overall", assignedTask.testingData.testing_overall);
+        setValue(
+          "customer_comment",
+          assignedTask.testingData.customer_comment || ""
+        );
+      }
+
+      //deployment
+      if (assignedTask.deployment) {
+        setValue("deployment_type", assignedTask.deployment.deployment_type);
+        setValue("server_type", assignedTask.deployment.server_type);
+        setValue("deployment_brief", assignedTask.deployment.deployment_brief);
+        setValue("instance_name", assignedTask.deployment.instance_name);
+        setValue("configuration", assignedTask.deployment.configuration);
+        setValue("db_type", assignedTask.deployment.db_type);
+        setValue("ip_and_port", assignedTask.deployment.ip_and_port);
+        setValue("username", assignedTask.deployment.username);
+        setValue("project_type", assignedTask.deployment.project_type);
+        setValue("dev_type", assignedTask.deployment.dev_type);
+        setValue("sub_domain", assignedTask.deployment.sub_domain);
+        setValue(
+          "deployment_issues",
+          assignedTask.deployment.deployment_issues
+        );
+        setValue(
+          "deployment_overall",
+          assignedTask.deployment.deployment_overall
+        );
       }
     }
   }, [assignedTask, setValue]);
@@ -379,6 +438,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <Select
+                        disabled={isEmployee}
                         label="Cusotmer"
                         style={{ width: "50%" }}
                         placeholder="Pick customer"
@@ -396,6 +456,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <Select
+                        disabled={isEmployee}
                         label="Project"
                         style={{ width: "50%" }}
                         placeholder="Pick project"
@@ -415,6 +476,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <DatePickerInput
+                        disabled={isEmployee}
                         error={errors.start_date?.message}
                         label="Start date"
                         style={{ width: "50%" }}
@@ -432,6 +494,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <DatePickerInput
+                        disabled={isEmployee}
                         style={{ width: "50%" }}
                         {...field}
                         label="End date"
@@ -451,6 +514,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <TimeInput
+                        disabled={isEmployee}
                         {...field}
                         label="Start time"
                         error={errors.start_time?.message}
@@ -467,6 +531,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <TimeInput
+                        disabled={isEmployee}
                         {...field}
                         label="End time"
                         error={errors.end_time?.message}
@@ -484,13 +549,16 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                   control={control}
                   render={({ field }) => (
                     <Select
+                      disabled={isEmployee}
                       label="Employee"
                       style={{ width: "100%" }}
                       placeholder="Pick employee"
-                      data={employees?.map((employee: Employee) => ({
-                        label: employee.name,
-                        value: employee.id.toString(),
-                      }))}
+                      data={
+                        employees?.map((employee: Employee) => ({
+                          label: employee.name,
+                          value: employee.id.toString(),
+                        })) || []
+                      }
                       {...field}
                       error={errors.user_id?.message}
                     />
@@ -549,6 +617,9 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                 )}
                 {taskType === "Testing" && (
                   <TestingForm
+                    checked={
+                      assignedTask.testingData?.customer_comment ? true : false
+                    }
                     control={control}
                     register={register}
                     errors={errors}

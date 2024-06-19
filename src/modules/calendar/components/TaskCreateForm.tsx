@@ -163,15 +163,12 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       formData.append(key, data[key as keyof TTaskFormSchema] as string);
     }
 
-    console.log(data);
-
     createTask(formData, {
       onSuccess: () => {
         reset();
         close();
         setFile(null);
         setItems([]);
-        setFile(null);
         toast.success("Task Created Successfully.");
       },
       onError: (error) => {

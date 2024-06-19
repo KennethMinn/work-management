@@ -10,6 +10,7 @@ import { TTaskFormSchema } from "../../types";
 
 interface TestingFormProps {
   isDetail?: boolean;
+  checked?: boolean;
   errors: FieldErrors<TTaskFormSchema>;
   register: UseFormRegister<TTaskFormSchema>;
   control: Control<TTaskFormSchema>;
@@ -20,8 +21,9 @@ const TestingForm: FC<TestingFormProps> = ({
   isDetail,
   register,
   control,
+  checked: initialChecked,
 }) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(initialChecked || false);
 
   return (
     <React.Fragment>
@@ -30,6 +32,7 @@ const TestingForm: FC<TestingFormProps> = ({
         control={control}
         render={({ field }) => (
           <Select
+            withAsterisk
             {...field}
             label="Testing type"
             style={{ width: "100%" }}
@@ -46,6 +49,7 @@ const TestingForm: FC<TestingFormProps> = ({
         )}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("initial_test_brief")}
         style={{ width: "100%" }}
@@ -54,6 +58,7 @@ const TestingForm: FC<TestingFormProps> = ({
         error={errors.initial_test_brief?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("testing_issues")}
         style={{ width: "100%" }}
@@ -62,6 +67,7 @@ const TestingForm: FC<TestingFormProps> = ({
         error={errors.testing_issues?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("testing_overall")}
         style={{ width: "100%" }}

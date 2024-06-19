@@ -192,7 +192,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
         setValue("progress", activeTask.progress);
       }
       setValue("status", activeTask.status);
-      setValue("report_date", new Date());
+      setValue("report_date", new Date(activeTask.start_date));
       if (activeTask.shootingData) {
         setItems(activeTask.shootingData.shooting_accessory_categories);
         const initialTakenQty: { [key: number]: number } = {};
@@ -223,7 +223,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
   return (
     <Box>
       <Modal
-        size={600}
+        size={650}
         opened={open}
         onClose={() => setOpen(false)}
         title="Create Report Task Form"
@@ -363,7 +363,7 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                 </Group>
               )}
               {previewUrl && <Image radius="md" src={previewUrl} />}
-              <Group style={{ width: "100%" }}>
+              <Flex align="Center" gap="lg">
                 <FileButton
                   resetRef={resetPhotoRef}
                   onChange={setPhoto}
@@ -382,7 +382,8 @@ const ReportCreateForm: FC<ReportCreateFormProps> = ({
                 <Button disabled={!photo} color="red" onClick={clearPhoto}>
                   Reset
                 </Button>
-              </Group>
+                <Text fw={600}>Upload video, if more than one photo</Text>
+              </Flex>
               {videoPreviewUrl && (
                 <video width="100%" controls>
                   <source src={videoPreviewUrl} type={video?.type} />

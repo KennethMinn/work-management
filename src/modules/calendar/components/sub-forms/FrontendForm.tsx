@@ -28,6 +28,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
         control={control}
         render={({ field }) => (
           <MultiSelect
+            withAsterisk
             hidePickedOptions
             disabled={isDetail}
             label="Type"
@@ -40,6 +41,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
         )}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("reference_figma")}
         style={{ width: "100%" }}
@@ -48,6 +50,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
         error={errors.reference_figma?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("detail_task")}
         style={{ width: "100%" }}
@@ -56,6 +59,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
         error={errors.detail_task?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("design_validation_detail")}
         style={{ width: "100%" }}
@@ -64,6 +68,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
         error={errors.design_validation_detail?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("styling_detail")}
         style={{ width: "100%" }}
@@ -72,6 +77,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
         error={errors.styling_detail?.message}
       />
       <Textarea
+        withAsterisk
         disabled={isDetail}
         {...register("api_integration")}
         style={{ width: "100%" }}

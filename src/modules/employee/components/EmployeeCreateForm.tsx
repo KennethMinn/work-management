@@ -91,6 +91,7 @@ const EmployeeCreateForm = () => {
       onSuccess: () => {
         reset();
         close();
+        setFile(null);
         toast.success("Employee Created Successfully.");
       },
       onError: () => {

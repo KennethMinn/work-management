@@ -21,6 +21,7 @@ export interface Task {
   meeting_link: string;
   location: string;
   status: string;
+  is_done: boolean;
   progress: number;
   created_at: string;
   updated_at: string;
@@ -33,6 +34,8 @@ export interface Task {
   frontEndData: FrontEndData | null;
   backEndData: BackEndData | null;
   uiUxData: UiUxData | null;
+  testingData: TestingData | null;
+  deployment: Deployment | null;
 }
 
 export interface Customer {
@@ -175,7 +178,7 @@ export interface BackEndData {
 export interface UiUxData {
   id: number;
   customer_requirement: string;
-  ui_type: string;
+  ui_type: string[];
   reference_platform: string;
   ui_detail_task: string;
   ui_styling_detail: string;
@@ -186,6 +189,40 @@ export interface UiUxData {
   pivot: Pivot;
 }
 
+export interface Deployment {
+  id: number;
+  deployment_type: string;
+  deployment_brief: string;
+  server_type: string;
+  instance_name: string;
+  configuration: string;
+  db_type: string;
+  db_name: string;
+  ip_and_port: string;
+  username: string;
+  project_type: string[];
+  dev_type: string[];
+  sub_domain: string;
+  server_restart_after_deploy: boolean;
+  apk_released_if_mobile: boolean;
+  deployment_issues: string;
+  deployment_overall: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+export interface TestingData {
+  id: number;
+  testing_type: string;
+  initial_test_brief: string;
+  testing_issues: string;
+  testing_overall: string;
+  customer_comment: string | null;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
 export interface Pivot {
   assigned_task_id: number;
   shooting_id: number;
@@ -215,7 +252,7 @@ export const taskFormSchema = z.object({
   customer_id: z.string().min(1, "customer is required"),
   project_id: z.string().min(1, "project is required"),
   user_id: z.string().min(1, "user is required"),
-  meeting_link: z.string().min(1, "meeting link is required"),
+  meeting_link: z.string().optional(),
   location: z.string().min(1, "location is required"),
 
   //Graphic Design
