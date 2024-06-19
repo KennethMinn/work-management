@@ -1,0 +1,1 @@
+import{u as e}from"./index-DAvzNLjh.js";import{a as t}from"./axiosInstance-BMsWOdQC.js";const n=()=>e({queryKey:["departments"],queryFn:async()=>await(await t.get("/departments")).data.departments});export{n as u};
