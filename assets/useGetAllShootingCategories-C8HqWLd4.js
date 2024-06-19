@@ -1,0 +1,1 @@
+import{u as t}from"./index-CLtWpDKR.js";import{a as o}from"./axiosInstance-D1VA4u8v.js";const i=e=>t({queryKey:["shooting-categories",e],queryFn:async()=>await(await o.get(`/shooting-categories?state=${e}`)).data.shootingCategories});export{i as u};

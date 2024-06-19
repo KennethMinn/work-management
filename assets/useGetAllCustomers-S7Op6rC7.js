@@ -1,0 +1,1 @@
+import{u as s}from"./index-CLtWpDKR.js";import{a as e}from"./axiosInstance-D1VA4u8v.js";const u=()=>s({queryKey:["customers"],queryFn:async()=>await(await e.get("/customers")).data.customers});export{u};

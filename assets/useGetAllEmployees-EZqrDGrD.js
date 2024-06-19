@@ -1,0 +1,1 @@
+import{u as s}from"./index-CLtWpDKR.js";import{a as r}from"./axiosInstance-D1VA4u8v.js";const u=(e="")=>s({queryKey:["employees",e],queryFn:async()=>await(await r.get(`/employees?company_id=${e}`)).data.employees});export{u};
