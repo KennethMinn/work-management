@@ -379,8 +379,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
     }
   }, [assignedTask, setValue]);
 
-  console.log(assignedTask);
-
   return (
     <Box>
       <Modal

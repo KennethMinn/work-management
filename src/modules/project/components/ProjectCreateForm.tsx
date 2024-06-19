@@ -65,7 +65,6 @@ const ProjectCreateForm = () => {
       document: file,
     };
     const formData = new FormData();
-    console.log(data);
     for (const key in data) {
       formData.append(key, data[key as keyof TProjectFormSchema] as string);
     }
