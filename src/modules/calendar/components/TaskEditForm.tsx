@@ -123,7 +123,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       }
     }
 
-    //shootinig
+    //shooting
     if (taskType === "Shooting" && items.length < 1) {
       toast.error("Please add shooting accessories");
       return;
@@ -225,129 +225,165 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
 
       //graphic design
       if (assignedTask?.designData) {
-        setValue("brand", assignedTask.designData.brand);
-        setValue("type_of_media", assignedTask.designData.type_of_media);
-        setValue("designer_id", assignedTask.designData.designer_id.toString());
+        setValue("brand", assignedTask.designData.brand || "");
+        setValue("type_of_media", assignedTask.designData.type_of_media || "");
+        setValue(
+          "designer_id",
+          assignedTask.designData.designer_id.toString() || ""
+        );
         setValue(
           "content_writer_id",
-          assignedTask?.designData?.content_writer_id.toString()
+          assignedTask?.designData?.content_writer_id.toString() || ""
         );
-        setValue("visual_copy", assignedTask.designData.visual_copy);
-        setValue("headline", assignedTask.designData.headline);
+        setValue("visual_copy", assignedTask.designData.visual_copy || "");
+        setValue("headline", assignedTask.designData.headline || "");
         setValue("deadline", new Date(assignedTask.designData.deadline));
         setValue("body", assignedTask.designData.body);
-        setValue("objective", assignedTask.designData.objective);
+        setValue("objective", assignedTask.designData.objective || "");
         setValue("important_info", assignedTask.designData.important_info);
-        setValue("taste_style", assignedTask.designData.taste_style);
+        setValue("taste_style", assignedTask.designData.taste_style || "");
         setValue(
           "visual_format",
-          assignedTask.designData.artworkSizes.visual_format
+          assignedTask.designData.artworkSizes.visual_format || ""
         );
         setValue(
           "aspect_ratio",
-          assignedTask.designData.artworkSizes.aspect_ratio
+          assignedTask.designData.artworkSizes.aspect_ratio || ""
         );
         setValue("width", assignedTask.designData.artworkSizes.width);
         setValue("height", assignedTask.designData.artworkSizes.height);
-        setValue("resolution", assignedTask.designData.artworkSizes.resolution);
-        setValue("reference", assignedTask.designData.reference);
-        setPreviewUrl(assignedTask.designData.imageURL);
+        setValue(
+          "resolution",
+          assignedTask.designData.artworkSizes.resolution || ""
+        );
+        setValue("reference", assignedTask.designData.reference || "");
+        setPreviewUrl(assignedTask.designData.imageURL || "");
       }
 
       //shooting
       if (assignedTask?.shootingData) {
-        setValue("duration", assignedTask.shootingData.duration);
+        setValue("duration", assignedTask.shootingData.duration || "");
         setValue(
           "shooting_location",
-          assignedTask.shootingData.shooting_location
+          assignedTask.shootingData.shooting_location || ""
         );
-        setValue("type", assignedTask.shootingData.type);
+        setValue("type", assignedTask.shootingData.type || "");
         setValue(
           "transportation_charge",
-          assignedTask.shootingData.transportation_charge
+          assignedTask.shootingData.transportation_charge || ""
         );
-        setValue("type_detail", assignedTask.shootingData.type_detail);
-        setValue("script_detail", assignedTask.shootingData.script_detail);
-        setValue("scene_number", assignedTask.shootingData.scene_number);
-        setValue("contact_name", assignedTask.shootingData.contact_name);
+        setValue("type_detail", assignedTask.shootingData.type_detail || "");
+        setValue(
+          "script_detail",
+          assignedTask.shootingData.script_detail || ""
+        );
+        setValue("scene_number", assignedTask.shootingData.scene_number || "");
+        setValue("contact_name", assignedTask.shootingData.contact_name || "");
         setValue("contact_phone", assignedTask.shootingData.contact_phone);
-        setValue("crew_list", assignedTask.shootingData.crew_list);
+        setValue("crew_list", assignedTask.shootingData.crew_list || "");
         setValue(
           "photo_shooting_project",
-          assignedTask.shootingData.photo_shooting_project
+          assignedTask.shootingData.photo_shooting_project || ""
         );
         setValue(
           "video_shooting_project",
-          assignedTask.shootingData.video_shooting_project
+          assignedTask.shootingData.video_shooting_project || ""
         );
         setValue(
           "arrive_office_on_time",
-          assignedTask.shootingData.arrive_office_on_time
+          assignedTask.shootingData.arrive_office_on_time || ""
         );
-        setValue("client", assignedTask.shootingData.client);
-        setValue("in_time", assignedTask.shootingData.in_time);
-        setValue("out_time", assignedTask.shootingData.out_time);
-        setValue("project_details", assignedTask.shootingData.project_details);
-        setValue("project_details", assignedTask.shootingData.project_details);
-        setItems(assignedTask.shootingData.shooting_accessories);
+        setValue("client", assignedTask.shootingData.client || "");
+        setValue("in_time", assignedTask.shootingData.in_time || "");
+        setValue("out_time", assignedTask.shootingData.out_time || "");
+        setValue(
+          "project_details",
+          assignedTask.shootingData.project_details || ""
+        );
+        setValue(
+          "project_details",
+          assignedTask.shootingData.project_details || ""
+        );
+        setItems(assignedTask.shootingData.shooting_accessories || "");
       }
 
       //frontend
       if (assignedTask?.frontEndData) {
-        setValue("feature_type", assignedTask.frontEndData.feature_type);
-        setValue("reference_figma", assignedTask.frontEndData.reference_figma);
-        setValue("detail_task", assignedTask.frontEndData.detail_task);
+        setValue("feature_type", assignedTask.frontEndData.feature_type || []);
+        setValue(
+          "reference_figma",
+          assignedTask.frontEndData.reference_figma || ""
+        );
+        setValue("detail_task", assignedTask.frontEndData.detail_task || "");
         setValue(
           "design_validation_detail",
-          assignedTask.frontEndData.design_validation_detail
+          assignedTask.frontEndData.design_validation_detail || ""
         );
-        setValue("styling_detail", assignedTask.frontEndData.styling_detail);
-        setValue("api_integration", assignedTask.frontEndData.api_integration);
+        setValue(
+          "styling_detail",
+          assignedTask.frontEndData.styling_detail || ""
+        );
+        setValue(
+          "api_integration",
+          assignedTask.frontEndData.api_integration || ""
+        );
       }
 
       //backend
       if (assignedTask?.backEndData) {
-        setValue("use_case", assignedTask.backEndData.use_case);
-        setValue("crud_type", assignedTask.backEndData.crud_type);
-        setValue("detail", assignedTask.backEndData.detail);
+        setValue("use_case", assignedTask.backEndData.use_case || "");
+        setValue("crud_type", assignedTask.backEndData.crud_type || "");
+        setValue("detail", assignedTask.backEndData.detail || "");
         setValue(
           "database_migration",
-          assignedTask.backEndData.database_migration
+          assignedTask.backEndData.database_migration || ""
         );
-        setValue("controller_name", assignedTask.backEndData.controller_name);
-        setValue("routes", assignedTask.backEndData.routes);
-        setValue("related_view", assignedTask.backEndData.related_view);
+        setValue(
+          "controller_name",
+          assignedTask.backEndData.controller_name || ""
+        );
+        setValue("routes", assignedTask.backEndData.routes || "");
+        setValue("related_view", assignedTask.backEndData.related_view || "");
       }
 
       //uiux
       if (assignedTask?.uiUxData) {
         setValue(
           "customer_requirement",
-          assignedTask.uiUxData.customer_requirement
+          assignedTask.uiUxData.customer_requirement || ""
         );
-        setValue("ui_type", assignedTask.uiUxData.ui_type);
+        setValue("ui_type", assignedTask.uiUxData.ui_type || "");
         setValue(
           "reference_platform",
-          assignedTask.uiUxData.reference_platform
+          assignedTask.uiUxData.reference_platform || ""
         );
-        setValue("ui_detail_task", assignedTask.uiUxData.ui_detail_task);
-        setValue("ui_styling_detail", assignedTask.uiUxData.ui_styling_detail);
-        setValue("total_ui_screen", assignedTask.uiUxData.total_ui_screen);
+        setValue("ui_detail_task", assignedTask.uiUxData.ui_detail_task || "");
+        setValue(
+          "ui_styling_detail",
+          assignedTask.uiUxData.ui_styling_detail || ""
+        );
+        setValue("total_ui_screen", assignedTask.uiUxData.total_ui_screen || 0);
         setValue(
           "confirmed_ui_screen",
-          assignedTask.uiUxData.confirmed_ui_screen
+          assignedTask.uiUxData.confirmed_ui_screen || 0
         );
       }
 
       //testing
       if (assignedTask.testingData) {
-        setValue("testing_type", assignedTask.testingData.testing_type);
+        setValue("testing_type", assignedTask.testingData.testing_type || "");
         setValue(
           "initial_test_brief",
-          assignedTask.testingData.initial_test_brief
+          assignedTask.testingData.initial_test_brief || ""
         );
-        setValue("testing_issues", assignedTask.testingData.testing_issues);
-        setValue("testing_overall", assignedTask.testingData.testing_overall);
+        setValue(
+          "testing_issues",
+          assignedTask.testingData.testing_issues || ""
+        );
+        setValue(
+          "testing_overall",
+          assignedTask.testingData.testing_overall || ""
+        );
         setValue(
           "customer_comment",
           assignedTask.testingData.customer_comment || ""
@@ -356,24 +392,30 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
 
       //deployment
       if (assignedTask.deployment) {
-        setValue("deployment_type", assignedTask.deployment.deployment_type);
-        setValue("server_type", assignedTask.deployment.server_type);
-        setValue("deployment_brief", assignedTask.deployment.deployment_brief);
-        setValue("instance_name", assignedTask.deployment.instance_name);
-        setValue("configuration", assignedTask.deployment.configuration);
-        setValue("db_type", assignedTask.deployment.db_type);
+        setValue(
+          "deployment_type",
+          assignedTask.deployment.deployment_type || ""
+        );
+        setValue("server_type", assignedTask.deployment.server_type || "");
+        setValue(
+          "deployment_brief",
+          assignedTask.deployment.deployment_brief || ""
+        );
+        setValue("instance_name", assignedTask.deployment.instance_name || "");
+        setValue("configuration", assignedTask.deployment.configuration || "");
+        setValue("db_type", assignedTask.deployment.db_type || "");
         setValue("ip_and_port", assignedTask.deployment.ip_and_port);
-        setValue("username", assignedTask.deployment.username);
+        setValue("username", assignedTask.deployment.username || "");
         setValue("project_type", assignedTask.deployment.project_type);
-        setValue("dev_type", assignedTask.deployment.dev_type);
-        setValue("sub_domain", assignedTask.deployment.sub_domain);
+        setValue("dev_type", assignedTask.deployment.dev_type || "");
+        setValue("sub_domain", assignedTask.deployment.sub_domain || "");
         setValue(
           "deployment_issues",
-          assignedTask.deployment.deployment_issues
+          assignedTask.deployment.deployment_issues || ""
         );
         setValue(
           "deployment_overall",
-          assignedTask.deployment.deployment_overall
+          assignedTask.deployment.deployment_overall || ""
         );
       }
     }
