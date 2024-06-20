@@ -24,7 +24,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
   return (
     <React.Fragment>
       <Controller
-        name="frontend_type"
+        name="feature_type"
         control={control}
         render={({ field }) => (
           <MultiSelect
@@ -36,7 +36,7 @@ const FrontendForm: FC<FrontendFormProps> = ({
             placeholder="Pick type"
             data={["Form", "List", "Dialog", "Flow"]}
             {...field}
-            error={errors.frontend_type?.message}
+            error={errors.feature_type?.message}
           />
         )}
       />

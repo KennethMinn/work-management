@@ -1,4 +1,11 @@
-import { Button, Flex, Image, Stack, TextInput } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Image,
+  PasswordInput,
+  Stack,
+  TextInput,
+} from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import auth from "../../../assets/auth.jpg";
 import { useForm } from "@mantine/form";
@@ -53,7 +60,7 @@ const Login = () => {
             placeholder="Enter Email"
             {...form.getInputProps("email")}
           />
-          <TextInput
+          <PasswordInput
             w={400}
             label="Password"
             placeholder="Enter Password"

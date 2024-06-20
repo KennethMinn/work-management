@@ -150,7 +150,7 @@ export interface ShootingData {
 
 export interface FrontEndData {
   id: number;
-  frontend_type: string[];
+  feature_type: string[];
   reference_figma: string;
   detail_task: string;
   design_validation_detail: string;
@@ -296,7 +296,7 @@ export const taskFormSchema = z.object({
   project_details: z.string().optional(),
 
   //Frontend
-  frontend_type: z.array(z.string()).optional(),
+  feature_type: z.array(z.string()).optional(),
   reference_figma: z.string().optional(),
   detail_task: z.string().optional(),
   design_validation_detail: z.string().optional(),

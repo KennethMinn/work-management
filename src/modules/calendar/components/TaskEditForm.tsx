@@ -294,7 +294,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
 
       //frontend
       if (assignedTask?.frontEndData) {
-        setValue("frontend_type", assignedTask.frontEndData.frontend_type);
+        setValue("feature_type", assignedTask.frontEndData.feature_type);
         setValue("reference_figma", assignedTask.frontEndData.reference_figma);
         setValue("detail_task", assignedTask.frontEndData.detail_task);
         setValue(
