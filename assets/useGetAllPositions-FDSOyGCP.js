@@ -1,1 +1,0 @@
-import{u as s}from"./index-CLtWpDKR.js";import{a as t}from"./axiosInstance-D1VA4u8v.js";const a=()=>s({queryKey:["positions"],queryFn:async()=>await(await t.get("/positions   ")).data.positions});export{a as u};
