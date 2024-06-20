@@ -53,10 +53,6 @@ const ProjectCreateForm = () => {
   });
 
   const onSubmit = (values: TProjectFormSchema) => {
-    if (!file) {
-      toast.error("Please add document");
-      return;
-    }
     const data = {
       ...values,
       contract_date: dayjs(values.contract_date).format("YYYY-MM-DD"),

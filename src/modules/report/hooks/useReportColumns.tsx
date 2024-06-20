@@ -34,7 +34,7 @@ export const useReportColumns = () => {
     },
     {
       name: "Progress",
-      selector: (row) => row.progress,
+      selector: (row) => row.progress + "%",
       width: "100px",
     },
     {
