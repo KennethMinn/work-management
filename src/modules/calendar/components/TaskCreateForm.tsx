@@ -42,6 +42,8 @@ import { TaskType } from "../../task-type/types";
 import UiUxForm from "./sub-forms/UiUxForm";
 import TestingForm from "./sub-forms/TestingForm";
 import DeploymentForm from "./sub-forms/DeploymentForm";
+import PhotoEditForm from "./sub-forms/PhotoEditForm";
+import VideoEditForm from "./sub-forms/VideoEditForm";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -119,7 +121,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       return;
     }
 
-    //shootinig
+    //shooting
     if (taskType === "Shooting" && items.length < 1) {
       toast.error("Please add shooting accessories");
       return;
@@ -149,33 +151,45 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
           sent_to_customer_if_mobile: values.sent_to_customer_if_mobile ? 1 : 0,
         };
       }
+
+      return {};
     })();
 
+    //removing fields if not Deployment
+    const filteredValues: Partial<TTaskFormSchema> = { ...values };
+    if (taskType !== "Deployment") {
+      delete filteredValues.apk_released_if_mobile;
+      delete filteredValues.sent_to_customer_if_mobile;
+    }
+
     const data = {
-      ...values,
+      ...filteredValues,
       ...fileKey,
       ...dynamicValues, //for all task types
       start_date: dayjs(values.start_date).format("YYYY-MM-DD"),
       end_date: dayjs(values.end_date).format("YYYY-MM-DD"),
     };
+
     const formData = new FormData();
     for (const key in data) {
       formData.append(key, data[key as keyof TTaskFormSchema] as string);
     }
 
-    createTask(formData, {
-      onSuccess: () => {
-        reset();
-        close();
-        setFile(null);
-        setItems([]);
-        toast.success("Task Created Successfully.");
-      },
-      onError: (error) => {
-        toast.error(error.message);
-        console.error(error);
-      },
-    });
+    console.log(data);
+
+    // createTask(formData, {
+    //   onSuccess: () => {
+    //     reset();
+    //     close();
+    //     setFile(null);
+    //     setItems([]);
+    //     toast.success("Task Created Successfully.");
+    //   },
+    //   onError: (error) => {
+    //     toast.error(error.message);
+    //     console.error(error);
+    //   },
+    // });
   };
 
   useEffect(() => {
@@ -446,6 +460,20 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   register={register}
                 />
               )}
+              {/* Photo edit */}
+              {/* <PhotoEditForm
+                control={control}
+                register={register}
+                errors={errors}
+                employees={employees}
+              /> */}
+              {/* Video edit */}
+              <VideoEditForm
+                control={control}
+                register={register}
+                errors={errors}
+                employees={employees}
+              />
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button radius={4} size="sm" onClick={close} color="dark">

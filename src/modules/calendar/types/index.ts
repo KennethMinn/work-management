@@ -295,6 +295,26 @@ export const taskFormSchema = z.object({
   crew_list: z.array(z.string()).optional(),
   project_details: z.string().optional(),
 
+  //photo&video editing
+  brand_name: z.string().optional(),
+  project_title: z.string().optional(),
+  project_start_date: z.date().optional(),
+  draft_deadline: z.date().optional(),
+  final_deadline: z.date().optional(),
+  account_executive: z.string().optional(),
+  photo_retoucher: z.string().optional(),
+  video_editor: z.string().optional(), //video
+  project_description: z.string().optional(),
+  client_request_detail: z.string().optional(),
+  number_of_retouch_photos: z.number().optional(),
+  color_grade: z.string().optional(),
+  editing_style: z.string().optional(),
+  motion_text_effect: z.string().optional(), //video
+  three_d_animation: z.string().optional(), //video
+  remark: z.string().optional(),
+  editing_reference: z.string().optional(),
+  //highlight -> from comp -> video -> [{time : string , description : string , remark : string}]
+
   //Frontend
   feature_type: z.array(z.string()).optional(),
   reference_figma: z.string().optional(),
