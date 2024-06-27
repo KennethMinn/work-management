@@ -424,7 +424,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   return (
     <Box>
       <Modal
-        size={650}
+        size={700}
         padding={30}
         opened={opened}
         onClose={close}

@@ -12,9 +12,10 @@ import { IconCalendar } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import {
   Customer,
+  Highlight,
   Item,
   Project,
   taskFormSchema,
@@ -23,7 +24,6 @@ import {
 import { FC, useEffect, useRef, useState } from "react";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
-import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
 import { useGetAllEmployees } from "../../employee/hooks/useGetAllEmployees";
 import { Employee } from "../../project/types";
 import { useStartTime } from "../hooks/time/useStartTime";
@@ -44,6 +44,7 @@ import TestingForm from "./sub-forms/TestingForm";
 import DeploymentForm from "./sub-forms/DeploymentForm";
 import PhotoEditForm from "./sub-forms/PhotoEditForm";
 import VideoEditForm from "./sub-forms/VideoEditForm";
+import { useGetProjectsByCustomerId } from "../../project/hooks/useGetProjectsByCustomerId";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -52,15 +53,32 @@ interface TaskCreateFormProps {
 }
 
 const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<TTaskFormSchema>({
+    resolver: zodResolver(taskFormSchema),
+  });
+
+  const customerId = useWatch({
+    control,
+    name: "customer_id",
+  });
+
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [taskType, setTaskType] = useState<string | null>(null);
   const { mutate: createTask, isPending } = useCreateTask();
   const { data: customers } = useGetAllCustomers();
-  const { data: projects } = useGetAllProjects();
+  const { data: projects } = useGetProjectsByCustomerId(customerId);
   const { data: employees } = useGetAllEmployees(companyId!);
   const { data: companies } = useGetAllCompanies();
   const { data: taskTypes } = useGetTaskTypes(companyId!);
   const [items, setItems] = useState<Item[]>([]);
+  const [highlight, setHighlight] = useState<Highlight[]>([]);
 
   //for avatar
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -75,17 +93,6 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
     setFile(null);
     resetRef.current?.();
   };
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    control,
-    formState: { errors },
-  } = useForm<TTaskFormSchema>({
-    resolver: zodResolver(taskFormSchema),
-  });
 
   useEffect(() => {
     if (file) {
@@ -127,6 +134,12 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       return;
     }
 
+    //video editing
+    if (taskType === "VideoEditing" && highlight.length < 1) {
+      toast.error("Please add highlight");
+      return;
+    }
+
     const dynamicValues = (() => {
       if (taskType === "Graphic Design") {
         return {
@@ -151,7 +164,31 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
           sent_to_customer_if_mobile: values.sent_to_customer_if_mobile ? 1 : 0,
         };
       }
-
+      if (taskType === "VideoEditing") {
+        return {
+          project_start_date: dayjs(values.project_start_date).format(
+            "YYYY-MM-DD"
+          ),
+          draft_deadline: dayjs(values.draft_deadline).format("YYYY-MM-DD"),
+          final_deadline: dayjs(values.final_deadline).format("YYYY-MM-DD"),
+          high_light: JSON.stringify(
+            highlight.map((highlight) => ({
+              time: highlight.time,
+              description: highlight.description,
+              remark: highlight.remark,
+            }))
+          ),
+        };
+      }
+      if (taskType === "PhotoEditing") {
+        return {
+          project_start_date: dayjs(values.project_start_date).format(
+            "YYYY-MM-DD"
+          ),
+          draft_deadline: dayjs(values.draft_deadline).format("YYYY-MM-DD"),
+          final_deadline: dayjs(values.final_deadline).format("YYYY-MM-DD"),
+        };
+      }
       return {};
     })();
 
@@ -177,19 +214,19 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
 
     console.log(data);
 
-    // createTask(formData, {
-    //   onSuccess: () => {
-    //     reset();
-    //     close();
-    //     setFile(null);
-    //     setItems([]);
-    //     toast.success("Task Created Successfully.");
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error.message);
-    //     console.error(error);
-    //   },
-    // });
+    createTask(formData, {
+      onSuccess: () => {
+        reset();
+        close();
+        setFile(null);
+        setItems([]);
+        toast.success("Task Created Successfully.");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+        console.error(error);
+      },
+    });
   };
 
   useEffect(() => {
@@ -207,7 +244,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
   return (
     <Box>
       <Modal
-        size={650}
+        size={750}
         padding={30}
         opened={opened}
         onClose={close}
@@ -460,20 +497,24 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   register={register}
                 />
               )}
-              {/* Photo edit */}
-              {/* <PhotoEditForm
-                control={control}
-                register={register}
-                errors={errors}
-                employees={employees}
-              /> */}
-              {/* Video edit */}
-              <VideoEditForm
-                control={control}
-                register={register}
-                errors={errors}
-                employees={employees}
-              />
+              {taskType === "PhotoEditing" && (
+                <PhotoEditForm
+                  control={control}
+                  register={register}
+                  errors={errors}
+                  employees={employees}
+                />
+              )}
+              {taskType === "VideoEditing" && (
+                <VideoEditForm
+                  highlight={highlight}
+                  setHighlight={setHighlight}
+                  control={control}
+                  register={register}
+                  errors={errors}
+                  employees={employees}
+                />
+              )}
             </Stack>
             <Flex justify="end" gap={15} mt={20}>
               <Button radius={4} size="sm" onClick={close} color="dark">
