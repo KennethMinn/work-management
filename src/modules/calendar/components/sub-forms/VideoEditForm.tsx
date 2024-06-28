@@ -296,7 +296,6 @@ const VideoEditForm: FC<VideoEditFormProps> = ({
                   <TimeInput
                     w={100}
                     disabled={isDetail}
-                    label="Time"
                     style={{ width: "100%" }}
                     value={highlight.time}
                     onChange={(e) =>
@@ -322,7 +321,6 @@ const VideoEditForm: FC<VideoEditFormProps> = ({
                     }
                     withAsterisk
                     disabled={isDetail}
-                    label="Description"
                     placeholder="Enter description"
                   />
                 </Table.Td>
@@ -339,7 +337,6 @@ const VideoEditForm: FC<VideoEditFormProps> = ({
                     }
                     withAsterisk
                     disabled={isDetail}
-                    label="Remark"
                     placeholder="Enter remark"
                   />
                 </Table.Td>

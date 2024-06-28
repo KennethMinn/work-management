@@ -212,14 +212,13 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       formData.append(key, data[key as keyof TTaskFormSchema] as string);
     }
 
-    console.log(data);
-
     createTask(formData, {
       onSuccess: () => {
         reset();
         close();
         setFile(null);
         setItems([]);
+        setHighlight([]);
         toast.success("Task Created Successfully.");
       },
       onError: (error) => {
@@ -431,7 +430,10 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   onChange={setTaskType}
                   style={{ width: "50%" }}
                   placeholder="Pick task"
-                  data={taskTypes?.map((taskType: TaskType) => taskType.name)}
+                  data={taskTypes?.map((taskType: TaskType) => ({
+                    label: taskType.name,
+                    value: taskType.name,
+                  }))}
                 />
               </Flex>
 

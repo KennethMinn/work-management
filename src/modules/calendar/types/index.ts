@@ -36,6 +36,8 @@ export interface Task {
   uiUxData: UiUxData | null;
   testingData: TestingData | null;
   deployment: Deployment | null;
+  photoEditingData: PhotoEditingData | null;
+  videoEditingData: VideoEditingData | null;
 }
 
 export interface Customer {
@@ -223,6 +225,47 @@ export interface TestingData {
   updated_at: string;
   pivot: Pivot;
 }
+
+export interface PhotoEditingData {
+  id: number;
+  brand_name: string;
+  project_title: string;
+  project_start_date: string;
+  draft_deadline: string;
+  final_deadline: string;
+  account_executive: string;
+  photo_retoucher: string;
+  project_description: string;
+  client_request_detail: string;
+  number_of_retouch_photos: number;
+  color_grade: string;
+  editing_style: string;
+  remark: string;
+  editing_reference: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+export interface VideoEditingData {
+  id: number;
+  brand_name: string;
+  project_title: string;
+  project_start_date: string;
+  draft_deadline: string;
+  final_deadline: string;
+  account_executive: string;
+  video_editor: string[];
+  project_description: string;
+  client_request_detail: string;
+  color_grade: string;
+  editing_style: string;
+  motion_text_effect: string;
+  three_d_animation: string;
+  high_light: Highlight[];
+  pivot: Pivot2;
+}
+
 export interface Pivot {
   assigned_task_id: number;
   shooting_id: number;

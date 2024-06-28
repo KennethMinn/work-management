@@ -13,9 +13,10 @@ import { IconCalendar } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import {
   Customer,
+  Highlight,
   Item,
   Project,
   Task,
@@ -25,7 +26,6 @@ import {
 import { FC, useEffect, useRef, useState } from "react";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useGetAllCustomers } from "../../customer/hooks/useGetAllCustomers";
-import { useGetAllProjects } from "../../project/hooks/useGetAllProjects";
 import { useGetAllEmployees } from "../../employee/hooks/useGetAllEmployees";
 import { Employee } from "../../project/types";
 import { useStartTime } from "../hooks/time/useStartTime";
@@ -40,6 +40,9 @@ import UiUxForm from "./sub-forms/UiUxForm";
 import TestingForm from "./sub-forms/TestingForm";
 import DeploymentForm from "./sub-forms/DeploymentForm";
 import { useAuth } from "../../../hooks/auth/useAuth";
+import { useGetProjectsByCustomerId } from "../../project/hooks/useGetProjectsByCustomerId";
+import PhotoEditForm from "./sub-forms/PhotoEditForm";
+import VideoEditForm from "./sub-forms/VideoEditForm";
 
 interface TaskEditFormProps {
   assignedTask: Task;
@@ -52,10 +55,26 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
   close,
   assignedTask,
 }) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<TTaskFormSchema>({
+    resolver: zodResolver(taskFormSchema),
+  });
+
+  const customerId = useWatch({
+    control,
+    name: "customer_id",
+  });
+
   const [items, setItems] = useState<Item[]>([]);
+  const [highlight, setHighlight] = useState<Highlight[]>([]);
   const [taskType, setTaskType] = useState<string | null>("");
   const { data: customers } = useGetAllCustomers();
-  const { data: projects } = useGetAllProjects();
+  const { data: projects } = useGetProjectsByCustomerId(customerId);
   const { data: employees } = useGetAllEmployees(
     assignedTask.user.company_id.toString()
   );
@@ -78,16 +97,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       resetRef.current?.();
     }
   };
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-    formState: { errors },
-  } = useForm<TTaskFormSchema>({
-    resolver: zodResolver(taskFormSchema),
-  });
 
   useEffect(() => {
     if (file) {
@@ -129,6 +138,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       return;
     }
 
+    //video editing
+    if (taskType === "VideoEditing" && highlight.length < 1) {
+      toast.error("Please add highlight");
+      return;
+    }
+
     const dynamicValues = (() => {
       if (taskType === "Graphic Design") {
         return {
@@ -153,10 +168,42 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           sent_to_customer_if_mobile: values.sent_to_customer_if_mobile ? 1 : 0,
         };
       }
+      if (taskType === "VideoEditing") {
+        return {
+          project_start_date: dayjs(values.project_start_date).format(
+            "YYYY-MM-DD"
+          ),
+          draft_deadline: dayjs(values.draft_deadline).format("YYYY-MM-DD"),
+          final_deadline: dayjs(values.final_deadline).format("YYYY-MM-DD"),
+          high_light: JSON.stringify(
+            highlight.map((highlight) => ({
+              time: highlight.time,
+              description: highlight.description,
+              remark: highlight.remark,
+            }))
+          ),
+        };
+      }
+      if (taskType === "PhotoEditing") {
+        return {
+          project_start_date: dayjs(values.project_start_date).format(
+            "YYYY-MM-DD"
+          ),
+          draft_deadline: dayjs(values.draft_deadline).format("YYYY-MM-DD"),
+          final_deadline: dayjs(values.final_deadline).format("YYYY-MM-DD"),
+        };
+      }
     })();
 
+    //removing fields if not Deployment
+    const filteredValues: Partial<TTaskFormSchema> = { ...values };
+    if (taskType !== "Deployment") {
+      delete filteredValues.apk_released_if_mobile;
+      delete filteredValues.sent_to_customer_if_mobile;
+    }
+
     const data = {
-      ...values,
+      ...filteredValues,
       ...fileKey,
       ...dynamicValues, //for all task types
       start_date: dayjs(values.start_date).format("YYYY-MM-DD"),
@@ -172,12 +219,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         close();
         setFile(null);
         setItems([]);
+        setHighlight([]);
         toast.success("Task Updated Successfully.");
       },
       onError: (error) => {
         toast.error(error.message);
         console.error(error);
-        setItems([]);
       },
     });
   };
@@ -208,6 +255,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       }
       if (assignedTask.deployment) {
         setTaskType("Deployment");
+      }
+      if (assignedTask.photoEditingData) {
+        setTaskType("PhotoEditing");
+      }
+      if (assignedTask.videoEditingData) {
+        setTaskType("VideoEditing");
       }
 
       //root
@@ -304,7 +357,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           "project_details",
           assignedTask.shootingData.project_details || ""
         );
-        setItems(assignedTask.shootingData.shooting_accessories || "");
+        setItems(assignedTask.shootingData.shooting_accessories || []);
       }
 
       //frontend
@@ -417,6 +470,94 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           "deployment_overall",
           assignedTask.deployment.deployment_overall || ""
         );
+      }
+
+      if (assignedTask.photoEditingData) {
+        setValue("brand_name", assignedTask.photoEditingData.brand_name);
+        setValue("project_title", assignedTask.photoEditingData.project_title);
+        setValue(
+          "project_start_date",
+          new Date(assignedTask.photoEditingData.project_start_date)
+        );
+        setValue(
+          "draft_deadline",
+          new Date(assignedTask.photoEditingData.draft_deadline)
+        );
+        setValue(
+          "final_deadline",
+          new Date(assignedTask.photoEditingData.final_deadline)
+        );
+        setValue(
+          "account_executive",
+          assignedTask.photoEditingData.account_executive
+        );
+        setValue(
+          "photo_retoucher",
+          assignedTask.photoEditingData.photo_retoucher
+        );
+        setValue(
+          "project_description",
+          assignedTask.photoEditingData.project_description
+        );
+        setValue(
+          "client_request_detail",
+          assignedTask.photoEditingData.client_request_detail
+        );
+        setValue(
+          "number_of_retouch_photos",
+          assignedTask.photoEditingData.number_of_retouch_photos
+        );
+        setValue("color_grade", assignedTask.photoEditingData.color_grade);
+        setValue("editing_style", assignedTask.photoEditingData.editing_style);
+        setValue("remark", assignedTask.photoEditingData.remark);
+        setValue(
+          "editing_reference",
+          assignedTask.photoEditingData.editing_reference
+        );
+      }
+
+      if (assignedTask.videoEditingData) {
+        setValue("brand_name", assignedTask.videoEditingData.brand_name);
+        setValue("project_title", assignedTask.videoEditingData.project_title);
+        setValue(
+          "project_start_date",
+          new Date(assignedTask.videoEditingData.project_start_date)
+        );
+        setValue(
+          "draft_deadline",
+          new Date(assignedTask.videoEditingData.draft_deadline)
+        );
+        setValue(
+          "final_deadline",
+          new Date(assignedTask.videoEditingData.final_deadline)
+        );
+        setValue(
+          "account_executive",
+          assignedTask.videoEditingData.account_executive
+        );
+        // setValue(
+        //   "video_editor",
+        //   assignedTask.videoEditingData.video_editor
+        // );
+        setValue(
+          "project_description",
+          assignedTask.videoEditingData.project_description
+        );
+        setValue(
+          "client_request_detail",
+          assignedTask.videoEditingData.client_request_detail
+        );
+        setValue("color_grade", assignedTask.videoEditingData.color_grade);
+        setValue("editing_style", assignedTask.videoEditingData.editing_style);
+        setValue(
+          "motion_text_effect",
+          assignedTask.videoEditingData.motion_text_effect
+        );
+        setValue(
+          "three_d_animation",
+          assignedTask.videoEditingData.three_d_animation
+        );
+        setHighlight(assignedTask.videoEditingData.high_light || []);
       }
     }
   }, [assignedTask, setValue]);
@@ -670,6 +811,24 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     control={control}
                     errors={errors}
                     register={register}
+                  />
+                )}
+                {taskType === "PhotoEditing" && (
+                  <PhotoEditForm
+                    control={control}
+                    register={register}
+                    errors={errors}
+                    employees={employees}
+                  />
+                )}
+                {taskType === "VideoEditing" && (
+                  <VideoEditForm
+                    highlight={highlight}
+                    setHighlight={setHighlight}
+                    control={control}
+                    register={register}
+                    errors={errors}
+                    employees={employees}
                   />
                 )}
               </Stack>
