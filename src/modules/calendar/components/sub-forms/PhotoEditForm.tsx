@@ -6,7 +6,14 @@ import {
   UseFormRegister,
 } from "react-hook-form";
 import { TTaskFormSchema } from "../../types";
-import { Flex, NumberInput, Select, Textarea, TextInput } from "@mantine/core";
+import {
+  Flex,
+  MultiSelect,
+  NumberInput,
+  Select,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
 import { Employee } from "../../../project/types";
@@ -100,42 +107,40 @@ const PhotoEditForm: FC<PhotoEditFormProps> = ({
           )}
         />
       </Flex>
-      <Flex align="center" gap="lg">
-        <Controller
-          name="account_executive"
-          control={control}
-          render={({ field }) => (
-            <Select
-              label="Account executive"
-              style={{ width: "50%" }}
-              placeholder="Pick account executive"
-              data={employees?.map((employee: Employee) => ({
-                label: employee.name,
-                value: employee.id.toString(),
-              }))}
-              {...field}
-              error={errors.account_executive?.message}
-            />
-          )}
-        />
-        <Controller
-          name="photo_retoucher"
-          control={control}
-          render={({ field }) => (
-            <Select
-              label="Photo Editor"
-              style={{ width: "50%" }}
-              placeholder="Pick photo editor"
-              data={employees?.map((employee: Employee) => ({
-                label: employee.name,
-                value: employee.id.toString(),
-              }))}
-              {...field}
-              error={errors.photo_retoucher?.message}
-            />
-          )}
-        />
-      </Flex>
+      <Controller
+        name="account_executive"
+        control={control}
+        render={({ field }) => (
+          <Select
+            label="Account executive"
+            style={{ width: "100%" }}
+            placeholder="Pick account executive"
+            data={employees?.map((employee: Employee) => ({
+              label: employee.name,
+              value: employee.id.toString(),
+            }))}
+            {...field}
+            error={errors.account_executive?.message}
+          />
+        )}
+      />
+      <Controller
+        name="photo_retoucher"
+        control={control}
+        render={({ field }) => (
+          <MultiSelect
+            label="Photo Editor"
+            style={{ width: "100%" }}
+            placeholder="Pick photo editor"
+            data={employees?.map((employee: Employee) => ({
+              label: employee.name,
+              value: employee.id.toString(),
+            }))}
+            {...field}
+            error={errors.photo_retoucher?.message}
+          />
+        )}
+      />
       <Textarea
         resize="vertical"
         withAsterisk

@@ -10,6 +10,7 @@ import {
   ActionIcon,
   Flex,
   Grid,
+  MultiSelect,
   Select,
   Table,
   Textarea,
@@ -140,42 +141,40 @@ const VideoEditForm: FC<VideoEditFormProps> = ({
           )}
         />
       </Flex>
-      <Flex align="center" gap="lg">
-        <Controller
-          name="account_executive"
-          control={control}
-          render={({ field }) => (
-            <Select
-              label="Account Executive"
-              style={{ width: "50%" }}
-              placeholder="Pick account executive"
-              data={employees?.map((employee: Employee) => ({
-                label: employee.name,
-                value: employee.id.toString(),
-              }))}
-              {...field}
-              error={errors.account_executive?.message}
-            />
-          )}
-        />
-        <Controller
-          name="video_editor"
-          control={control}
-          render={({ field }) => (
-            <Select
-              label="Video Editor"
-              style={{ width: "50%" }}
-              placeholder="Pick video editor"
-              data={employees?.map((employee: Employee) => ({
-                label: employee.name,
-                value: employee.id.toString(),
-              }))}
-              {...field}
-              error={errors.video_editor?.message}
-            />
-          )}
-        />
-      </Flex>
+      <Controller
+        name="account_executive"
+        control={control}
+        render={({ field }) => (
+          <Select
+            label="Account Executive"
+            style={{ width: "100%" }}
+            placeholder="Pick account executive"
+            data={employees?.map((employee: Employee) => ({
+              label: employee.name,
+              value: employee.id.toString(),
+            }))}
+            {...field}
+            error={errors.account_executive?.message}
+          />
+        )}
+      />
+      <Controller
+        name="video_editor"
+        control={control}
+        render={({ field }) => (
+          <MultiSelect
+            label="Video Editor"
+            style={{ width: "100%" }}
+            placeholder="Pick video editor"
+            data={employees?.map((employee: Employee) => ({
+              label: employee.name,
+              value: employee.id.toString(),
+            }))}
+            {...field}
+            error={errors.video_editor?.message}
+          />
+        )}
+      />
       <Textarea
         resize="vertical"
         withAsterisk

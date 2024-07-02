@@ -234,7 +234,7 @@ export interface PhotoEditingData {
   draft_deadline: string;
   final_deadline: string;
   account_executive: string;
-  photo_retoucher: string;
+  photo_retoucher: string[];
   project_description: string;
   client_request_detail: string;
   number_of_retouch_photos: number;
@@ -352,8 +352,8 @@ export const taskFormSchema = z.object({
   draft_deadline: z.date().optional(),
   final_deadline: z.date().optional(),
   account_executive: z.string().optional(),
-  photo_retoucher: z.string().optional(),
-  video_editor: z.string().optional(), //video
+  photo_retoucher: z.array(z.string()).optional(),
+  video_editor: z.array(z.string()).optional(), //video
   project_description: z.string().optional(),
   client_request_detail: z.string().optional(),
   number_of_retouch_photos: z.number().optional(),

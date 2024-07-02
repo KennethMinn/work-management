@@ -535,10 +535,7 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           "account_executive",
           assignedTask.videoEditingData.account_executive
         );
-        // setValue(
-        //   "video_editor",
-        //   assignedTask.videoEditingData.video_editor
-        // );
+        setValue("video_editor", assignedTask.videoEditingData.video_editor);
         setValue(
           "project_description",
           assignedTask.videoEditingData.project_description
