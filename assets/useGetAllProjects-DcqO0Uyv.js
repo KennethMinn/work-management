@@ -1,0 +1,1 @@
+import{u as e}from"./index-xlF32sg_.js";import{a as r}from"./axiosInstance-BCsj8OtX.js";const o=()=>e({queryKey:["projects"],queryFn:async()=>await(await r.get("/projects")).data.projects});export{o as u};

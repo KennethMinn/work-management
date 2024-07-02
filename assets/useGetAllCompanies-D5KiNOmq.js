@@ -1,0 +1,1 @@
+import{u as e}from"./index-xlF32sg_.js";import{a}from"./axiosInstance-BCsj8OtX.js";const n=()=>e({queryKey:["companies"],queryFn:async()=>await(await a.get("/companies")).data.companies});export{n as u};
