@@ -43,6 +43,7 @@ import { useAuth } from "../../../hooks/auth/useAuth";
 import { useGetProjectsByCustomerId } from "../../project/hooks/useGetProjectsByCustomerId";
 import PhotoEditForm from "./sub-forms/PhotoEditForm";
 import VideoEditForm from "./sub-forms/VideoEditForm";
+import ContentManagementForm from "./sub-forms/ContentManagementForm";
 
 interface TaskEditFormProps {
   assignedTask: Task;
@@ -193,6 +194,11 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
           final_deadline: dayjs(values.final_deadline).format("YYYY-MM-DD"),
         };
       }
+      if (taskType === "ContentManagement") {
+        return {
+          notify_date: dayjs(values.notify_date).format("YYYY-MM-DD"),
+        };
+      }
     })();
 
     //removing fields if not Deployment
@@ -261,6 +267,9 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
       }
       if (assignedTask.videoEditingData) {
         setTaskType("VideoEditing");
+      }
+      if (assignedTask.contentManagementData) {
+        setTaskType("ContentManagement");
       }
 
       //root
@@ -489,36 +498,45 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         );
         setValue(
           "account_executive",
-          assignedTask.photoEditingData.account_executive
+          assignedTask.photoEditingData.account_executive || ""
         );
         setValue(
           "photo_retoucher",
-          assignedTask.photoEditingData.photo_retoucher
+          assignedTask.photoEditingData.photo_retoucher || []
         );
         setValue(
           "project_description",
-          assignedTask.photoEditingData.project_description
+          assignedTask.photoEditingData.project_description || ""
         );
         setValue(
           "client_request_detail",
-          assignedTask.photoEditingData.client_request_detail
+          assignedTask.photoEditingData.client_request_detail || ""
         );
         setValue(
           "number_of_retouch_photos",
-          assignedTask.photoEditingData.number_of_retouch_photos
+          assignedTask.photoEditingData.number_of_retouch_photos || 0
         );
-        setValue("color_grade", assignedTask.photoEditingData.color_grade);
-        setValue("editing_style", assignedTask.photoEditingData.editing_style);
-        setValue("remark", assignedTask.photoEditingData.remark);
+        setValue(
+          "color_grade",
+          assignedTask.photoEditingData.color_grade || ""
+        );
+        setValue(
+          "editing_style",
+          assignedTask.photoEditingData.editing_style || ""
+        );
+        setValue("remark", assignedTask.photoEditingData.remark || "");
         setValue(
           "editing_reference",
-          assignedTask.photoEditingData.editing_reference
+          assignedTask.photoEditingData.editing_reference || ""
         );
       }
 
       if (assignedTask.videoEditingData) {
-        setValue("brand_name", assignedTask.videoEditingData.brand_name);
-        setValue("project_title", assignedTask.videoEditingData.project_title);
+        setValue("brand_name", assignedTask.videoEditingData.brand_name || "");
+        setValue(
+          "project_title",
+          assignedTask.videoEditingData.project_title || ""
+        );
         setValue(
           "project_start_date",
           new Date(assignedTask.videoEditingData.project_start_date)
@@ -533,34 +551,62 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         );
         setValue(
           "account_executive",
-          assignedTask.videoEditingData.account_executive
+          assignedTask.videoEditingData.account_executive || ""
         );
-        setValue("video_editor", assignedTask.videoEditingData.video_editor);
+        setValue(
+          "video_editor",
+          assignedTask.videoEditingData.video_editor || []
+        );
         setValue(
           "project_description",
-          assignedTask.videoEditingData.project_description
+          assignedTask.videoEditingData.project_description || ""
         );
         setValue(
           "client_request_detail",
-          assignedTask.videoEditingData.client_request_detail
+          assignedTask.videoEditingData.client_request_detail || ""
         );
-        setValue("color_grade", assignedTask.videoEditingData.color_grade);
-        setValue("editing_style", assignedTask.videoEditingData.editing_style);
+        setValue(
+          "color_grade",
+          assignedTask.videoEditingData.color_grade || ""
+        );
+        setValue(
+          "editing_style",
+          assignedTask.videoEditingData.editing_style || ""
+        );
         setValue(
           "motion_text_effect",
-          assignedTask.videoEditingData.motion_text_effect
+          assignedTask.videoEditingData.motion_text_effect || ""
         );
         setValue(
           "three_d_animation",
-          assignedTask.videoEditingData.three_d_animation
+          assignedTask.videoEditingData.three_d_animation || ""
         );
         setHighlight(assignedTask.videoEditingData.high_light || []);
+      }
+      if (assignedTask.contentManagementData) {
+        setValue(
+          "content_title",
+          assignedTask.contentManagementData.content_title || ""
+        );
+        setValue(
+          "content_description",
+          assignedTask.contentManagementData.content_description || ""
+        );
+        setValue(
+          "notify_date",
+          new Date(assignedTask.contentManagementData.notify_date)
+        );
+        setValue(
+          "notify_time",
+          assignedTask.contentManagementData.notify_time || ""
+        );
       }
     }
   }, [assignedTask, setValue]);
 
   return (
     <Box>
+      
       <Modal
         size={700}
         padding={30}
@@ -826,6 +872,13 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
                     register={register}
                     errors={errors}
                     employees={employees}
+                  />
+                )}
+                {taskType === "ContentManagement" && (
+                  <ContentManagementForm
+                    control={control}
+                    register={register}
+                    errors={errors}
                   />
                 )}
               </Stack>

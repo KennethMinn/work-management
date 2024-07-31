@@ -38,6 +38,7 @@ export interface Task {
   deployment: Deployment | null;
   photoEditingData: PhotoEditingData | null;
   videoEditingData: VideoEditingData | null;
+  contentManagementData: ContentManagementData | null;
 }
 
 export interface Customer {
@@ -266,6 +267,18 @@ export interface VideoEditingData {
   pivot: Pivot2;
 }
 
+export interface ContentManagementData {
+  id: number;
+  content_title: string;
+  notify_date: string;
+  notify_time: string;
+  content_description: string;
+  is_seen: boolean;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
 export interface Pivot {
   assigned_task_id: number;
   shooting_id: number;
@@ -416,6 +429,13 @@ export const taskFormSchema = z.object({
   sent_to_customer_if_mobile: z.boolean().optional().default(false), //optional
   deployment_issues: z.string().optional(),
   deployment_overall: z.string().optional(),
+
+  //content-management-form
+  content_title: z.string().optional(),
+  content_description: z.string().optional(),
+  notify_date: z.date().optional(),
+  notify_time: z.string().optional(),
+  is_seen: z.boolean().optional(),
 });
 
 export type TTaskFormSchema = z.infer<typeof taskFormSchema>;

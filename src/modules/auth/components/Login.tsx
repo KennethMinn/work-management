@@ -30,6 +30,7 @@ const Login = () => {
   });
 
   const onSubmit = (values: LoginValues) => {
+    console.log(values);
     const formData = new FormData();
     for (const key in values) {
       formData.append(key, values[key]);

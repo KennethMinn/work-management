@@ -45,6 +45,7 @@ import DeploymentForm from "./sub-forms/DeploymentForm";
 import PhotoEditForm from "./sub-forms/PhotoEditForm";
 import VideoEditForm from "./sub-forms/VideoEditForm";
 import { useGetProjectsByCustomerId } from "../../project/hooks/useGetProjectsByCustomerId";
+import ContentManagementForm from "./sub-forms/ContentManagementForm";
 
 interface TaskCreateFormProps {
   start: Date | undefined;
@@ -189,6 +190,11 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
           final_deadline: dayjs(values.final_deadline).format("YYYY-MM-DD"),
         };
       }
+      if (taskType === "ContentManagement") {
+        return {
+          notify_date: dayjs(values.notify_date).format("YYYY-MM-DD"),
+        };
+      }
       return {};
     })();
 
@@ -206,6 +212,7 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
       start_date: dayjs(values.start_date).format("YYYY-MM-DD"),
       end_date: dayjs(values.end_date).format("YYYY-MM-DD"),
     };
+    console.log(data);
 
     const formData = new FormData();
     for (const key in data) {
@@ -515,6 +522,13 @@ const TaskCreateForm: FC<TaskCreateFormProps> = ({ opened, close, start }) => {
                   register={register}
                   errors={errors}
                   employees={employees}
+                />
+              )}
+              {taskType === "ContentManagement" && (
+                <ContentManagementForm
+                  control={control}
+                  register={register}
+                  errors={errors}
                 />
               )}
             </Stack>
