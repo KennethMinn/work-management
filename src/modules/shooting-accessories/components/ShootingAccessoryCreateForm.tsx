@@ -83,7 +83,7 @@ const ShootingAccessoryCreateForm = () => {
               </Flex>
               <Flex align="center" gap="lg">
                 <Text w={140} fw={500}>
-                  Company
+                  Category
                 </Text>
                 <Controller
                   name="shooting_category_id"
