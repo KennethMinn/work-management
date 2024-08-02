@@ -15,7 +15,9 @@ const Home = () => {
       justify="center"
     >
       <Box>
-        <Text fw={600}>Owned by K-win technologies, Developed by @Kenneth</Text>
+        <Text fw={600}>
+          Owned by K-win technologies, Developed by @Kenneth & @Kaung Htet
+        </Text>
       </Box>
       <Button onClick={() => navigate("/login")}>Login</Button>
     </Flex>

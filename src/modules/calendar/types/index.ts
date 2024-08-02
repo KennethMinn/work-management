@@ -139,6 +139,9 @@ export interface ShootingData {
   photo_shooting_project: string;
   arrive_office_on_time: string;
   transportation_charge: string;
+  food_charge: string;
+  other_charge: string;
+  total_charge: string;
   out_time: string;
   in_time: string;
   crew_list: string[];
@@ -353,6 +356,10 @@ export const taskFormSchema = z.object({
   video_shooting_project: z.string().optional(),
   photo_shooting_project: z.string().optional(),
   arrive_office_on_time: z.string().optional(),
+  shooting_description: z.string().optional(),
+  food_charge: z.string().optional(),
+  other_charge: z.string().optional(),
+  total_charge: z.string().optional(),
   transportation_charge: z.string().optional(),
   out_time: z.string().optional(),
   in_time: z.string().optional(),

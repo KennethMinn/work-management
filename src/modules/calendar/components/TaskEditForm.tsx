@@ -71,6 +71,31 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
     name: "customer_id",
   });
 
+  const transportation_charge = Number(
+    useWatch({
+      control,
+      name: "transportation_charge",
+    })
+  );
+
+  const food_charge = Number(
+    useWatch({
+      control,
+      name: "food_charge",
+    })
+  );
+  const other_charge = Number(
+    useWatch({
+      control,
+      name: "other_charge",
+    })
+  );
+
+  useEffect(() => {
+    const total = String(transportation_charge + food_charge + other_charge);
+    setValue("total_charge", total);
+  }, [transportation_charge, food_charge, other_charge, setValue]);
+
   const [items, setItems] = useState<Item[]>([]);
   const [highlight, setHighlight] = useState<Highlight[]>([]);
   const [taskType, setTaskType] = useState<string | null>("");
@@ -203,9 +228,16 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
 
     //removing fields if not Deployment
     const filteredValues: Partial<TTaskFormSchema> = { ...values };
-    if (taskType !== "Deployment") {
+     //this mutates the origin values
+     if (taskType !== "Deployment") {
       delete filteredValues.apk_released_if_mobile;
       delete filteredValues.sent_to_customer_if_mobile;
+    }
+    if (taskType !== "Shooting") {
+      delete filteredValues.transportation_charge;
+      delete filteredValues.food_charge;
+      delete filteredValues.other_charge;
+      delete filteredValues.total_charge;
     }
 
     const data = {
@@ -332,8 +364,12 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
         setValue("type", assignedTask.shootingData.type || "");
         setValue(
           "transportation_charge",
-          assignedTask.shootingData.transportation_charge || ""
+          assignedTask.shootingData.transportation_charge || "0"
         );
+        setValue("food_charge", assignedTask.shootingData.food_charge || "0");
+        setValue("other_charge", assignedTask.shootingData.other_charge || "0");
+        setValue("total_charge", assignedTask.shootingData.total_charge || "0");
+        setValue("shooting_description", assignedTask.shootingData.shooting_description || "");
         setValue("type_detail", assignedTask.shootingData.type_detail || "");
         setValue(
           "script_detail",
@@ -606,7 +642,6 @@ const TaskEditForm: FC<TaskEditFormProps> = ({
 
   return (
     <Box>
-      
       <Modal
         size={700}
         padding={30}

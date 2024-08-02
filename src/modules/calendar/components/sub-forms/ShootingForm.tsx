@@ -51,6 +51,7 @@ interface ShootingFormProps {
   customers: Customer[];
   projects: Project[];
   employees: Employee[];
+  // getValues: UseFormGetValues<TTaskFormSchema>;
 }
 
 const ShootingForm: FC<ShootingFormProps> = ({
@@ -125,6 +126,14 @@ const ShootingForm: FC<ShootingFormProps> = ({
         {...register("shooting_location")}
         error={errors.shooting_location?.message}
       />
+      <Textarea
+        disabled={isDetail}
+        style={{ width: "100%" }}
+        label="Shooting Description"
+        placeholder="Shooting Description"
+        {...register("shooting_description")}
+        error={errors.shooting_description?.message}
+      />
       <Flex align="center" gap="lg">
         <Controller
           name="type"
@@ -148,6 +157,34 @@ const ShootingForm: FC<ShootingFormProps> = ({
           placeholder="Enter transportation"
           {...register("transportation_charge")}
           error={errors.transportation_charge?.message}
+        />
+      </Flex>
+      <Flex align="center" gap="lg">
+        <TextInput
+          w="33%"
+          disabled={isDetail}
+          label="Food charge"
+          style={{ width: "50%" }}
+          placeholder="Enter food charge"
+          {...register("food_charge")}
+          error={errors.food_charge?.message}
+        />
+        <TextInput
+          w="33%"
+          disabled={isDetail}
+          label="Other charge"
+          style={{ width: "50%" }}
+          placeholder="Other charge"
+          {...register("other_charge")}
+          error={errors.other_charge?.message}
+        />
+        <TextInput
+          w="33%"
+          disabled
+          label="Total charge"
+          style={{ width: "50%" }}
+          {...register("total_charge")}
+          error={errors.total_charge?.message}
         />
       </Flex>
       <Textarea
