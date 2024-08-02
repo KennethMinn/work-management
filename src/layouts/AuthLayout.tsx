@@ -1,33 +1,25 @@
 import { Alert, AppShell } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/navbar/Navbar";
 import dayjs from "dayjs";
-import { useGetNotifications } from "../hooks/useGetNotifications";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { useGetNotifications } from "../hooks/useGetNotifications";
+import { useCloseNoti } from "../hooks/useCloseNoti";
 
 const AuthLayout = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [visibleAlerts, setVisibleAlerts] = useState<boolean[]>([]);
-
   const todayDate = dayjs(new Date()).format("YYYY-MM-DD");
   const currentTime = dayjs(new Date()).format("HH:mm");
   const { data: timeNotifications } = useGetNotifications(
     todayDate,
     currentTime
   );
+  const { mutate: closeNoti } = useCloseNoti();
 
-  const handleCloseAlert = (index: number) => {
-    setVisibleAlerts((prevVisibleAlerts) =>
-      prevVisibleAlerts.map((isVisible, i) => (i === index ? false : isVisible))
-    );
+  const handleCloseAlert = (id: number) => {
+    closeNoti(id);
   };
-
-  useEffect(() => {
-    setVisibleAlerts(
-      timeNotifications ? timeNotifications.map(() => true) : []
-    );
-  }, [timeNotifications]);
 
   return (
     <AppShell
@@ -40,21 +32,20 @@ const AuthLayout = () => {
     >
       <Navbar isOpen={isOpen} setIsOpen={setIsOpen} />
       <AppShell.Main pt={80}>
-        {timeNotifications?.map(
-          (noti, i) =>
-            visibleAlerts[i] && (
-              <Alert
-                key={noti.id}
-                onClose={() => handleCloseAlert(i)}
-                withCloseButton
-                mb={10}
-                variant="light"
-                color="blue"
-                title={noti.contentManagement.content_title}
-                icon={<IconInfoCircle />}
-              />
-            )
-        )}
+        {timeNotifications
+          ?.filter((item) => item.contentManagement.is_close === 0)
+          .map((noti) => (
+            <Alert
+              key={noti.id}
+              onClose={() => handleCloseAlert(noti.contentManagement.id)}
+              withCloseButton
+              mb={10}
+              variant="filled"
+              color="red"
+              title={noti.contentManagement.content_title}
+              icon={<IconInfoCircle />}
+            />
+          ))}
         <Outlet />
       </AppShell.Main>
     </AppShell>

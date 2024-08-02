@@ -101,7 +101,9 @@ const NavbarHeader: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
                       onClick={() => onDetail(noti.contentManagement.id)}
                       key={noti.id}
                       variant={
-                        noti.contentManagement.is_seen ? "transparent" : "light"
+                        noti.contentManagement.is_seen === 1
+                          ? "transparent"
+                          : "light"
                       }
                       color="blue"
                       title={noti.contentManagement.content_title}

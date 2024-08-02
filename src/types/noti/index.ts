@@ -1,3 +1,5 @@
+import { ContentManagementData } from "../../modules/calendar/types";
+
 export interface Notification {
   id: number;
   customer_id: number;
@@ -16,22 +18,5 @@ export interface Notification {
   created_at: string;
   updated_at: string;
   is_done: number;
-  contentManagement: ContentManagement;
-}
-
-export interface ContentManagement {
-  id: number;
-  content_title: string;
-  notify_date: string;
-  notify_time: string;
-  content_description: string;
-  is_seen: number;
-  created_at: string;
-  updated_at: string;
-  pivot: Pivot;
-}
-
-export interface Pivot {
-  assigned_task_id: number;
-  content_managements_id: number;
+  contentManagement: ContentManagementData;
 }

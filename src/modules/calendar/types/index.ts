@@ -273,7 +273,8 @@ export interface ContentManagementData {
   notify_date: string;
   notify_time: string;
   content_description: string;
-  is_seen: boolean;
+  is_seen: number;
+  is_close: number;
   created_at: string;
   updated_at: string;
   pivot: Pivot;
