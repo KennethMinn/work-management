@@ -139,6 +139,7 @@ export interface ShootingData {
   photo_shooting_project: string;
   arrive_office_on_time: string;
   transportation_charge: string;
+  shooting_description: string;
   food_charge: string;
   other_charge: string;
   total_charge: string;
