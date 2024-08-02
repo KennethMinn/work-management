@@ -1,0 +1,1 @@
+import{h as t,c as s}from"./index-CfsjOTI0.js";const r=e=>t({queryKey:["shooting-categories",e],queryFn:async()=>await(await s.get(`/shooting-categories?state=${e}`)).data.shootingCategories});export{r as u};
